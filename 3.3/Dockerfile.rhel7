@@ -1,0 +1,24 @@
+FROM openshift/base-rhel7
+
+# This image provides a Python 3.3 environment you can use to run your Python
+# applications.
+
+MAINTAINER Maciej Szulik <maszulik@redhat.com>
+
+# Image metadata
+ENV PYTHON_VERSION        3.3
+ENV IMAGE_DESCRIPTION     Python 3.3
+ENV IMAGE_TAGS            python,python33
+ENV IMAGE_EXPOSE_SERVICES 8080:http
+
+RUN yum-config-manager --enable rhel-server-rhscl-7-rpms \
+    yum-config-manager --enable rhel-7-server-optional-rpms && \
+    yum install -y --setopt=tsflags=nodocs python33 python33-python-devel pip3 && \
+    yum clean all -y && \
+    scl enable python33 "easy_install pip"
+
+ENV PATH .local/bin/:$PATH
+
+USER default
+
+EXPOSE 8080
