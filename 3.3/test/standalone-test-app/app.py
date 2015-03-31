@@ -1,5 +1,8 @@
+import os
+
 from gunicorn.app.base import BaseApplication
 from gunicorn.six import iteritems
+
 
 def wsgi_handler(environ, start_response):
     start_response('200 OK', [('Content-Type','text/html')])
@@ -21,4 +24,6 @@ class StandaloneApplication(BaseApplication):
         return self.application
 
 if __name__ == '__main__':
-    StandaloneApplication(wsgi_handler, {'bind': '0.0.0.0:8080'}).run()
+    port = os.environ['IMAGE_EXPOSE_SERVICES']
+    port = port[:port.index(':')]
+    StandaloneApplication(wsgi_handler, {'bind': ':%s' % port}).run()

@@ -17,7 +17,7 @@ if is_gunicorn_installed && [[ -v APP_MODULE ]]; then
     if [[ -v APP_CONFIG ]]; then
         export CONFIG="--config ${APP_CONFIG}"
     fi
-    exec gunicorn ${APP_MODULE} --bind=:8080 ${CONFIG}
+    exec gunicorn ${APP_MODULE} --bind=:${IMAGE_EXPOSE_SERVICES%:*} ${CONFIG}
 fi
 
 exec python -u ${APP_FILE}
