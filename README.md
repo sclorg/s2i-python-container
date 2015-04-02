@@ -10,7 +10,7 @@ The resulting image can be run using [Docker](http://docker.io).
 
 Versions
 ---------------
-Python versions currently supported are:
+Python versions currently provided are:
 * python-3.3
 
 RHEL versions currently supported are:
@@ -25,7 +25,8 @@ Installation
 To build Python image, choose between CentOS or RHEL based image:
 *  **RHEL based image**
 
-    To build a rhel-based python-3.3 image, you need to run the build on a properly subscribed RHEL machine.
+    To build a rhel-based python-3.3 image, you need to run the build on properly
+    subscribed RHEL machine.
 
     ```
     $ git clone https://github.com/openshift/sti-python.git
@@ -38,7 +39,7 @@ To build Python image, choose between CentOS or RHEL based image:
     This image is available on DockerHub. To download it use:
 
     ```
-    docker pull openshift/python-33-centos7
+    $ docker pull openshift/python-33-centos7
     ```
 
     To build Python image from scratch use:
@@ -50,7 +51,7 @@ To build Python image, choose between CentOS or RHEL based image:
     ```
 
 **Notice: By omitting the `VERSION` parameter, the build/test action will be performed
-on all the supported versions of Python. Since we are now supporting only version `3.3`,
+on all provided versions of Python. Since we are now providing only version `3.3`,
 you can omit this parameter.**
 
 
@@ -102,7 +103,7 @@ User can choose between testing python test application based on RHEL or CentOS 
     ```
 
 **Notice: By omitting the `VERSION` parameter, the build/test action will be performed
-on all the supported versions of Python. Since we are now supporting only version `3.3`
+on all provided versions of Python. Since we are now providing only version `3.3`
 you can omit this parameter.**
 
 
@@ -134,6 +135,10 @@ Repository organization
             This script is responsible for running the application, by using the
             application web server.
 
+        *   **usage***
+
+            This script prints the usage of this image.
+
     * **`contrib/`**
 
         This folder contains file with commonly used modules.
@@ -158,6 +163,7 @@ Repository organization
 * **`hack/`**
 
     Folder contains scripts which are responsible for build and test actions performed by the `Makefile`.
+
 
 Image name structure
 ------------------------
