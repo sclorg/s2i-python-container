@@ -1,0 +1,14 @@
+#!/bin/bash
+
+source scl_source enable python33
+set -e
+
+echo "---> Installing application source"
+cp -Rf /tmp/src/* ./
+
+echo "---> Building your Python application from source"
+if [ -f setup.py ]; then
+    python setup.py install --user
+elif [ -f requirements.txt ]; then
+    pip install --user -r requirements.txt
+fi
