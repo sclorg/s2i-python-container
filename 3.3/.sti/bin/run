@@ -4,7 +4,9 @@ function is_gunicorn_installed() {
     pip show gunicorn
 }
 
-source scl_source enable python33
+# For SCL enablement
+source .bashrc
+
 set -e
 
 export APP_FILE=${APP_FILE:-"app.py"}
