@@ -1,6 +1,8 @@
 #!/bin/bash
 
-source scl_source enable python33
+# For SCL enablement
+source .bashrc
+
 set -e
 
 echo "---> Installing application source"
