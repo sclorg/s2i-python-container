@@ -25,7 +25,7 @@ Installation
 To build Python image, choose between CentOS or RHEL based image:
 *  **RHEL based image**
 
-    To build a rhel-based python-3.3 image, you need to run the build on properly
+    To build a rhel-based python-3.3 image, you need to run the build on a properly
     subscribed RHEL machine.
 
     ```
@@ -118,7 +118,7 @@ Repository organization
     * **Dockerfile.rhel7**
 
         RHEL based Dockerfile. In order to perform build or test actions on this
-        Dockerfile you need to run the action on properly subscribed RHEL machine.
+        Dockerfile you need to run the action on a properly subscribed RHEL machine.
 
     * **`.sti/bin/`**
 
