@@ -5,10 +5,13 @@ source .bashrc
 
 set -e
 
-echo "---> Installing application source"
+echo "---> Installing prerequisites ..."
+easy_install --user pip
+
+echo "---> Installing application source ..."
 cp -Rf /tmp/src/* ./
 
-echo "---> Building your Python application from source"
+echo "---> Building your Python application from source ..."
 if [ -f setup.py ]; then
     python setup.py install --user
 elif [ -f requirements.txt ]; then
