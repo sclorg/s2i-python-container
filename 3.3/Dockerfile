@@ -14,8 +14,7 @@ ENV IMAGE_EXPOSE_SERVICES 8080:http
 RUN yum install -y \
     https://www.softwarecollections.org/en/scls/rhscl/python33/epel-7-x86_64/download/rhscl-python33-epel-7-x86_64.noarch.rpm && \
     yum install -y --setopt=tsflags=nodocs python33 python33-python-devel python33-python-setuptools && \
-    yum clean all -y && \
-    scl enable python33 "easy_install pip"
+    yum clean all -y
 
 ENV PATH .local/bin/:$PATH
 
