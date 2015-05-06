@@ -86,7 +86,7 @@ wait_for_cid() {
   local result=1
   info "Waiting for application container to start"
   while [ $attempt -le $max_attempts ]; do
-    [ -f $cid_file ] && break
+    [ -f $cid_file ] && [ -s $cid_file ] && break
     attempt=$(( $attempt + 1 ))
     sleep $sleep_time
   done
