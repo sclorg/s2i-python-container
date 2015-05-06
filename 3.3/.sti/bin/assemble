@@ -5,13 +5,14 @@ source .bashrc
 
 set -e
 
-echo "---> Installing application source"
+echo "---> Copying application source ..."
 cp -Rf /tmp/src/. ./
 
-echo "---> Building your Python application from source"
 if [ -f setup.py ]; then
+    echo "---> Installing application ..."
     python setup.py install --user
 elif [ -f requirements.txt ]; then
+    echo "---> Installing dependencies ..."
     pip install --user -r requirements.txt
 fi
 
@@ -19,7 +20,4 @@ fi
 chmod -R og+rwx /opt/openshift
 
 # remove pip temporary directory
-pip_tmp=/tmp/pip_build_default
-if [ -d $pip_tmp ]; then
-    rm -rf $pip_tmp
-fi
+rm -rf /tmp/pip_build_default
