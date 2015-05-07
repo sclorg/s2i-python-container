@@ -13,7 +13,6 @@ declare -a WEB_APPS=(standalone setup)
 # TODO: Make command compatible for Mac users
 test_dir="$(readlink -zf $(dirname "${BASH_SOURCE[0]}"))"
 image_dir=$(readlink -zf ${test_dir}/..)
-scripts_url="file://${image_dir}/.sti/bin"
 
 # TODO: This should be part of the image metadata
 test_port=8080
@@ -70,7 +69,7 @@ cleanup_app() {
 cleanup() {
   info "Cleaning up the test application image"
   if image_exists ${IMAGE_NAME}-testapp; then
-    docker rmi ${IMAGE_NAME}-testapp
+    docker rmi -f ${IMAGE_NAME}-testapp
   fi
   rm -rf ${test_dir}/${1}-test-app/.git
 }
@@ -149,7 +148,7 @@ for app in ${WEB_APPS[@]}; do
 
   # Since we built the candidate image locally, we don't want STI attempt to pull
   # it from Docker hub
-  sti_args="--forcePull=false -s ${scripts_url}"
+  sti_args="--forcePull=false"
 
   prepare ${app}
   run_sti_build ${app}
