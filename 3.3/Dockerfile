@@ -5,12 +5,15 @@ FROM openshift/base-centos7
 
 MAINTAINER Maciej Szulik <maszulik@redhat.com>
 
-# Image metadata
+EXPOSE 8080
+
 ENV PYTHON_VERSION=3.3 \
-    IMAGE_DESCRIPTION="Python 3.3" \
-    IMAGE_TAGS=python,python33 \
-    IMAGE_EXPOSE_SERVICES=8080:http \
-    PATH=$HOME/.local/bin/:$PATH
+    PATH=.local/bin/:$PATH
+
+LABEL k8s.io/description="Platform for building and running Python 3.3 applications" \
+      k8s.io/display-name="Python 3.3" \
+      openshift.io/expose-services="8080:http" \
+      openshift.io/tags="builder,python,python33"
 
 # Copy the STI scripts from the specific language image to /usr/local/sti
 COPY ./.sti/bin/ /usr/local/sti
@@ -25,8 +28,6 @@ RUN yum install -y \
     yum clean all -y && \
     scl enable python33 "easy_install pip" && \
     chown -R default:default /opt/openshift
-
-EXPOSE 8080
 
 USER default
 

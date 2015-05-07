@@ -24,6 +24,4 @@ class StandaloneApplication(BaseApplication):
         return self.application
 
 if __name__ == '__main__':
-    port = os.environ['IMAGE_EXPOSE_SERVICES']
-    port = port[:port.index(':')]
-    StandaloneApplication(wsgi_handler, {'bind': ':%s' % port}).run()
+    StandaloneApplication(wsgi_handler, {'bind': ':8080'}).run()
