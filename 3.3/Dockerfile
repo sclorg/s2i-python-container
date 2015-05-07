@@ -21,10 +21,12 @@ COPY ./contrib/ /opt/openshift
 
 RUN yum install -y \
     https://www.softwarecollections.org/en/scls/rhscl/python33/epel-7-x86_64/download/rhscl-python33-epel-7-x86_64.noarch.rpm && \
-    yum install -y --setopt=tsflags=nodocs python33 python33-python-devel python33-python-setuptools && \
+    yum install -y --setopt=tsflags=nodocs --enablerepo=centosplus python33 python33-python-devel python33-python-setuptools epel-release && \
+    yum install -y --setopt=tsflags=nodocs install nss_wrapper && \
     yum clean all -y && \
     scl enable python33 "easy_install pip" && \
-    chown -R default:default /opt/openshift
+    chown -R default:default /opt/openshift && \
+    chmod -R og+rwx /opt/openshift
 
 EXPOSE 8080
 

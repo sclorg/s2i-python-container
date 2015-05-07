@@ -14,3 +14,12 @@ if [ -f setup.py ]; then
 elif [ -f requirements.txt ]; then
     pip install --user -r requirements.txt
 fi
+
+# set permissions for any installed artifacts
+chmod -R og+rwx /opt/openshift
+
+# remove pip temporary directory
+pip_tmp=/tmp/pip_build_default
+if [ -d $pip_tmp ]; then
+    rm -rf $pip_tmp
+fi

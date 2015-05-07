@@ -54,16 +54,21 @@ prepare() {
 }
 
 run_test_application() {
-  docker run --rm --cidfile=${cid_file} -p ${test_port} ${IMAGE_NAME}-testapp
+  local cargs=${CONTAINER_ARGS:-}
+  docker run ${cargs} --rm --cidfile=${cid_file} -p ${test_port} ${IMAGE_NAME}-testapp
 }
 
-cleanup() {
-  info "Cleaning up the test application image"
+cleanup_app() {
+  info "Cleaning up app container"
   if [ -f $cid_file ]; then
     if container_exists; then
       docker stop $(cat $cid_file)
     fi
   fi
+}
+
+cleanup() {
+  info "Cleaning up the test application image"
   if image_exists ${IMAGE_NAME}-testapp; then
     docker rmi ${IMAGE_NAME}-testapp
   fi
@@ -84,7 +89,8 @@ wait_for_cid() {
   local sleep_time=1
   local attempt=1
   local result=1
-  info "Waiting for application container to start"
+  local cargs=${CONTAINER_ARGS:-}
+  info "Waiting for application container to start $cargs"
   while [ $attempt -le $max_attempts ]; do
     [ -f $cid_file ] && [ -s $cid_file ] && break
     attempt=$(( $attempt + 1 ))
@@ -104,7 +110,8 @@ test_docker_run_usage() {
 
 
 test_connection() {
-  info "Testing the HTTP connection (http://$(container_ip):${test_port})"
+  local cargs=${CONTAINER_ARGS:-}
+  info "Testing the HTTP connection (http://$(container_ip):${test_port}) $cargs"
   local max_attempts=10
   local sleep_time=1
   local attempt=1
@@ -122,6 +129,19 @@ test_connection() {
     sleep $sleep_time
   done
   return $result
+}
+
+test_application() {
+  local cid_file=$(mktemp -u --suffix=.cid)
+  # Verify that the HTTP connection can be established to test application container
+  run_test_application &
+
+  # Wait for the container to write it's CID file
+  wait_for_cid
+
+  test_connection
+  check_result $?
+  cleanup_app
 }
 
 for app in ${WEB_APPS[@]}; do
@@ -143,14 +163,11 @@ for app in ${WEB_APPS[@]}; do
   test_docker_run_usage
   check_result $?
 
-  # Verify that the HTTP connection can be established to test application container
-  run_test_application &
+  # test application with default user
+  test_application
 
-  # Wait for the container to write it's CID file
-  wait_for_cid
-
-  test_connection
-  check_result $?
+  # test application with random user
+  CONTAINER_ARGS="-u 12345" test_application
 
   info "All tests for the ${app}-test-app finished successfully."
   cleanup ${app}
