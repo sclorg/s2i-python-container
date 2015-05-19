@@ -148,7 +148,7 @@ for app in ${WEB_APPS[@]}; do
 
   # Since we built the candidate image locally, we don't want STI attempt to pull
   # it from Docker hub
-  sti_args="--forcePull=false"
+  sti_args="--force-pull=false"
 
   prepare ${app}
   run_sti_build ${app}

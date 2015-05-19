@@ -31,7 +31,7 @@ RUN yum install -y \
     chown -R default:default /opt/openshift && \
     chmod -R og+rwx /opt/openshift
 
-USER default
+USER 1001
 
 # Set the default CMD to print the usage of the language image
 CMD ["usage"]
