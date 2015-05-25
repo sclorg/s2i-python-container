@@ -8,7 +8,7 @@ To use it, install STI: https://github.com/openshift/source-to-image
 
 Sample invocation:
 
-sti build https://github.com/openshift/sti-python.git --contextDir=3.3/test/setup-test-app/ openshift/python-33-${DISTRO}7 python-sample-app
+sti build https://github.com/openshift/sti-python.git --context-dir=3.3/test/setup-test-app/ openshift/python-33-${DISTRO}7 python-sample-app
 
 
 You can then run the resulting image via:
