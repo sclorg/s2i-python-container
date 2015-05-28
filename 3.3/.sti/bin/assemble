@@ -6,7 +6,7 @@ source .bashrc
 set -e
 
 echo "---> Installing application source"
-cp -Rf /tmp/src/* ./
+cp -Rf /tmp/src/. ./
 
 echo "---> Building your Python application from source"
 if [ -f setup.py ]; then
