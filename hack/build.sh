@@ -8,9 +8,9 @@ VERSION=$2
 # Array of all versions of Python
 declare -a VERSIONS=(3.3)
 
-function squash { 
+function squash {
   # install the docker layer squashing tool
-  easy_install --user docker-scripts==0.3.3
+  easy_install --user docker-scripts==0.4.1
   base=$(awk '/^FROM/{print $2}' Dockerfile)
   $HOME/.local/bin/docker-scripts squash -f $base ${IMAGE_NAME}
 }
