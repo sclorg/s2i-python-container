@@ -8,7 +8,7 @@
 #
 IMAGE_NAME=${IMAGE_NAME-openshift/python33-centos7-candidate}
 
-declare -a WEB_APPS=(standalone setup)
+declare -a WEB_APPS=({standalone,setup}-test-app)
 
 # TODO: Make command compatible for Mac users
 test_dir="$(readlink -zf $(dirname "${BASH_SOURCE[0]}"))"
@@ -18,7 +18,7 @@ image_dir=$(readlink -zf ${test_dir}/..)
 test_port=8080
 
 info() {
-  echo -e "\n\e[1m[INFO] $@...\e[0m\n"
+  echo -e "\n\e[1m[INFO] $@\e[0m\n"
 }
 
 image_exists() {
@@ -34,7 +34,8 @@ container_ip() {
 }
 
 run_sti_build() {
-  sti build ${sti_args} file://${test_dir}/${1}-test-app ${IMAGE_NAME} ${IMAGE_NAME}-testapp
+  info "Building the ${1} application image ..."
+  sti build ${sti_args} file://${test_dir}/${1} ${IMAGE_NAME} ${IMAGE_NAME}-testapp
 }
 
 prepare() {
@@ -44,8 +45,8 @@ prepare() {
   fi
   # TODO: STI build require the application is a valid 'GIT' repository, we
   # should remove this restriction in the future when a file:// is used.
-  info "Build the ${1}-test application image"
-  pushd ${test_dir}/${1}-test-app >/dev/null
+  info "Preparing to test ${1} ..."
+  pushd ${test_dir}/${1} >/dev/null
   git init
   git config user.email "build@localhost" && git config user.name "builder"
   git add -A && git commit -m "Sample commit"
@@ -53,12 +54,11 @@ prepare() {
 }
 
 run_test_application() {
-  local cargs=${CONTAINER_ARGS:-}
-  docker run ${cargs} --rm --cidfile=${cid_file} -p ${test_port} ${IMAGE_NAME}-testapp
+  docker run ${CONTAINER_ARGS} --rm --cidfile=${cid_file} -p ${test_port} ${IMAGE_NAME}-testapp
 }
 
 cleanup_app() {
-  info "Cleaning up app container"
+  info "Cleaning up app container ..."
   if [ -f $cid_file ]; then
     if container_exists; then
       docker stop $(cat $cid_file)
@@ -71,7 +71,7 @@ cleanup() {
   if image_exists ${IMAGE_NAME}-testapp; then
     docker rmi -f ${IMAGE_NAME}-testapp
   fi
-  rm -rf ${test_dir}/${1}-test-app/.git
+  rm -rf ${test_dir}/${1}/.git
 }
 
 check_result() {
@@ -88,8 +88,7 @@ wait_for_cid() {
   local sleep_time=1
   local attempt=1
   local result=1
-  local cargs=${CONTAINER_ARGS:-}
-  info "Waiting for application container to start $cargs"
+  info "Waiting for application container to start $CONTAINER_ARGS ..."
   while [ $attempt -le $max_attempts ]; do
     [ -f $cid_file ] && [ -s $cid_file ] && break
     attempt=$(( $attempt + 1 ))
@@ -98,19 +97,18 @@ wait_for_cid() {
 }
 
 test_sti_usage() {
-  info "Testing 'sti usage'"
+  info "Testing 'sti usage' ..."
   sti usage ${sti_args} ${IMAGE_NAME} &>/dev/null
 }
 
 test_docker_run_usage() {
-  info "Testing 'docker run' usage"
+  info "Testing 'docker run' usage ..."
   docker run ${IMAGE_NAME} &>/dev/null
 }
 
 
 test_connection() {
-  local cargs=${CONTAINER_ARGS:-}
-  info "Testing the HTTP connection (http://$(container_ip):${test_port}) $cargs"
+  info "Testing the HTTP connection (http://$(container_ip):${test_port}) ${CONTAINER_ARGS} ..."
   local max_attempts=10
   local sleep_time=1
   local attempt=1
@@ -143,13 +141,13 @@ test_application() {
   cleanup_app
 }
 
+
+# Since we built the candidate image locally, we don't want STI attempt to pull
+# it from Docker hub
+sti_args="--force-pull=false"
+
+
 for app in ${WEB_APPS[@]}; do
-  cid_file=$(mktemp -u --suffix=.cid)
-
-  # Since we built the candidate image locally, we don't want STI attempt to pull
-  # it from Docker hub
-  sti_args="--force-pull=false"
-
   prepare ${app}
   run_sti_build ${app}
   check_result $?
@@ -168,7 +166,7 @@ for app in ${WEB_APPS[@]}; do
   # test application with random user
   CONTAINER_ARGS="-u 12345" test_application
 
-  info "All tests for the ${app}-test-app finished successfully."
+  info "All tests for the ${app} finished successfully."
   cleanup ${app}
 done
 
