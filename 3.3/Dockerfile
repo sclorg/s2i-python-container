@@ -27,6 +27,7 @@ RUN yum install -y \
     yum install -y --setopt=tsflags=nodocs --enablerepo=centosplus python33 python33-python-devel python33-python-setuptools epel-release && \
     yum install -y --setopt=tsflags=nodocs install nss_wrapper && \
     yum clean all -y && \
+    # FIXME remove this line when pip will be part of python33 package
     scl enable python33 "easy_install pip" && \
     chown -R default:default /opt/openshift && \
     chmod -R og+rwx /opt/openshift
