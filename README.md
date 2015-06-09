@@ -184,16 +184,72 @@ file inside your source code repository.
 
 * **APP_FILE**
 
-    This variable specifies file name (defaults to `app.py`) passed to the python interpreter which is
-    responsible for launching application.
+    Used to run the application from a Python script.
+    This should be a path to a Python file (defaults to `app.py`) that will be
+    passed to the Python interpreter to start the application.
 
 * **APP_MODULE**
 
-    This variable specifies WSGI callable. It is of the pattern `$(MODULE_NAME):$(VARIABLE_NAME)`,
-    where module name is a full dotted path and the variable name refers to a inside the specified module.
-    If using `setup.py` for installing the application the module name can be read from that file and variable
-    will default to `application`, eg. see [setup-test-app](https://github.com/openshift/sti-python/tree/master/3.3/test/setup-test-app).
+    Used to run the application with gunicorn, as documented
+    [here](http://docs.gunicorn.org/en/latest/run.html#gunicorn).
+    This variable specifies a WSGI callable with the pattern
+    `MODULE_NAME:VARIABLE_NAME`, where `MODULE_NAME` is a full dotted path
+    of a module, and `VARIABLE_NAME` refers to a WSGI callable inside the
+    specified module.
+    Gunicorn will look for a WSGI callable named `application` if not specified.
+
+    If `APP_MODULE` is not provided, the `run` script will look for a `wsgi.py`
+    file in your project and use it if it exists.
+
+    If using `setup.py` for installing the application, the `MODULE_NAME` part
+    can be read from there. For example, see
+    [setup-test-app](https://github.com/openshift/sti-python/tree/master/3.3/test/setup-test-app).
 
 * **APP_CONFIG**
 
-    This variable indicates path to a module which contains [gunicorn configuration](http://docs.gunicorn.org/en/latest/configure.html).
+    Path to a valid Python file with
+    [gunicorn configuration](http://docs.gunicorn.org/en/latest/configure.html#configuration-file).
+
+
+Source repository layout
+------------------------
+
+You need not change anything in your existing Python project's repository.
+However, if these files exist they affect the behavior of the build process:
+
+* **requirements.txt**
+
+  List of dependencies to be installed with `pip`. The format is documented
+  [here](https://pip.pypa.io/en/latest/user_guide.html#requirements-files).
+
+
+* **setup.py**
+
+  Configuration of various aspects of the project, including installation
+  dependencies, as documented
+  [here](https://packaging.python.org/en/latest/distributing.html#setup-py).
+  For most projects, it is sufficient to use `requirements.txt`.
+
+
+Run strategies
+--------------
+
+The Docker image produced by sti-python executes your project in one of these
+ways, in precedence order:
+
+* **Gunicorn**
+
+  The Gunicorn WSGI HTTP server is used to serve your application in case it is
+  installed. It can be installed by listing it either in the `requirements.txt`
+  file or in the `install_requires` section of the `setup.py` file.
+
+  If a file named `wsgi.py` is present in your repository, it will be used as
+  the entry point to your application. This can be overridden with the
+  environment variable `APP_MODULE`.
+
+* **Python script**
+
+  This is the most general way of executing your application. It will be used
+  in case you specify a path to a Python script via the `APP_FILE` environment
+  variable, defaulting to a file named `app.py` if it exists. The script is
+  passed to a regular Python interpreter to launch your application.

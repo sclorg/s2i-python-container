@@ -1,22 +1,37 @@
 #!/bin/bash
 
 function is_gunicorn_installed() {
-    pip show gunicorn
+  pip show -q gunicorn
 }
 
 set -e
 
-export APP_FILE=${APP_FILE:-"app.py"}
+if is_gunicorn_installed; then
+  if [[ -z "$APP_MODULE" ]]; then
+    # Find shallowest wsgi.py file, one of ./wsgi.py, <project>/wsgi.py or <project>/<project>/wsgi.py,
+    # replace "/" with "." and remove ".py" suffix
+    APP_MODULE=$(find . -maxdepth 3 -type f -name 'wsgi.py' -printf '%d\t%P\n' | sort -nk1 | cut -f2 | head -1 | sed 's:/:.:;s:.py$::')
+  fi
 
-if [[ ! -v APP_MODULE  && -f setup.py ]]; then
-    APP_MODULE=`python setup.py --name`":application"
+  if [[ -z "$APP_MODULE" && -f setup.py ]]; then
+    APP_MODULE="$(python setup.py --name)"
+  fi
+
+  if [[ "$APP_MODULE" ]]; then
+    echo "---> Serving application with gunicorn ($APP_MODULE) ..."
+    exec gunicorn "$APP_MODULE" --bind=0.0.0.0:8080 --access-logfile=- --config "$APP_CONFIG"
+  fi
 fi
 
-if is_gunicorn_installed && [[ -v APP_MODULE ]]; then
-    if [[ -v APP_CONFIG ]]; then
-        export CONFIG="--config ${APP_CONFIG}"
-    fi
-    exec gunicorn ${APP_MODULE} --bind=:8080 ${CONFIG}
+APP_FILE="${APP_FILE:-app.py}"
+if [[ "$APP_FILE" ]]; then
+  if [[ -f "$APP_FILE" ]]; then
+    echo "---> Running application from Python script ($APP_FILE) ..."
+    exec python "$APP_FILE"
+  fi
+  echo "WARNING: file '$APP_FILE' not found."
 fi
 
-exec python -u ${APP_FILE}
+>&2 echo "ERROR: don't know how to run your application."
+>&2 echo "Please set either APP_MODULE or APP_FILE environment variables, or create a file 'app.py' to launch your application."
+exit 1
