@@ -29,7 +29,9 @@ function docker_build {
   fi
 
   docker build -t ${TAG} . && trap - ERR
-  squash
+  [ -z "${SKIP_SQUASH}" ] && squash
+
+  return 0
 }
 
 if [ -z ${VERSION} ]; then
