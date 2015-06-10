@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# For SCL enablement
-source .bashrc
-
 set -e
 
 echo "---> Copying application source ..."
