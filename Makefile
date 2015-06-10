@@ -13,10 +13,9 @@ endif
 
 .PHONY: build
 build:
-	hack/build.sh $(OS) $(VERSION)
+	SKIP_SQUASH=$(SKIP_SQUASH) hack/build.sh $(OS) $(VERSION)
 
 
 .PHONY: test
 test:
-	TEST_MODE=true hack/build.sh $(OS) $(VERSION)
-
+	SKIP_SQUASH=1 TEST_MODE=true hack/build.sh $(OS) $(VERSION)
