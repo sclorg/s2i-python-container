@@ -210,6 +210,15 @@ file inside your source code repository.
     Path to a valid Python file with
     [gunicorn configuration](http://docs.gunicorn.org/en/latest/configure.html#configuration-file).
 
+* **DISABLE_COLLECTSTATIC**
+
+    Set it to a nonempty value to inhibit the execution of
+    'manage.py collectstatic' during the build. Only affects Django projects.
+
+* **DISABLE_MIGRATE**
+
+    Set it to a nonempty value to inhibit the execution of 'manage.py migrate'
+    when the produced image is run. Only affects Django projects.
 
 Source repository layout
 ------------------------
@@ -246,6 +255,16 @@ ways, in precedence order:
   If a file named `wsgi.py` is present in your repository, it will be used as
   the entry point to your application. This can be overridden with the
   environment variable `APP_MODULE`.
+  This file is present in Django projects by default.
+
+  If you have both Django and Gunicorn in your requirements, your Django project
+  will be automatically served with Gunicorn.
+
+* **Django development server**
+
+  If you have Django in your requirements, but don't have Gunicorn, then your
+  application will be served with Django's development web server. This is not,
+  however, a recommended way to serve your application in production.
 
 * **Python script**
 
