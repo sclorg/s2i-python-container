@@ -106,6 +106,43 @@ test_docker_run_usage() {
   docker run ${IMAGE_NAME} &>/dev/null
 }
 
+test_scl_usage() {
+  local run_cmd="$1"
+  local expected="$2"
+  local cid_file="$3"
+
+  info "Testing the image SCL enable"
+  out=$(docker run --rm ${IMAGE_NAME} /bin/bash -c "${run_cmd}" 2>&1)
+  if ! echo "${out}" | grep -q "${expected}"; then
+    echo "ERROR[/bin/bash -c "${run_cmd}"] Expected '${expected}', got '${out}'"
+    return 1
+  fi
+  out=$(docker run --rm -i ${IMAGE_NAME} /bin/bash -i <<< "${run_cmd}" 2>&1)
+  if ! echo "${out}" | grep -q "${expected}"; then
+    echo "ERROR[-i /bin/bash -c "${run_cmd}"] Expected '${expected}', got '${out}'"
+    return 1
+  fi
+  out=$(docker run --rm -i ${IMAGE_NAME} /bin/bash -l <<< "${run_cmd}" 2>&1)
+  if ! echo "${out}" | grep -q "${expected}"; then
+    echo "ERROR[-i /bin/bash -l "${run_cmd}"] Expected '${expected}', got '${out}'"
+    return 1
+  fi
+  out=$(docker run --rm -i ${IMAGE_NAME} /bin/sh -ic "${run_cmd}" 2>&1)
+  if ! echo "${out}" | grep -q "${expected}"; then
+    echo "ERROR[/bin/sh -c "${run_cmd}"] Expected '${expected}', got '${out}'"
+    return 1
+  fi
+  out=$(docker exec $(cat ${cid_file}) /bin/bash -c "${run_cmd}" 2>&1)
+  if ! echo "${out}" | grep -q "${expected}"; then
+    echo "ERROR[exec /bin/bash -c "${run_cmd}"] Expected '${expected}', got '${out}'"
+    return 1
+  fi
+  out=$(docker exec $(cat ${cid_file}) /bin/sh -ic "${run_cmd}" 2>&1)
+  if ! echo "${out}" | grep -q "${expected}"; then
+    echo "ERROR[exec /bin/sh -ic "${run_cmd}"] Expected '${expected}', got '${out}'"
+    return 1
+  fi
+}
 
 test_connection() {
   info "Testing the HTTP connection (http://$(container_ip):${test_port}) ${CONTAINER_ARGS} ..."
@@ -136,6 +173,8 @@ test_application() {
   # Wait for the container to write it's CID file
   wait_for_cid
 
+  test_scl_usage "python --version" "Python 3.3.2" "${cid_file}"
+  check_result $?
   test_connection
   check_result $?
   cleanup_app
@@ -146,18 +185,17 @@ test_application() {
 # it from Docker hub
 sti_args="--force-pull=false"
 
+# Verify the 'usage' script is working properly when running the base image with 'sti usage ...'
+test_sti_usage
+check_result $?
+
+# Verify the 'usage' script is working properly when running the base image with 'docker run ...'
+test_docker_run_usage
+check_result $?
 
 for app in ${WEB_APPS[@]}; do
   prepare ${app}
   run_sti_build ${app}
-  check_result $?
-
-  # Verify the 'usage' script is working properly when running the base image with 'sti usage ...'
-  test_sti_usage
-  check_result $?
-
-  # Verify the 'usage' script is working properly when running the base image with 'docker run ...'
-  test_docker_run_usage
   check_result $?
 
   # test application with default user
