@@ -1,4 +1,5 @@
 #!/bin/bash
+source /opt/openshift/etc/generate_container_user
 
 function is_gunicorn_installed() {
   pip show -q gunicorn
