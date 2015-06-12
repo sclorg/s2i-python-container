@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function is_django_installed() {
-  pip show -q django
+  python -c "import django" &>/dev/null
 }
 
 function should_collectstatic() {
