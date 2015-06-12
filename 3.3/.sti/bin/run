@@ -2,11 +2,11 @@
 source /opt/openshift/etc/generate_container_user
 
 function is_gunicorn_installed() {
-  pip show -q gunicorn
+  hash gunicorn &>/dev/null
 }
 
 function is_django_installed() {
-  pip show -q django
+  python -c "import django" &>/dev/null
 }
 
 function should_migrate() {

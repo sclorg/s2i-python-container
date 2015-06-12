@@ -35,7 +35,7 @@ RUN yum-config-manager --enable rhel-server-rhscl-7-rpms \
     rpm -Uvh epel-release-7-5.noarch.rpm && rm epel-release-7-5.noarch.rpm && \
     yum install -y --enablerepo=epel --setopt=tsflags=nodocs nss_wrapper && \
     yum clean all -y && \
-    scl enable python33 "easy_install pip" && \
+    scl enable python33 "easy_install pip==1.5.6" && \
     chown -R default:default /opt/openshift && \
     chmod -R og+rwx /opt/openshift
 
