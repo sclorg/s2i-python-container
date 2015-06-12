@@ -33,9 +33,9 @@ RUN yum-config-manager --enable rhel-server-rhscl-7-rpms \
     yum install -y --setopt=tsflags=nodocs python33 python33-python-devel python33-python-setuptools && \
     curl -O https://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm && \
     rpm -Uvh epel-release-7-5.noarch.rpm && rm epel-release-7-5.noarch.rpm && \
-    yum install -y --enablerepo=epel --setopt=tsflags=nodocs nss_wrapper && \
+    yum install -y --disablerepo=epel --setopt=tsflags=nodocs nss_wrapper && \
     yum clean all -y && \
-    scl enable python33 "easy_install pip==1.5.6" && \
+    yum install -y python33-python-pip && \
     chown -R default:default /opt/openshift && \
     chmod -R og+rwx /opt/openshift
 
