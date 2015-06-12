@@ -15,6 +15,12 @@ LABEL k8s.io/description="Platform for building and running Python 3.3 applicati
       openshift.io/expose-services="8080:http" \
       openshift.io/tags="builder,python,python33"
 
+# Labels consumed by Red Hat build service
+LABEL Component="python33" \
+      Name="openshift3/python-33-rhel7" \
+      Version="3.3" \
+      Release="1"
+
 # Copy the STI scripts from the specific language image to /usr/local/sti
 COPY ./.sti/bin/ /usr/local/sti
 
