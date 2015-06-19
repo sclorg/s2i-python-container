@@ -37,6 +37,7 @@ for dir in ${dirs[@]}; do
   else
     docker build -t ${IMAGE_NAME} .
   fi
+  [ -z "${SKIP_SQUASH}" ] && squash
 
   if [ -v TEST_MODE ]; then
     IMAGE_NAME=${IMAGE_NAME} test/run
