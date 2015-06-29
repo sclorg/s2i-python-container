@@ -1,10 +1,10 @@
 Python for OpenShift - Docker images
 ========================================
 
-This repository contains sources of the images for building various versions
-of Python applications as reproducible Docker images using
+This repository contains the source for building various versions of
+the Python application as a reproducible Docker image using
 [source-to-image](https://github.com/openshift/source-to-image).
-User can choose between RHEL and CentOS based builder images.
+Users can choose between RHEL and CentOS based builder images.
 The resulting image can be run using [Docker](http://docker.io).
 
 
@@ -22,10 +22,10 @@ CentOS versions currently supported are:
 
 Installation
 ---------------
-To build Python image, choose between CentOS or RHEL based image:
+To build a Python image, choose either the CentOS or RHEL based image:
 *  **RHEL based image**
 
-    To build a rhel-based python-3.3 image, you need to run the build on a properly
+    To build a RHEL based Python-3.3 image, you need to run the build on a properly
     subscribed RHEL machine.
 
     ```
@@ -36,13 +36,13 @@ To build Python image, choose between CentOS or RHEL based image:
 
 *  **CentOS based image**
 
-    This image is available on DockerHub. To download it use:
+    This image is available on DockerHub. To download it run:
 
     ```
     $ docker pull openshift/python-33-centos7
     ```
 
-    To build Python image from scratch use:
+    To build a Python image from scratch run:
 
     ```
     $ git clone https://github.com/openshift/sti-python.git
@@ -51,13 +51,13 @@ To build Python image, choose between CentOS or RHEL based image:
     ```
 
 **Notice: By omitting the `VERSION` parameter, the build/test action will be performed
-on all provided versions of Python. Since we are now providing only version `3.3`,
+on all provided versions of Python. Since we are currently providing only version `3.3`,
 you can omit this parameter.**
 
 
 Usage
 ---------------------
-To build a simple [python-sample-app](https://github.com/openshift/sti-python/tree/master/3.3/test/setup-test-app) application,
+To build a simple [python-sample-app](https://github.com/openshift/sti-python/tree/master/3.3/test/setup-test-app) application
 using standalone [STI](https://github.com/openshift/source-to-image) and then run the
 resulting image with [Docker](http://docker.io) execute:
 
@@ -81,14 +81,14 @@ $ curl 127.0.0.1:8080
 
 Test
 ---------------------
-This repository also provides [STI](https://github.com/openshift/source-to-image) test framework,
-which launches tests to check functionality of a simple python application built on top of sti-python image.
+This repository also provides a [S2I](https://github.com/openshift/source-to-image) test framework,
+which launches tests to check functionality of a simple Python application built on top of the sti-python image.
 
-User can choose between testing python test application based on RHEL or CentOS image.
+Users can choose between testing a Python test application based on a RHEL or CentOS image.
 
 *  **RHEL based image**
 
-    To test a rhel7-based python-3.3 image, you need to run the test on a properly subscribed RHEL machine.
+    To test a RHEL7-based Python-3.3 image, you need to run the test on a properly subscribed RHEL machine.
 
     ```
     $ cd sti-python
@@ -103,7 +103,7 @@ User can choose between testing python test application based on RHEL or CentOS 
     ```
 
 **Notice: By omitting the `VERSION` parameter, the build/test action will be performed
-on all provided versions of Python. Since we are now providing only version `3.3`
+on all provided versions of Python. Since we are currently providing only version `3.3`
 you can omit this parameter.**
 
 
@@ -126,13 +126,13 @@ Repository organization
 
         *   **assemble**
 
-            Is used to install the sources into location from where the application
+            Used to install the sources into the location where the application
             will be run and prepare the application for deployment (eg. installing
             dependencies, etc.)
 
         *   **run**
 
-            This script is responsible for running the application, by using the
+            This script is responsible for running the application by using the
             application web server.
 
         *   **usage***
@@ -141,36 +141,36 @@ Repository organization
 
     * **`contrib/`**
 
-        This folder contains file with commonly used modules.
+        This folder contains a file with commonly used modules.
 
     * **`test/`**
 
-        This folder is containing [STI](https://github.com/openshift/source-to-image)
-        test framework with simple server.
+        This folder contains a [S2I](https://github.com/openshift/source-to-image)
+        test framework with a simple server.
 
         * **`setup-test-app/`**
 
-            Simple gunicorn application used for testing purposes in the [STI](https://github.com/openshift/source-to-image) test framework.
+            Simple Gunicorn application used for testing purposes by the [S2I](https://github.com/openshift/source-to-image) test framework.
 
         * **`standalone-test-app/`**
 
-            Simple standalone application used for testing purposes in the [STI](https://github.com/openshift/source-to-image) test framework.
+            Simple standalone application used for testing purposes by the [S2I](https://github.com/openshift/source-to-image) test framework.
 
         * **run**
 
-            Script that runs the [STI](https://github.com/openshift/source-to-image) test framework.
+            Script that runs the [S2I](https://github.com/openshift/source-to-image) test framework.
 
 * **`hack/`**
 
-    Folder contains scripts which are responsible for build and test actions performed by the `Makefile`.
+    Folder containing scripts which are responsible for build and test actions performed by the `Makefile`.
 
 
 Image name structure
 ------------------------
 ##### Structure: openshift/1-2-3
 
-1. Platform name - python
-2. Platform version(without dots)
+1. Platform name (lowercase) - python
+2. Platform version(without dots) - 33
 3. Base builder image - centos7/rhel7
 
 Examples: `openshift/python-33-centos7`, `openshift/python-33-rhel7`
@@ -179,7 +179,7 @@ Examples: `openshift/python-33-centos7`, `openshift/python-33-rhel7`
 Environment variables
 ---------------------
 
-To set these environment variables, you can place them into `.sti/environment`
+To set these environment variables, you can place them as a key value pair into a `.sti/environment`
 file inside your source code repository.
 
 * **APP_FILE**
@@ -190,10 +190,10 @@ file inside your source code repository.
 
 * **APP_MODULE**
 
-    Used to run the application with gunicorn, as documented
+    Used to run the application with Gunicorn, as documented
     [here](http://docs.gunicorn.org/en/latest/run.html#gunicorn).
     This variable specifies a WSGI callable with the pattern
-    `MODULE_NAME:VARIABLE_NAME`, where `MODULE_NAME` is a full dotted path
+    `MODULE_NAME:VARIABLE_NAME`, where `MODULE_NAME` is the full dotted path
     of a module, and `VARIABLE_NAME` refers to a WSGI callable inside the
     specified module.
     Gunicorn will look for a WSGI callable named `application` if not specified.
@@ -202,29 +202,29 @@ file inside your source code repository.
     file in your project and use it if it exists.
 
     If using `setup.py` for installing the application, the `MODULE_NAME` part
-    can be read from there. For example, see
+    can be read from there. For an example, see
     [setup-test-app](https://github.com/openshift/sti-python/tree/master/3.3/test/setup-test-app).
 
 * **APP_CONFIG**
 
-    Path to a valid Python file with
-    [gunicorn configuration](http://docs.gunicorn.org/en/latest/configure.html#configuration-file).
+    Path to a valid Python file with a
+    [Gunicorn configuration](http://docs.gunicorn.org/en/latest/configure.html#configuration-file) file.
 
 * **DISABLE_COLLECTSTATIC**
 
-    Set it to a nonempty value to inhibit the execution of
-    'manage.py collectstatic' during the build. Only affects Django projects.
+    Set this variable to a non-empty value to inhibit the execution of
+    'manage.py collectstatic' during the build. This only affects Django projects.
 
 * **DISABLE_MIGRATE**
 
-    Set it to a nonempty value to inhibit the execution of 'manage.py migrate'
-    when the produced image is run. Only affects Django projects.
+    Set this variable to a non-empty value to inhibit the execution of 'manage.py migrate'
+    when the produced image is run. This only affects Django projects.
 
 Source repository layout
 ------------------------
 
-You need not change anything in your existing Python project's repository.
-However, if these files exist they affect the behavior of the build process:
+You do not need to change anything in your existing Python project's repository.
+However, if these files exist they will affect the behavior of the build process:
 
 * **requirements.txt**
 
@@ -234,22 +234,22 @@ However, if these files exist they affect the behavior of the build process:
 
 * **setup.py**
 
-  Configuration of various aspects of the project, including installation
+  Configures various aspects of the project, including installation of
   dependencies, as documented
   [here](https://packaging.python.org/en/latest/distributing.html#setup-py).
-  For most projects, it is sufficient to use `requirements.txt`.
+  For most projects, it is sufficient to simply use `requirements.txt`.
 
 
 Run strategies
 --------------
 
-The Docker image produced by sti-python executes your project in one of these
-ways, in precedence order:
+The Docker image produced by sti-python executes your project in one of the
+following ways, in precedence order:
 
 * **Gunicorn**
 
-  The Gunicorn WSGI HTTP server is used to serve your application in case it is
-  installed. It can be installed by listing it either in the `requirements.txt`
+  The Gunicorn WSGI HTTP server is used to serve your application in the case that it
+  is installed. It can be installed by listing it either in the `requirements.txt`
   file or in the `install_requires` section of the `setup.py` file.
 
   If a file named `wsgi.py` is present in your repository, it will be used as
@@ -258,17 +258,17 @@ ways, in precedence order:
   This file is present in Django projects by default.
 
   If you have both Django and Gunicorn in your requirements, your Django project
-  will be automatically served with Gunicorn.
+  will automatically be served using Gunicorn.
 
 * **Django development server**
 
-  If you have Django in your requirements, but don't have Gunicorn, then your
-  application will be served with Django's development web server. This is not,
-  however, a recommended way to serve your application in production.
+  If you have Django in your requirements but don't have Gunicorn, then your
+  application will be served using Django's development web server. However, this is not
+  recommended for production environments.
 
 * **Python script**
 
   This is the most general way of executing your application. It will be used
-  in case you specify a path to a Python script via the `APP_FILE` environment
+  in the case where you specify a path to a Python script via the `APP_FILE` environment
   variable, defaulting to a file named `app.py` if it exists. The script is
   passed to a regular Python interpreter to launch your application.
