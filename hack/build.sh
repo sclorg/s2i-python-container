@@ -10,7 +10,7 @@ declare -a VERSIONS=(3.3)
 
 function squash {
   # install the docker layer squashing tool
-  easy_install --user docker-scripts==0.4.1
+  easy_install --user docker_py==1.2.3 docker-scripts==0.4.2
   base=$(awk '/^FROM/{print $2}' $1)
   $HOME/.local/bin/docker-scripts squash -f $base ${IMAGE_NAME}
 }
