@@ -10,7 +10,7 @@ OS=$1
 VERSION=$2
 
 DOCKERFILE_PATH=""
-BASE_DIR_NAME=$(basename `pwd`)
+BASE_DIR_NAME=$(echo $(basename `pwd`) | sed -e 's/-[0-9]*$//g')
 BASE_IMAGE_NAME="openshift/${BASE_DIR_NAME#sti-}"
 
 # Cleanup the temporary Dockerfile created by docker build with version
