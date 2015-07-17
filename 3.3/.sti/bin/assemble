@@ -24,7 +24,7 @@ if [[ -f setup.py ]]; then
 fi
 
 # set permissions for any installed artifacts
-chmod -R og+rwx /opt/openshift
+chmod -R og+rwx /opt/app-root
 
 if should_collectstatic; then
   (
