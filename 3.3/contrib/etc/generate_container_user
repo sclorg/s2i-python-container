@@ -1,5 +1,5 @@
 # Set current user in nss_wrapper
-PASSWD_DIR="/opt/openshift/etc"
+PASSWD_DIR="/opt/app-root/etc"
 
 export USER_ID=$(id -u)
 envsubst < ${PASSWD_DIR}/passwd.template > ${PASSWD_DIR}/passwd

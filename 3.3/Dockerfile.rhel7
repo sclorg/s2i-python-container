@@ -26,7 +26,7 @@ COPY ./.sti/bin/ /usr/local/sti
 
 # Each language image can have 'contrib' a directory with extra files needed to
 # run and build the applications.
-COPY ./contrib/ /opt/openshift
+COPY ./contrib/ /opt/app-root
 
 RUN yum-config-manager --enable rhel-server-rhscl-7-rpms \
     yum-config-manager --enable rhel-7-server-optional-rpms && \
@@ -36,8 +36,8 @@ RUN yum-config-manager --enable rhel-server-rhscl-7-rpms \
     yum install -y --disablerepo=epel --setopt=tsflags=nodocs nss_wrapper && \
     yum clean all -y && \
     yum install -y python33-python-pip && \
-    chown -R default:default /opt/openshift && \
-    chmod -R og+rwx /opt/openshift
+    chown -R default:default /opt/app-root && \
+    chmod -R og+rwx /opt/app-root
 
 USER 1001
 
