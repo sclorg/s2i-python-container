@@ -10,10 +10,10 @@ EXPOSE 8080
 ENV PYTHON_VERSION=3.3 \
     PATH=.local/bin/:$PATH
 
-LABEL k8s.io/description="Platform for building and running Python 3.3 applications" \
-      k8s.io/display-name="Python 3.3" \
-      openshift.io/expose-services="8080:http" \
-      openshift.io/tags="builder,python,python33"
+LABEL io.k8s.description="Platform for building and running Python 3.3 applications" \
+      io.k8s.display-name="Python 3.3" \
+      io.openshift.expose-services="8080:http" \
+      io.openshift.tags="builder,python,python33"
 
 # Labels consumed by Red Hat build service
 LABEL BZComponent="openshift-sti-python-docker" \
@@ -22,6 +22,12 @@ LABEL BZComponent="openshift-sti-python-docker" \
       Release="1" \
       Architecture="x86_64"
 
+RUN yum-config-manager --enable rhel-server-rhscl-7-rpms \
+    yum-config-manager --enable rhel-7-server-optional-rpms && \
+    yum-config-manager --disable epel >/dev/null || : && \
+    yum install -y --setopt=tsflags=nodocs python33 python33-python-devel python33-python-setuptools python33-python-pip nss_wrapper && \
+    yum clean all -y
+
 # Copy the STI scripts from the specific language image to /usr/local/sti
 COPY ./.sti/bin/ /usr/local/sti
 
@@ -29,16 +35,10 @@ COPY ./.sti/bin/ /usr/local/sti
 # run and build the applications.
 COPY ./contrib/ /opt/app-root
 
-RUN yum-config-manager --enable rhel-server-rhscl-7-rpms \
-    yum-config-manager --enable rhel-7-server-optional-rpms && \
-    yum install -y --setopt=tsflags=nodocs python33 python33-python-devel python33-python-setuptools && \
-    curl -O https://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm && \
-    rpm -Uvh epel-release-7-5.noarch.rpm && rm epel-release-7-5.noarch.rpm && \
-    yum install -y --disablerepo=epel --setopt=tsflags=nodocs nss_wrapper && \
-    yum clean all -y && \
-    yum install -y python33-python-pip && \
-    chown -R default:default /opt/app-root && \
-    chmod -R og+rwx /opt/app-root
+# In order to drop the root user, we have to make some directories world
+# writeable as OpenShift default security model is to run the container under
+# random UID.
+RUN chown -R 1001:1001 /opt/app-root && chmod -R og+rwx /opt/app-root
 
 USER 1001
 
