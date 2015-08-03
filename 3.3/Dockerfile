@@ -2,7 +2,7 @@ FROM openshift/base-centos7
 
 # This image provides a Python 3.3 environment you can use to run your Python
 # applications.
-MAINTAINER Maciej Szulik <maszulik@redhat.com>
+MAINTAINER SoftwareCollections.org <sclorg@redhat.com>
 
 EXPOSE 8080
 
