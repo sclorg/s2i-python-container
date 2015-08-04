@@ -117,21 +117,6 @@ test_scl_usage() {
     echo "ERROR[/bin/bash -c "${run_cmd}"] Expected '${expected}', got '${out}'"
     return 1
   fi
-  # out=$(docker run --rm -i ${IMAGE_NAME} /bin/bash -i <<< "${run_cmd}" 2>&1)
-  # if ! echo "${out}" | grep -q "${expected}"; then
-  #   echo "ERROR[-i /bin/bash -c "${run_cmd}"] Expected '${expected}', got '${out}'"
-  #   return 1
-  # fi
-  # out=$(docker run --rm -i ${IMAGE_NAME} /bin/bash -l <<< "${run_cmd}" 2>&1)
-  # if ! echo "${out}" | grep -q "${expected}"; then
-  #   echo "ERROR[-i /bin/bash -l "${run_cmd}"] Expected '${expected}', got '${out}'"
-  #   return 1
-  # fi
-  # out=$(docker run --rm -i ${IMAGE_NAME} /bin/sh -ic "${run_cmd}" 2>&1)
-  # if ! echo "${out}" | grep -q "${expected}"; then
-  #   echo "ERROR[/bin/sh -c "${run_cmd}"] Expected '${expected}', got '${out}'"
-  #   return 1
-  # fi
   out=$(docker exec $(cat ${cid_file}) /bin/bash -c "${run_cmd}" 2>&1)
   if ! echo "${out}" | grep -q "${expected}"; then
     echo "ERROR[exec /bin/bash -c "${run_cmd}"] Expected '${expected}', got '${out}'"
