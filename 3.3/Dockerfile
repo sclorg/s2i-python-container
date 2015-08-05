@@ -20,7 +20,7 @@ RUN yum install -y \
     yum install -y --setopt=tsflags=nodocs install nss_wrapper && \
     yum clean all -y
 
-# Copy the STI scripts from the specific language image to /usr/local/sti
+# Copy the S2I scripts from the specific language image to /usr/local/sti
 COPY ./.sti/bin/ /usr/local/sti
 
 # Each language image can have 'contrib' a directory with extra files needed to

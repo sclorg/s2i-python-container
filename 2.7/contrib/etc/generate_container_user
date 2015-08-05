@@ -1,0 +1,8 @@
+# Set current user in nss_wrapper
+PASSWD_DIR="/opt/app-root/etc"
+
+export USER_ID=$(id -u)
+envsubst < ${PASSWD_DIR}/passwd.template > ${PASSWD_DIR}/passwd
+export LD_PRELOAD=libnss_wrapper.so
+export NSS_WRAPPER_PASSWD=${PASSWD_DIR}/passwd
+export NSS_WRAPPER_GROUP=/etc/group

@@ -1,5 +1,5 @@
 SKIP_SQUASH?=0
-VERSIONS="3.3"
+VERSIONS="2.7 3.3"
 
 ifeq ($(TARGET),rhel7)
 	OS := rhel7
@@ -7,7 +7,9 @@ else
 	OS := centos7
 endif
 
-ifeq ($(VERSION), 3.3)
+ifeq ($(VERSION), 2.7)
+	VERSION := 2.7
+else ifeq ($(VERSION), 3.3)
 	VERSION := 3.3
 else
 	VERSION :=

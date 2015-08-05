@@ -11,6 +11,7 @@ The resulting image can be run using [Docker](http://docker.io).
 Versions
 ---------------
 Python versions currently provided are:
+* python-2.7
 * python-3.3
 
 RHEL versions currently supported are:
@@ -25,7 +26,7 @@ Installation
 To build a Python image, choose either the CentOS or RHEL based image:
 *  **RHEL based image**
 
-    To build a RHEL based Python-3.3 image, you need to run the build on a properly
+    To build a RHEL based Python image, you need to run the build on a properly
     subscribed RHEL machine.
 
     ```
@@ -51,14 +52,13 @@ To build a Python image, choose either the CentOS or RHEL based image:
     ```
 
 **Notice: By omitting the `VERSION` parameter, the build/test action will be performed
-on all provided versions of Python. Since we are currently providing only version `3.3`,
-you can omit this parameter.**
+on all provided versions of Python.**
 
 
 Usage
 ---------------------
 To build a simple [python-sample-app](https://github.com/openshift/sti-python/tree/master/3.3/test/setup-test-app) application
-using standalone [STI](https://github.com/openshift/source-to-image) and then run the
+using standalone [S2I](https://github.com/openshift/source-to-image) and then run the
 resulting image with [Docker](http://docker.io) execute:
 
 *  **For RHEL based image**
@@ -122,7 +122,7 @@ Repository organization
 
     * **`.sti/bin/`**
 
-        This folder contains scripts that are run by [STI](https://github.com/openshift/source-to-image):
+        This folder contains scripts that are run by [S2I](https://github.com/openshift/source-to-image):
 
         *   **assemble**
 

@@ -6,7 +6,7 @@
 # IMAGE_NAME specifies a name of the candidate image used for testing.
 # The image has to be available before this script is executed.
 #
-IMAGE_NAME=${IMAGE_NAME:-openshift/python-33-centos7-candidate}
+IMAGE_NAME=${IMAGE_NAME:-openshift/python-27-centos7-candidate}
 
 declare -a WEB_APPS=({standalone,setup,django}-test-app)
 
@@ -117,6 +117,21 @@ test_scl_usage() {
     echo "ERROR[/bin/bash -c "${run_cmd}"] Expected '${expected}', got '${out}'"
     return 1
   fi
+  # out=$(docker run --rm -i ${IMAGE_NAME} /bin/bash -i <<< "${run_cmd}" 2>&1)
+  # if ! echo "${out}" | grep -q "${expected}"; then
+  #   echo "ERROR[-i /bin/bash -c "${run_cmd}"] Expected '${expected}', got '${out}'"
+  #   return 1
+  # fi
+  # out=$(docker run --rm -i ${IMAGE_NAME} /bin/bash -l <<< "${run_cmd}" 2>&1)
+  # if ! echo "${out}" | grep -q "${expected}"; then
+  #   echo "ERROR[-i /bin/bash -l "${run_cmd}"] Expected '${expected}', got '${out}'"
+  #   return 1
+  # fi
+  # out=$(docker run --rm -i ${IMAGE_NAME} /bin/sh -ic "${run_cmd}" 2>&1)
+  # if ! echo "${out}" | grep -q "${expected}"; then
+  #   echo "ERROR[/bin/sh -c "${run_cmd}"] Expected '${expected}', got '${out}'"
+  #   return 1
+  # fi
   out=$(docker exec $(cat ${cid_file}) /bin/bash -c "${run_cmd}" 2>&1)
   if ! echo "${out}" | grep -q "${expected}"; then
     echo "ERROR[exec /bin/bash -c "${run_cmd}"] Expected '${expected}', got '${out}'"
@@ -158,7 +173,7 @@ test_application() {
   # Wait for the container to write it's CID file
   wait_for_cid
 
-  test_scl_usage "python --version" "Python 3.3.2" "${cid_file}"
+  test_scl_usage "python --version" "Python 2.7.8" "${cid_file}"
   check_result $?
   test_connection
   check_result $?
