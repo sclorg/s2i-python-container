@@ -13,6 +13,7 @@ Versions
 Python versions currently provided are:
 * python-2.7
 * python-3.3
+* python-3.4
 
 RHEL versions currently supported are:
 * RHEL7
