@@ -33,9 +33,9 @@ container_ip() {
   docker inspect --format="{{ .NetworkSettings.IPAddress }}" $(cat $cid_file)
 }
 
-run_sti_build() {
+run_s2i_build() {
   info "Building the ${1} application image ..."
-  sti build ${sti_args} file://${test_dir}/${1} ${IMAGE_NAME} ${IMAGE_NAME}-testapp
+  s2i build ${s2i_args} file://${test_dir}/${1} ${IMAGE_NAME} ${IMAGE_NAME}-testapp
 }
 
 prepare() {
@@ -96,9 +96,9 @@ wait_for_cid() {
   done
 }
 
-test_sti_usage() {
-  info "Testing 'sti usage' ..."
-  sti usage ${sti_args} ${IMAGE_NAME} &>/dev/null
+test_s2i_usage() {
+  info "Testing 's2i usage' ..."
+  s2i usage ${s2i_args} ${IMAGE_NAME} &>/dev/null
 }
 
 test_docker_run_usage() {
@@ -183,10 +183,10 @@ test_application() {
 
 # Since we built the candidate image locally, we don't want S2I attempt to pull
 # it from Docker hub
-sti_args="--force-pull=false"
+s2i_args="--force-pull=false"
 
-# Verify the 'usage' script is working properly when running the base image with 'sti usage ...'
-test_sti_usage
+# Verify the 'usage' script is working properly when running the base image with 's2i usage ...'
+test_s2i_usage
 check_result $?
 
 # Verify the 'usage' script is working properly when running the base image with 'docker run ...'
@@ -195,7 +195,7 @@ check_result $?
 
 for app in ${WEB_APPS[@]}; do
   prepare ${app}
-  run_sti_build ${app}
+  run_s2i_build ${app}
   check_result $?
 
   # test application with default user
