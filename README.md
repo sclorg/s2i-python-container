@@ -64,13 +64,13 @@ resulting image with [Docker](http://docker.io) execute:
 
 *  **For RHEL based image**
     ```
-    $ sti build https://github.com/openshift/sti-python.git --context-dir=3.3/test/setup-test-app/ openshift/python-33-rhel7 python-sample-app
+    $ s2i build https://github.com/openshift/sti-python.git --context-dir=3.3/test/setup-test-app/ openshift/python-33-rhel7 python-sample-app
     $ docker run -p 8080:8080 python-sample-app
     ```
 
 *  **For CentOS based image**
     ```
-    $ sti build https://github.com/openshift/sti-python.git --context-dir=3.3/test/setup-test-app/ openshift/python-33-centos7 python-sample-app
+    $ s2i build https://github.com/openshift/sti-python.git --context-dir=3.3/test/setup-test-app/ openshift/python-33-centos7 python-sample-app
     $ docker run -p 8080:8080 python-sample-app
     ```
 
@@ -121,7 +121,7 @@ Repository organization
         RHEL based Dockerfile. In order to perform build or test actions on this
         Dockerfile you need to run the action on a properly subscribed RHEL machine.
 
-    * **`.sti/bin/`**
+    * **`s2i/bin/`**
 
         This folder contains scripts that are run by [S2I](https://github.com/openshift/source-to-image):
 

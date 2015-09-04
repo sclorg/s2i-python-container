@@ -21,7 +21,7 @@ RUN yum install -y \
     yum clean all -y
 
 # Copy the S2I scripts from the specific language image to /usr/local/sti
-COPY ./.sti/bin/ /usr/local/sti
+COPY ./s2i/bin/ /usr/local/sti
 
 # Each language image can have 'contrib' a directory with extra files needed to
 # run and build the applications.
