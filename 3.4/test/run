@@ -131,7 +131,7 @@ test_scl_usage() {
 
 test_connection() {
   info "Testing the HTTP connection (http://$(container_ip):${test_port}) ${CONTAINER_ARGS} ..."
-  local max_attempts=10
+  local max_attempts=30
   local sleep_time=1
   local attempt=1
   local result=1

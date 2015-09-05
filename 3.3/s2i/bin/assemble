@@ -12,6 +12,8 @@ set -e
 
 echo "---> Copying application source ..."
 cp -Rf /tmp/src/. ./
+chgrp -R 0 ./
+chmod -R g+rwx ./
 
 if [[ -f requirements.txt ]]; then
   echo "---> Installing dependencies ..."
@@ -24,7 +26,8 @@ if [[ -f setup.py ]]; then
 fi
 
 # set permissions for any installed artifacts
-chmod -R og+rwx /opt/app-root
+chgrp -R 0 /opt/app-root
+chmod -R g+rwx /opt/app-root
 
 if should_collectstatic; then
   (
