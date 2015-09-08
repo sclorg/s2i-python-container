@@ -28,7 +28,7 @@ COPY ./s2i/bin/ /usr/local/sti
 COPY ./contrib/ /opt/app-root
 
 RUN scl enable python33 "easy_install pip==1.5.6" && \
-    chown -R 1001:1001 /opt/app-root && chmod -R og+rwx /opt/app-root
+    chown -R 1001:0 /opt/app-root && chmod -R og+rwx /opt/app-root
 
 USER 1001
 

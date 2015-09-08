@@ -28,7 +28,7 @@ COPY ./s2i/bin/ /usr/local/sti
 # run and build the applications.
 COPY ./contrib/ /opt/app-root
 
-RUN chown -R 1001:1001 /opt/app-root && chmod -R og+rwx /opt/app-root
+RUN chown -R 1001:0 /opt/app-root && chmod -R og+rwx /opt/app-root
 
 USER 1001
 
