@@ -3,8 +3,6 @@ FROM openshift/base-rhel7
 # This image provides a Python 3.4 environment you can use to run your Python
 # applications.
 
-MAINTAINER SoftwareCollections.org <sclorg@redhat.com>
-
 EXPOSE 8080
 
 ENV PYTHON_VERSION=3.4 \
