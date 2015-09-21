@@ -8,7 +8,7 @@ MAINTAINER SoftwareCollections.org <sclorg@redhat.com>
 EXPOSE 8080
 
 ENV PYTHON_VERSION=2.7 \
-    PATH=.local/bin/:$PATH
+    PATH=$HOME/.local/bin/:$PATH
 
 LABEL io.k8s.description="Platform for building and running Python 2.7 applications" \
       io.k8s.display-name="Python 2.7" \
