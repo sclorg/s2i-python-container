@@ -21,8 +21,8 @@ RUN yum install -y \
     yum install -y --setopt=tsflags=nodocs install nss_wrapper && \
     yum clean all -y
 
-# Copy the S2I scripts from the specific language image to /usr/local/sti
-COPY ./s2i/bin/ /usr/local/sti
+# Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
+COPY ./s2i/bin/ $STI_SCRIPTS_PATH
 
 # Each language image can have 'contrib' a directory with extra files needed to
 # run and build the applications.
@@ -33,4 +33,4 @@ RUN chown -R 1001:0 /opt/app-root && chmod -R og+rwx /opt/app-root
 USER 1001
 
 # Set the default CMD to print the usage of the language image
-CMD ["usage"]
+CMD $STI_SCRIPTS_PATH/usage
