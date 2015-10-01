@@ -1,19 +1,29 @@
 #!/bin/bash -e
 # This script is used to build, test and squash the OpenShift Docker images.
 #
-# $1 - Specifies distribution - "rhel7" or "centos7"
-# $2 - Specifies the image version - (must match with subdirectory in repo)
+# Name of resulting image will be: 'NAMESPACE/BASE_IMAGE_NAME-VERSION-OS'.
+#
+# BASE_IMAGE_NAME - Usually name of the main component within container.
+# OS - Specifies distribution - "rhel7" or "centos7"
+# VERSION - Specifies the image version - (must match with subdirectory in repo)
 # TEST_MODE - If set, build a candidate image and test it
 # TAG_ON_SUCCESS - If set, tested image will be re-tagged as a non-candidate
-#                  image, if the tests pass.
+#       image, if the tests pass.
 # VERSIONS - Must be set to a list with possible versions (subdirectories)
+# OPENSHIFT_NAMESPACES - Which of available versions (subdirectories) should be
+#       put into openshift/ namespace.
 
-OS=$1
-VERSION=$2
+OS=${1-$OS}
+VERSION=${2-$VERSION}
 
 DOCKERFILE_PATH=""
-BASE_DIR_NAME=$(echo $(basename `pwd`) | sed -e 's/-[0-9]*$//g')
-BASE_IMAGE_NAME="openshift/${BASE_DIR_NAME#sti-}"
+
+test -z "$BASE_IMAGE_NAME" && {
+  BASE_DIR_NAME=$(echo $(basename `pwd`) | sed -e 's/-[0-9]*$//g')
+  BASE_IMAGE_NAME="${BASE_DIR_NAME#sti-}"
+}
+
+NAMESPACE="openshift/"
 
 # Cleanup the temporary Dockerfile created by docker build with version
 trap "rm -f ${DOCKERFILE_PATH}.version" SIGINT SIGQUIT EXIT
@@ -48,7 +58,17 @@ function squash {
 dirs=${VERSION:-$VERSIONS}
 
 for dir in ${dirs}; do
-  IMAGE_NAME="${BASE_IMAGE_NAME}-${dir//./}-${OS}"
+  case " $OPENSHIFT_NAMESPACES " in
+    *\ ${dir}\ *) ;;
+    *)
+      if [ "${OS}" == "centos7" ]; then
+        NAMESPACE="centos/"
+      else
+        NAMESPACE="rhscl/"
+      fi
+  esac
+
+  IMAGE_NAME="${NAMESPACE}${BASE_IMAGE_NAME}-${dir//./}-${OS}"
 
   if [[ -v TEST_MODE ]]; then
     IMAGE_NAME+="-candidate"
