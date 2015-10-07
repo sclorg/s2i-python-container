@@ -273,3 +273,24 @@ following ways, in precedence order:
   in the case where you specify a path to a Python script via the `APP_FILE` environment
   variable, defaulting to a file named `app.py` if it exists. The script is
   passed to a regular Python interpreter to launch your application.
+
+Hot deploy
+---------------------
+
+If you are using Django, hot deploy will work out of the box.
+
+To enable hot deploy while using Gunicorn, make sure you have a Gunicorn
+configuration file inside your repository with the
+[`reload`](https://gunicorn-docs.readthedocs.org/en/latest/settings.html#reload)
+option set to `true`. Make sure to specify your config via the `APP_CONFIG`
+environment variable.
+
+To change your source code in running container, use Docker's
+[exec](https://docs.docker.com/reference/commandline/exec/) command:
+
+```
+docker exec -it <CONTAINER_ID> /bin/bash
+```
+
+After you enter into the running container, your current directory is set
+to `/opt/app-root/src`, where the source code is located.
