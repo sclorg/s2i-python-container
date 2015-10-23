@@ -12,8 +12,6 @@ set -e
 
 echo "---> Copying application source ..."
 cp -Rf /tmp/src/. ./
-chgrp -R 0 ./
-chmod -R g+rwx ./
 
 if [[ -f requirements.txt ]]; then
   echo "---> Installing dependencies ..."
@@ -24,10 +22,6 @@ if [[ -f setup.py ]]; then
   echo "---> Installing application ..."
   python setup.py develop --user
 fi
-
-# set permissions for any installed artifacts
-chgrp -R 0 /opt/app-root
-chmod -R g+rwx /opt/app-root
 
 if should_collectstatic; then
   (
@@ -52,6 +46,11 @@ if should_collectstatic; then
     python $manage_file collectstatic --noinput
   )
 fi
+
+# Fix source directory permissions
+fix-permissions ./
+# set permissions for any installed artifacts
+fix-permissions /opt/app-root
 
 # remove pip temporary directory
 rm -rf /tmp/pip_build_default
