@@ -15,7 +15,7 @@ LABEL io.k8s.description="Platform for building and running Python 2.7 applicati
 
 # Labels consumed by Red Hat build service
 LABEL Name="rhscl/python-27-rhel7" \
-      BZComponent="rh-python27-docker" \
+      BZComponent="python27-docker" \
       Version="2.7" \
       Release="1" \
       Architecture="x86_64"
