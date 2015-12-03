@@ -20,7 +20,7 @@ LABEL Name="rhscl/python-34-rhel7" \
       Release="1" \
       Architecture="x86_64"
 
-RUN yum-config-manager --enable rhel-server-rhscl-7-rpms \
+RUN yum-config-manager --enable rhel-server-rhscl-7-rpms && \
     yum-config-manager --enable rhel-7-server-optional-rpms && \
     yum-config-manager --disable epel >/dev/null || : && \
     yum install -y --setopt=tsflags=nodocs rh-python34 rh-python34-python-devel rh-python34-python-setuptools rh-python34-python-pip nss_wrapper && \
