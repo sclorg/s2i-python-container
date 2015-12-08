@@ -15,8 +15,7 @@ LABEL io.k8s.description="Platform for building and running Python 2.7 applicati
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,python,python27,rh-python27"
 
-RUN yum install -y \
-    https://www.softwarecollections.org/en/scls/rhscl/python27/epel-7-x86_64/download/rhscl-python27-epel-7-x86_64.noarch.rpm && \
+RUN yum install -y centos-release-scl && \
     yum install -y --setopt=tsflags=nodocs --enablerepo=centosplus python27 python27-python-devel python27-python-setuptools python27-python-pip epel-release && \
     yum install -y --setopt=tsflags=nodocs install nss_wrapper && \
     yum clean all -y
