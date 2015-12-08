@@ -14,8 +14,7 @@ LABEL io.k8s.description="Platform for building and running Python 3.3 applicati
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,python,python33"
 
-RUN yum install -y \
-    https://www.softwarecollections.org/en/scls/rhscl/python33/epel-7-x86_64/download/rhscl-python33-epel-7-x86_64.noarch.rpm && \
+RUN yum install -y centos-release-scl && \
     yum install -y --setopt=tsflags=nodocs --enablerepo=centosplus python33 python33-python-devel python33-python-setuptools epel-release && \
     yum install -y --setopt=tsflags=nodocs install nss_wrapper && \
     yum clean all -y
