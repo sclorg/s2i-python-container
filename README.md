@@ -7,6 +7,8 @@ the Python application as a reproducible Docker image using
 Users can choose between RHEL and CentOS based builder images.
 The resulting image can be run using [Docker](http://docker.io).
 
+For more information about using these images with OpenShift, please see the
+official [OpenShift Documentation](https://docs.openshift.org/latest/using_images/s2i_images/python.html).
 
 Versions
 ---------------
