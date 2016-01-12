@@ -20,10 +20,11 @@ LABEL Name="rhscl/python-27-rhel7" \
       Release="1" \
       Architecture="x86_64"
 
-RUN yum-config-manager --enable rhel-server-rhscl-7-rpms \
+RUN yum-config-manager --enable rhel-server-rhscl-7-rpms && \
     yum-config-manager --enable rhel-7-server-optional-rpms && \
     yum-config-manager --disable epel >/dev/null || : && \
-    yum install -y --setopt=tsflags=nodocs python27 python27-python-devel python27-python-setuptools python27-python-pip nss_wrapper && \
+    INSTALL_PKGS="python27 python27-python-devel python27-python-setuptools python27-python-pip nss_wrapper" && \
+    yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && rpm -V $INSTALL_PKGS && \
     yum clean all -y
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH

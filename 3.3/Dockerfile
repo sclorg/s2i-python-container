@@ -15,8 +15,9 @@ LABEL io.k8s.description="Platform for building and running Python 3.3 applicati
       io.openshift.tags="builder,python,python33"
 
 RUN yum install -y centos-release-scl && \
-    yum install -y --setopt=tsflags=nodocs --enablerepo=centosplus python33 python33-python-devel python33-python-setuptools epel-release && \
-    yum install -y --setopt=tsflags=nodocs install nss_wrapper && \
+    INSTALL_PKGS="python33 python33-python-devel python33-python-setuptools epel-release nss_wrapper" && \
+    yum install -y --setopt=tsflags=nodocs --enablerepo=centosplus $INSTALL_PKGS && \
+    rpm -V $INSTALL_PKGS && \
     yum clean all -y
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
