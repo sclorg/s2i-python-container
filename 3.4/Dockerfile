@@ -15,9 +15,10 @@ LABEL io.k8s.description="Platform for building and running Python 3.4 applicati
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,python,python34,rh-python34"
 
-RUN yum install -y centos-release-scl && \
-    yum install -y --setopt=tsflags=nodocs --enablerepo=centosplus rh-python34 rh-python34-python-devel rh-python34-python-setuptools rh-python34-python-pip epel-release && \
-    yum install -y --setopt=tsflags=nodocs install nss_wrapper && \
+RUN yum install --enablerepo=centosplus -y centos-release-scl epel-release && \
+    INSTALL_PKGS="rh-python34 rh-python34-python-devel rh-python34-python-setuptools rh-python34-python-pip nss_wrapper" && \
+    yum install -y --setopt=tsflags=nodocs --enablerepo=centosplus $INSTALL_PKGS && \
+    rpm -V $INSTALL_PKGS && \
     yum clean all -y
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
