@@ -15,7 +15,7 @@ LABEL io.k8s.description="Platform for building and running Python 2.7 applicati
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,python,python27,rh-python27"
 
-RUN INSTALL_PKGS="python27 python27-python-devel python27-python-setuptools python27-python-pip epel-release nss_wrapper" && \
+RUN INSTALL_PKGS="python27 python27-python-devel python27-python-setuptools python27-python-pip epel-release nss_wrapper httpd httpd-devel" && \
     yum install -y centos-release-scl && \
     yum install -y --setopt=tsflags=nodocs --enablerepo=centosplus $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
