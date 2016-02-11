@@ -19,6 +19,8 @@ RUN yum install -y centos-release-scl && \
     INSTALL_PKGS="python27 python27-python-devel python27-python-setuptools python27-python-pip epel-release nss_wrapper httpd httpd-devel" && \
     yum install -y --setopt=tsflags=nodocs --enablerepo=centosplus $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
+    # Remove centos-logos (httpd dependency, ~20MB of graphics) to keep image size smaller
+    rpm -e --nodeps centos-logos && \
     yum clean all -y
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
