@@ -2,6 +2,7 @@ FROM openshift/base-centos7
 
 # This image provides a Python 3.3 environment you can use to run your Python
 # applications.
+
 MAINTAINER SoftwareCollections.org <sclorg@redhat.com>
 
 EXPOSE 8080
@@ -27,6 +28,9 @@ COPY ./s2i/bin/ $STI_SCRIPTS_PATH
 # run and build the applications.
 COPY ./contrib/ /opt/app-root
 
+# In order to drop the root user, we have to make some directories world
+# writable as OpenShift default security model is to run the container under
+# random UID.
 RUN scl enable python33 "easy_install pip==1.5.6" && \
     chown -R 1001:0 /opt/app-root && chmod -R og+rwx /opt/app-root
 
