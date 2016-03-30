@@ -1,7 +1,6 @@
-FROM openshift/base-centos7
-
 # This image provides a Python 2.7 environment you can use to run your Python
 # applications.
+FROM openshift/base-centos7
 
 MAINTAINER SoftwareCollections.org <sclorg@redhat.com>
 
@@ -19,11 +18,12 @@ RUN yum install -y centos-release-scl && \
     INSTALL_PKGS="python27 python27-python-devel python27-python-setuptools python27-python-pip epel-release nss_wrapper httpd httpd-devel" && \
     yum install -y --setopt=tsflags=nodocs --enablerepo=centosplus $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
-    # Remove centos-logos (httpd dependency, ~20MB of graphics) to keep image size smaller
+    # Remove centos-logos (httpd dependency, ~20MB of graphics) to keep image
+    # size smaller.
     rpm -e --nodeps centos-logos && \
     yum clean all -y
 
-# Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
+# Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH.
 COPY ./s2i/bin/ $STI_SCRIPTS_PATH
 
 # Each language image can have 'contrib' a directory with extra files needed to
@@ -37,5 +37,5 @@ RUN chown -R 1001:0 /opt/app-root && chmod -R og+rwx /opt/app-root
 
 USER 1001
 
-# Set the default CMD to print the usage of the language image
+# Set the default CMD to print the usage of the language image.
 CMD $STI_SCRIPTS_PATH/usage
