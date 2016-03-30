@@ -20,6 +20,7 @@ LABEL io.k8s.description="Platform for building and running Python 3.4 applicati
 
 RUN yum-config-manager --enable rhel-server-rhscl-7-rpms && \
     yum-config-manager --enable rhel-7-server-optional-rpms && \
+    yum-config-manager --enable rhel-7-server-ose-3.0-rpms && \
     yum-config-manager --disable epel >/dev/null || : && \
     INSTALL_PKGS="rh-python34 rh-python34-python-devel rh-python34-python-setuptools rh-python34-python-pip nss_wrapper httpd httpd-devel" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
