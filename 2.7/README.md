@@ -89,8 +89,8 @@ Repository organization
 Environment variables
 ---------------------
 
-To set these environment variables, you can place them as a key value pair into a `.sti/environment`
-file inside your source code repository.
+To set these environment variables, you can place them as a key value pair into
+a `.s2i/environment` file inside your source code repository.
 
 * **APP_FILE**
 
