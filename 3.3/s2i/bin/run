@@ -1,6 +1,8 @@
 #!/bin/bash
 source /opt/app-root/etc/generate_container_user
 
+set -e
+
 function is_gunicorn_installed() {
   hash gunicorn &>/dev/null
 }
@@ -13,7 +15,22 @@ function should_migrate() {
   is_django_installed && [[ -z "$DISABLE_MIGRATE" ]]
 }
 
-set -e
+# Guess the number of workers according to the number of cores
+function get_default_web_concurrency() {
+  limit_vars=$(cgroup-limits)
+  local $limit_vars
+  if [ -z "${NUMBER_OF_CORES:-}" ]; then
+    echo 1
+    return
+  fi
+
+  local max=$((NUMBER_OF_CORES*4))
+  # Require at least 40 MiB and additional 5 MiB for every worker
+  local default=$(((${MEMORY_LIMIT_IN_BYTES:-MAX_MEMORY_LIMIT_IN_BYTES}/1024/1024 - 40) / 5))
+  default=$((default > max ? max : default))
+  default=$((default < 1 ? 1 : default))
+  echo $default
+}
 
 APP_FILE="${APP_FILE:-app.py}"
 if [[ -f "$APP_FILE" ]]; then
@@ -47,6 +64,8 @@ if is_gunicorn_installed; then
   fi
 
   if [[ "$APP_MODULE" ]]; then
+    export WEB_CONCURRENCY=${WEB_CONCURRENCY:-$(get_default_web_concurrency)}
+
     echo "---> Serving application with gunicorn ($APP_MODULE) ..."
     exec gunicorn "$APP_MODULE" --bind=0.0.0.0:8080 --access-logfile=- --config "$APP_CONFIG"
   fi
