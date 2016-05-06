@@ -20,7 +20,7 @@ DOCKERFILE_PATH=""
 
 test -z "$BASE_IMAGE_NAME" && {
   BASE_DIR_NAME=$(echo $(basename `pwd`) | sed -e 's/-[0-9]*$//g')
-  BASE_IMAGE_NAME="${BASE_DIR_NAME#sti-}"
+  BASE_IMAGE_NAME="${BASE_DIR_NAME#s2i-}"
 }
 
 NAMESPACE="openshift/"
