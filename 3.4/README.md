@@ -10,19 +10,19 @@ The resulting image can be run using [Docker](http://docker.io).
 
 Usage
 ---------------------
-To build a simple [python-sample-app](https://github.com/openshift/sti-python/tree/master/3.4/test/setup-test-app) application
+To build a simple [python-sample-app](https://github.com/openshift/s2i-python/tree/master/3.4/test/setup-test-app) application
 using standalone [S2I](https://github.com/openshift/source-to-image) and then run the
 resulting image with [Docker](http://docker.io) execute:
 
 *  **For RHEL based image**
     ```
-    $ s2i build https://github.com/openshift/sti-python.git --context-dir=3.4/test/setup-test-app/ rhscl/python-34-rhel7 python-sample-app
+    $ s2i build https://github.com/openshift/s2i-python.git --context-dir=3.4/test/setup-test-app/ rhscl/python-34-rhel7 python-sample-app
     $ docker run -p 8080:8080 python-sample-app
     ```
 
 *  **For CentOS based image**
     ```
-    $ s2i build https://github.com/openshift/sti-python.git --context-dir=3.4/test/setup-test-app/ centos/python-34-centos7 python-sample-app
+    $ s2i build https://github.com/openshift/s2i-python.git --context-dir=3.4/test/setup-test-app/ centos/python-34-centos7 python-sample-app
     $ docker run -p 8080:8080 python-sample-app
     ```
 
@@ -113,7 +113,7 @@ file inside your source code repository.
 
     If using `setup.py` for installing the application, the `MODULE_NAME` part
     can be read from there. For an example, see
-    [setup-test-app](https://github.com/openshift/sti-python/tree/master/3.4/test/setup-test-app).
+    [setup-test-app](https://github.com/openshift/s2i-python/tree/master/3.4/test/setup-test-app).
 
 * **APP_CONFIG**
 
@@ -153,7 +153,7 @@ However, if these files exist they will affect the behavior of the build process
 Run strategies
 --------------
 
-The Docker image produced by sti-python executes your project in one of the
+The Docker image produced by s2i-python executes your project in one of the
 following ways, in precedence order:
 
 * **Gunicorn**
