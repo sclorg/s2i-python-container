@@ -33,8 +33,8 @@ To build a Python image, choose either the CentOS or RHEL based image:
     subscribed RHEL machine.
 
     ```
-    $ git clone https://github.com/openshift/sti-python.git
-    $ cd sti-python
+    $ git clone https://github.com/openshift/s2i-python.git
+    $ cd s2i-python
     $ make build TARGET=rhel7 VERSION=3.3
     ```
 
@@ -49,8 +49,8 @@ To build a Python image, choose either the CentOS or RHEL based image:
     To build a Python image from scratch run:
 
     ```
-    $ git clone https://github.com/openshift/sti-python.git
-    $ cd sti-python
+    $ git clone https://github.com/openshift/s2i-python.git
+    $ cd s2i-python
     $ make build VERSION=3.3
     ```
 
@@ -74,7 +74,7 @@ see [usage documentation](3.4/README.md).
 Test
 ---------------------
 This repository also provides a [S2I](https://github.com/openshift/source-to-image) test framework,
-which launches tests to check functionality of a simple Python application built on top of the sti-python image.
+which launches tests to check functionality of a simple Python application built on top of the s2i-python image.
 
 Users can choose between testing a Python test application based on a RHEL or CentOS image.
 
@@ -83,14 +83,14 @@ Users can choose between testing a Python test application based on a RHEL or Ce
     To test a RHEL7-based Python-3.3 image, you need to run the test on a properly subscribed RHEL machine.
 
     ```
-    $ cd sti-python
+    $ cd s2i-python
     $ make test TARGET=rhel7 VERSION=3.3
     ```
 
 *  **CentOS based image**
 
     ```
-    $ cd sti-python
+    $ cd s2i-python
     $ make test VERSION=3.3
     ```
 
