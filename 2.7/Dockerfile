@@ -33,7 +33,7 @@ COPY ./contrib/ /opt/app-root
 # In order to drop the root user, we have to make some directories world
 # writable as OpenShift default security model is to run the container under
 # random UID.
-RUN chown -R 1001:0 /opt/app-root && chmod -R og+rwx /opt/app-root
+RUN chown -R 1001:0 /opt/app-root && chmod -R ug+rwx /opt/app-root
 
 USER 1001
 
