@@ -90,6 +90,11 @@ for dir in ${dirs}; do
       echo "-> Re-tagging ${IMAGE_NAME} image to ${IMAGE_NAME%"-candidate"}"
       docker tag -f $IMAGE_NAME ${IMAGE_NAME%"-candidate"}
     fi
+
+    if [[ ! -z "${REGISTRY}" ]]; then
+      echo "-> Tagging image as" ${REGISTRY}/${IMAGE_NAME%"-candidate"}
+      docker tag -f $IMAGE_NAME ${REGISTRY}/${IMAGE_NAME%"-candidate"}
+    fi
   fi
 
   popd > /dev/null
