@@ -34,7 +34,7 @@ COPY ./contrib/ /opt/app-root
 # writable as OpenShift default security model is to run the container under
 # random UID.
 RUN scl enable python33 "easy_install pip==1.5.6" && \
-    chown -R 1001:0 /opt/app-root && chmod -R og+rwx /opt/app-root
+    chown -R 1001:0 /opt/app-root && chmod -R ug+rwx /opt/app-root
 
 USER 1001
 
