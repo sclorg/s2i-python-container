@@ -16,6 +16,7 @@ Python versions currently provided are:
 * python-2.7
 * python-3.3
 * python-3.4
+* python-3.5
 
 RHEL versions currently supported are:
 * RHEL7
@@ -69,6 +70,9 @@ see [usage documentation](3.3/README.md).
 
 For information about usage of Dockerfile for Python 3.4,
 see [usage documentation](3.4/README.md).
+
+For information about usage of Dockerfile for Python 3.5,
+see [usage documentation](3.5/README.md).
 
 
 Test
