@@ -64,6 +64,11 @@ for dir in ${dirs}; do
       if [ "${OS}" == "centos7" ]; then
         NAMESPACE="centos/"
       else
+        # we don't test rhel versions of SCL owned images
+        if [[ "${SKIP_RHEL_SCL}" == "1" ]]; then
+          echo "Skipping rhel scl image ${BASE_IMAGE_NAME}-${dir//./}-{$OS}"
+          continue
+        fi
         NAMESPACE="rhscl/"
       fi
   esac
