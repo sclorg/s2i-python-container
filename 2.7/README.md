@@ -130,6 +130,11 @@ a `.s2i/environment` file inside your source code repository.
     Set this variable to a non-empty value to inhibit the execution of 'manage.py migrate'
     when the produced image is run. This only affects Django projects.
 
+* **PIP_INDEX_URL**
+
+    Set this variable to use a custom index URL or mirror to download required packages
+    during build process. This only affects packages listed in requirements.txt.
+
 Source repository layout
 ------------------------
 
