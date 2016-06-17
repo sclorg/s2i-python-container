@@ -135,6 +135,12 @@ a `.s2i/environment` file inside your source code repository.
     Set this variable to use a custom index URL or mirror to download required packages
     during build process. This only affects packages listed in requirements.txt.
 
+* **WEB_CONCURRENCY**
+
+    Set this to change the default setting for the number of
+    [workers](http://docs.gunicorn.org/en/stable/settings.html#workers). By
+    default, this is set to the number of available cores times 4.
+
 Source repository layout
 ------------------------
 
