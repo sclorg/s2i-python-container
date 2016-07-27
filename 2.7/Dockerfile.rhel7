@@ -7,17 +7,16 @@ EXPOSE 8080
 ENV PYTHON_VERSION=2.7 \
     PATH=$HOME/.local/bin/:$PATH
 
-LABEL io.k8s.description="Platform for building and running Python 2.7 applications" \
-      io.k8s.display-name="Python 2.7" \
-      io.openshift.expose-services="8080:http" \
-      io.openshift.tags="builder,python,python27,rh-python27" \
-
 # Labels consumed by Red Hat build service.
 LABEL BZComponent="python27-docker" \
       Name="rhscl/python-27-rhel7" \
       Version="2.7" \
       Release="1" \
-      Architecture="x86_64"
+      Architecture="x86_64" \
+      io.k8s.description="Platform for building and running Python 2.7 applications" \
+      io.k8s.display-name="Python 2.7" \
+      io.openshift.expose-services="8080:http" \
+      io.openshift.tags="builder,python,python27,rh-python27"
 
 RUN yum-config-manager --enable rhel-server-rhscl-7-rpms && \
     yum-config-manager --enable rhel-7-server-optional-rpms && \
