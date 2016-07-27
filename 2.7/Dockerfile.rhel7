@@ -11,8 +11,9 @@ LABEL io.k8s.description="Platform for building and running Python 2.7 applicati
       io.k8s.display-name="Python 2.7" \
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,python,python27,rh-python27" \
-      # Labels consumed by Red Hat build service.
-      BZComponent="python27-docker" \
+
+# Labels consumed by Red Hat build service.
+LABEL BZComponent="python27-docker" \
       Name="rhscl/python-27-rhel7" \
       Version="2.7" \
       Release="1" \

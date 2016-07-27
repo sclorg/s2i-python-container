@@ -11,8 +11,9 @@ LABEL io.k8s.description="Platform for building and running Python 3.5 applicati
       io.k8s.display-name="Python 3.5" \
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,python,python35,rh-python35" \
-      # Labels consumed by Red Hat build service.
-      BZComponent="rh-python35-docker" \
+
+# Labels consumed by Red Hat build service.
+LABEL BZComponent="rh-python35-docker" \
       Name="rhscl/python-35-rhel7" \
       Version="3.5" \
       Release="1" \

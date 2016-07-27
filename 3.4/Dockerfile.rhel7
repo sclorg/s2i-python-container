@@ -11,8 +11,9 @@ LABEL io.k8s.description="Platform for building and running Python 3.4 applicati
       io.k8s.display-name="Python 3.4" \
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,python,python34,rh-python34" \
-      # Labels consumed by Red Hat build service.
-      BZComponent="rh-python34-docker" \
+
+# Labels consumed by Red Hat build service.
+LABEL BZComponent="rh-python34-docker" \
       Name="rhscl/python-34-rhel7" \
       Version="3.4" \
       Release="1" \
