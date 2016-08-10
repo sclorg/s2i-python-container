@@ -1,6 +1,8 @@
 Python Docker images
 ====================
 
+[![Build Status](https://ci.openshift.redhat.com/jenkins/buildStatus/icon?job=sti-python)](https://ci.openshift.redhat.com/jenkins/job/sti-python/)
+
 This repository contains the source for building various versions of
 the Python application as a reproducible Docker image using
 [source-to-image](https://github.com/openshift/source-to-image).
@@ -123,4 +125,3 @@ Image name structure
 3. Base builder image - centos7/rhel7
 
 Examples: `openshift/python-33-centos7`, `openshift/python-33-rhel7`
-
