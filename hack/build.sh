@@ -36,7 +36,10 @@ function docker_build_with_version {
   cp ${DOCKERFILE_PATH} "${DOCKERFILE_PATH}.version"
   git_version=$(git rev-parse HEAD)
   echo "LABEL io.openshift.builder-version=\"${git_version}\"" >> "${dockerfile}.version"
-  docker build -t ${IMAGE_NAME} -f "${dockerfile}.version" .
+  if [[ "${UPDATE_BASE}" == "1" ]]; then
+    BUILD_OPTIONS+=" --pull=true"
+  fi
+  docker build ${BUILD_OPTIONS} -t ${IMAGE_NAME} -f "${dockerfile}.version" .
   if [[ "${SKIP_SQUASH}" != "1" ]]; then
     squash "${dockerfile}.version"
   fi
