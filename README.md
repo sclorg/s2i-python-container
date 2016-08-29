@@ -34,7 +34,7 @@ To build a Python image, choose either the CentOS or RHEL based image:
     subscribed RHEL machine.
 
     ```
-    $ git clone https://github.com/openshift/s2i-python.git
+    $ git clone https://github.com/sclorg/s2i-python-container.git
     $ cd s2i-python
     $ make build TARGET=rhel7 VERSION=3.3
     ```
@@ -50,7 +50,7 @@ To build a Python image, choose either the CentOS or RHEL based image:
     To build a Python image from scratch run:
 
     ```
-    $ git clone https://github.com/openshift/s2i-python.git
+    $ git clone https://github.com/sclorg/s2i-python-container.git
     $ cd s2i-python
     $ make build VERSION=3.3
     ```

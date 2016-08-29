@@ -16,13 +16,13 @@ resulting image with [Docker](http://docker.io) execute:
 
 *  **For RHEL based image**
     ```
-    $ s2i build https://github.com/openshift/s2i-python.git --context-dir=3.4/test/setup-test-app/ rhscl/python-34-rhel7 python-sample-app
+    $ s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.4/test/setup-test-app/ rhscl/python-34-rhel7 python-sample-app
     $ docker run -p 8080:8080 python-sample-app
     ```
 
 *  **For CentOS based image**
     ```
-    $ s2i build https://github.com/openshift/s2i-python.git --context-dir=3.4/test/setup-test-app/ centos/python-34-centos7 python-sample-app
+    $ s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.4/test/setup-test-app/ centos/python-34-centos7 python-sample-app
     $ docker run -p 8080:8080 python-sample-app
     ```
 
