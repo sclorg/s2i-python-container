@@ -15,16 +15,16 @@ echo "---> Installing application source ..."
 mv /tmp/src/* ./
 
 if [[ -f requirements.txt ]]; then
-  echo "---> Installing dependencies ..."
-  pip install --user -r requirements.txt
-fi
-
-if [[ -f setup.py ]]; then
   if [ -n "$PIP_INDEX_URL" ]; then
     echo "---> Installing dependencies via $PIP_INDEX_URL ..."
   else
     echo "---> Installing dependencies ..."
   fi
+  pip install --user -r requirements.txt
+fi
+
+if [[ -f setup.py ]]; then
+  echo "---> Installing application ..."
   python setup.py develop --user
 fi
 
