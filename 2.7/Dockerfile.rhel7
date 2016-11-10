@@ -18,7 +18,10 @@ LABEL BZComponent="python27-docker" \
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,python,python27,rh-python27"
 
-RUN yum-config-manager --enable rhel-server-rhscl-7-rpms && \
+# To use subscription inside container yum command has to be run first (before yum-config-manager)
+# https://access.redhat.com/solutions/1443553
+RUN yum repolist > /dev/null && \
+    yum-config-manager --enable rhel-server-rhscl-7-rpms && \
     yum-config-manager --enable rhel-7-server-optional-rpms && \
     yum-config-manager --enable rhel-7-server-ose-3.2-rpms && \
     yum-config-manager --disable epel >/dev/null || : && \
