@@ -8,11 +8,11 @@ ENV PYTHON_VERSION=3.4 \
     PATH=$HOME/.local/bin/:$PATH
 
 # Labels consumed by Red Hat build service.
-LABEL BZComponent="rh-python34-docker" \
-      Name="rhscl/python-34-rhel7" \
-      Version="3.4" \
-      Release="1" \
-      Architecture="x86_64" \
+LABEL com.redhat.component="rh-python34-docker" \
+      name="rhscl/python-34-rhel7" \
+      version="3.4" \
+      release="1" \
+      architecture="x86_64" \
       io.k8s.description="Platform for building and running Python 3.4 applications" \
       io.k8s.display-name="Python 3.4" \
       io.openshift.expose-services="8080:http" \

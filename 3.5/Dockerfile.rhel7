@@ -8,11 +8,11 @@ ENV PYTHON_VERSION=3.5 \
     PATH=$HOME/.local/bin/:$PATH
 
 # Labels consumed by Red Hat build service.
-LABEL BZComponent="rh-python35-docker" \
-      Name="rhscl/python-35-rhel7" \
-      Version="3.5" \
-      Release="1" \
-      Architecture="x86_64" \
+LABEL com.redhat.component="rh-python35-docker" \
+      name="rhscl/python-35-rhel7" \
+      version="3.5" \
+      release="1" \
+      architecture="x86_64" \
       io.k8s.description="Platform for building and running Python 3.5 applications" \
       io.k8s.display-name="Python 3.5" \
       io.openshift.expose-services="8080:http" \
