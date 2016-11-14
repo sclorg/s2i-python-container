@@ -8,11 +8,11 @@ ENV PYTHON_VERSION=2.7 \
     PATH=$HOME/.local/bin/:$PATH
 
 # Labels consumed by Red Hat build service.
-LABEL BZComponent="python27-docker" \
-      Name="rhscl/python-27-rhel7" \
-      Version="2.7" \
-      Release="1" \
-      Architecture="x86_64" \
+LABEL com.redhat.component="python27-docker" \
+      name="rhscl/python-27-rhel7" \
+      version="2.7" \
+      release="1" \
+      architecture="x86_64" \
       io.k8s.description="Platform for building and running Python 2.7 applications" \
       io.k8s.display-name="Python 2.7" \
       io.openshift.expose-services="8080:http" \
