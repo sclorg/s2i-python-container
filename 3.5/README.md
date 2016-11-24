@@ -115,6 +115,14 @@ file inside your source code repository.
     can be read from there. For an example, see
     [setup-test-app](https://github.com/openshift/s2i-python/tree/master/3.5/test/setup-test-app).
 
+* **APP_HOME**
+
+    This variable can be used to specify a sub-directory in which the application to be run is contained.
+    The directory pointed to by this variable needs to contain `wsgi.py` (for Gunicorn) or `manage.py` (for Django).
+
+    If `APP_HOME` is not provided, the `assemble` and `run` scripts will use the application's root
+    directory.
+
 * **APP_CONFIG**
 
     Path to a valid Python file with a
