@@ -143,6 +143,13 @@ file inside your source code repository.
     Set this variable to use a custom index URL or mirror to download required packages
     during build process. This only affects packages listed in requirements.txt.
 
+* **UPGRADE_PIP_TO_LATEST**
+
+    Set this variable to a non-empty value to have the 'pip' program be upgraded
+    to the most recent version before any Python packages are installed. If not
+    set it will use whatever the default version is included by the platform
+    for the Python version being used.
+
 * **WEB_CONCURRENCY**
 
     Set this to change the default setting for the number of

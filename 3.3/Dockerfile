@@ -7,7 +7,7 @@ MAINTAINER SoftwareCollections.org <sclorg@redhat.com>
 EXPOSE 8080
 
 ENV PYTHON_VERSION=3.3 \
-    PATH=$HOME/.local/bin/:$PATH
+    PIP_NO_CACHE_DIR=off
 
 LABEL io.k8s.description="Platform for building and running Python 3.3 applications" \
       io.k8s.display-name="Python 3.3" \
@@ -30,11 +30,18 @@ COPY ./s2i/bin/ $STI_SCRIPTS_PATH
 # run and build the applications.
 COPY ./contrib/ /opt/app-root
 
+# Create a Python virtual environment for use by any application to avoid
+# potential conflicts with Python packages preinstalled in the main Python
+# installation.
+RUN source scl_source enable python33 && \
+    virtualenv /opt/app-root && \
+    source /opt/app-root/bin/activate && \
+    pip install -U pip==1.5.6
+
 # In order to drop the root user, we have to make some directories world
 # writable as OpenShift default security model is to run the container under
 # random UID.
-RUN scl enable python33 "easy_install pip==1.5.6" && \
-    chown -R 1001:0 /opt/app-root && chmod -R ug+rwx /opt/app-root
+RUN chown -R 1001:0 /opt/app-root && chmod -R ug+rwx /opt/app-root
 
 USER 1001
 
