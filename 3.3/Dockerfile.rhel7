@@ -5,7 +5,10 @@ FROM openshift/base-rhel7
 EXPOSE 8080
 
 ENV PYTHON_VERSION=3.3 \
-    PATH=$HOME/.local/bin/:$PATH
+    PATH=$HOME/.local/bin/:$PATH \
+    PYTHONIOENCODING=UTF-8 \
+    LC_ALL=en_US.UTF-8 \
+    LANG=en_US.UTF-8
 
 # Labels consumed by Red Hat build service.
 LABEL com.redhat.component="openshift-sti-python-docker" \
