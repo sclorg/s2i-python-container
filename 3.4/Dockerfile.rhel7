@@ -5,7 +5,8 @@ FROM rhscl/s2i-base-rhel7
 EXPOSE 8080
 
 ENV PYTHON_VERSION=3.4 \
-    PATH=$HOME/.local/bin/:$PATH
+    PATH=$HOME/.local/bin/:$PATH \
+    PYTHONUNBUFFERED=1
 
 # Labels consumed by Red Hat build service.
 LABEL com.redhat.component="rh-python34-docker" \

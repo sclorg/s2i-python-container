@@ -1,10 +1,13 @@
 import os
+import time
 
 from gunicorn.app.base import BaseApplication
 from gunicorn.six import iteritems
 
+print('LOADING MODULE %s' % __file__)
 
 def wsgi_handler(environ, start_response):
+    print('HANDLE REQUEST %s' % time.time())
     start_response('200 OK', [('Content-Type','text/html')])
     return [b"Hello World from standalone WSGI application!"]
 

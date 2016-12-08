@@ -7,7 +7,8 @@ MAINTAINER SoftwareCollections.org <sclorg@redhat.com>
 EXPOSE 8080
 
 ENV PYTHON_VERSION=3.4 \
-    PATH=$HOME/.local/bin/:$PATH
+    PATH=$HOME/.local/bin/:$PATH \
+    PYTHONUNBUFFERED=1
 
 LABEL io.k8s.description="Platform for building and running Python 3.4 applications" \
       io.k8s.display-name="Python 3.4" \
