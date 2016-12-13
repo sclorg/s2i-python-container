@@ -15,6 +15,12 @@ function should_migrate() {
   is_django_installed && [[ -z "$DISABLE_MIGRATE" ]]
 }
 
+# Utility function to update PYTHONPATH and change cwd
+function change_cwd() {
+  export PYTHONPATH=${PYTHONPATH:-}:`pwd`
+  cd $1
+}
+
 # Guess the number of workers according to the number of cores
 function get_default_web_concurrency() {
   limit_vars=$(cgroup-limits)
@@ -32,17 +38,19 @@ function get_default_web_concurrency() {
   echo $default
 }
 
+APP_HOME=${APP_HOME:-.}
+
 app_file_check="${APP_FILE-}"
-APP_FILE="${APP_FILE:-app.py}"
+APP_FILE="${APP_FILE:-${APP_HOME}/app.py}"
 if [[ -f "$APP_FILE" ]]; then
   echo "---> Running application from Python script ($APP_FILE) ..."
-  exec python "$APP_FILE"
+  change_cwd $APP_HOME
+  exec python $(basename $APP_FILE)
 else
   test -n "$app_file_check" && (>&2 echo "ERROR: file '$app_file_check' not found.") && exit 1
 fi
 
-APP_HOME=${APP_HOME:-.}
-# Look for 'manage.py' in the directory specified by APP_HOME, or the current direcotry
+# Look for 'manage.py' in the directory specified by APP_HOME, or the current directory
 manage_file=$APP_HOME/manage.py
 
 if should_migrate; then
@@ -58,18 +66,21 @@ fi
 if is_gunicorn_installed; then
   if [[ -z "$APP_MODULE" ]]; then
     # Look only in the directory specified by APP_HOME, or the current directory
-    # replace all "/" with ".", remove leading "." and ".py" suffix
-    APP_MODULE=$(find $APP_HOME -maxdepth 1 -type f -name 'wsgi.py' | sed 's:/:.:g;s:^\.\+::;s:\.py$::')
+    APP_MODULE=$(find $APP_HOME -maxdepth 1 -type f -name 'wsgi.py')
+    APP_MODULE=${APP_MODULE:+wsgi}
   fi
 
   if [[ -z "$APP_MODULE" && -f setup.py ]]; then
     APP_MODULE="$(python setup.py --name)"
+    #FIXME: A bit counterintuitive?
+    [[ $APP_MODULE ]] && APP_HOME=.
   fi
 
   if [[ "$APP_MODULE" ]]; then
     export WEB_CONCURRENCY=${WEB_CONCURRENCY:-$(get_default_web_concurrency)}
 
     echo "---> Serving application with gunicorn ($APP_MODULE) ..."
+    change_cwd $APP_HOME
     exec gunicorn "$APP_MODULE" --bind=0.0.0.0:8080 --access-logfile=- --config "$APP_CONFIG"
   fi
 fi
@@ -79,7 +90,8 @@ if is_django_installed; then
     echo "---> Serving application with 'manage.py runserver' ..."
     echo "WARNING: this is NOT a recommended way to run you application in production!"
     echo "Consider using gunicorn or some other production web server."
-    exec python "$manage_file" runserver 0.0.0.0:8080
+    change_cwd $APP_HOME
+    exec python manage.py runserver 0.0.0.0:8080
   else
     echo "WARNING: seems that you're using Django, but we could not find a 'manage.py' file."
     echo "Skipped 'python manage.py runserver'."

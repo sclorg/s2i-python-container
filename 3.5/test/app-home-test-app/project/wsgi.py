@@ -1,3 +1,6 @@
+# Import to test properly set PYTHONPATH
+from lib import hello_world
+
 def application(environ, start_response):
     start_response('200 OK', [('Content-Type','text/plain')])
-    return [b"Hello World from app-home WSGI application!"]
+    return hello_world()
