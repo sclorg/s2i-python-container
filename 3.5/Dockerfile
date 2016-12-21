@@ -1,6 +1,6 @@
 # This image provides a Python 3.5 environment you can use to run your Python
 # applications.
-FROM openshift/base-centos7
+FROM centos/s2i-base-centos7
 
 MAINTAINER SoftwareCollections.org <sclorg@redhat.com>
 
