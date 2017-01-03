@@ -92,6 +92,12 @@ Environment variables
 To set these environment variables, you can place them as a key value pair into a `.s2i/environment`
 file inside your source code repository.
 
+* **APP_SCRIPT**
+
+    Used to run the application from a script file.
+    This should be a path to a script file (defaults to `app.sh`) that will be
+    run to start the application.
+
 * **APP_FILE**
 
     Used to run the application from a Python script.
@@ -197,10 +203,19 @@ following ways, in precedence order:
 
 * **Python script**
 
-  This is the most general way of executing your application. It will be used
-  in the case where you specify a path to a Python script via the `APP_FILE` environment
-  variable, defaulting to a file named `app.py` if it exists. The script is
-  passed to a regular Python interpreter to launch your application.
+  This would be used where you provide a Python code file for running you
+  application. It will be used in the case where you specify a path to a
+  Python script via the `APP_FILE` environment variable, defaulting to a
+  file named `app.py` if it exists. The script is passed to a regular
+  Python interpreter to launch your application.
+
+* **Application script file**
+
+  This is the most general way of executing your application. It will be
+  used in the case where you specify a path to an executable script file
+  via the `APP_SCRIPT` environment variable, defaulting to a file named
+  `app.sh` if it exists. The script is executed directory to launch your
+  application.
 
 Hot deploy
 ---------------------
