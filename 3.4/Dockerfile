@@ -15,7 +15,8 @@ LABEL io.k8s.description="Platform for building and running Python 3.4 applicati
       io.openshift.tags="builder,python,python34,rh-python34"
 
 RUN yum install -y centos-release-scl && \
-    INSTALL_PKGS="rh-python34 rh-python34-python-devel rh-python34-python-setuptools rh-python34-python-pip nss_wrapper httpd httpd-devel atlas-devel gcc-gfortran" && \
+    INSTALL_PKGS="rh-python34 rh-python34-python-devel rh-python34-python-setuptools rh-python34-python-pip \
+	nss_wrapper httpd httpd-devel atlas-devel gcc-gfortran libffi-devel libtool-ltdl" && \
     yum install -y --setopt=tsflags=nodocs --enablerepo=centosplus $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     # Remove centos-logos (httpd dependency, ~20MB of graphics) to keep image
