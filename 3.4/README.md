@@ -214,7 +214,7 @@ following ways, in precedence order:
   This is the most general way of executing your application. It will be
   used in the case where you specify a path to an executable script file
   via the `APP_SCRIPT` environment variable, defaulting to a file named
-  `app.sh` if it exists. The script is executed directory to launch your
+  `app.sh` if it exists. The script is executed directly to launch your
   application.
 
 Hot deploy
