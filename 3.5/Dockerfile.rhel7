@@ -26,7 +26,7 @@ RUN yum repolist > /dev/null && \
     yum-config-manager --enable rhel-7-server-ose-3.2-rpms && \
     yum-config-manager --disable epel >/dev/null || : && \
     INSTALL_PKGS="rh-python35 rh-python35-python-devel rh-python35-python-setuptools rh-python35-python-pip \
-	nss_wrapper httpd httpd-devel atlas-devel gcc-gfortran libffi-devel libtool-ltdl openssl-devel" && \
+	nss_wrapper httpd httpd-devel atlas-devel gcc-gfortran libffi-devel libtool-ltdl" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     # Remove redhat-logos (httpd dependency) to keep image size smaller.
