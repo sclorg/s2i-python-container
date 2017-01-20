@@ -8,7 +8,7 @@
 #
 IMAGE_NAME=${IMAGE_NAME:-openshift/python-35-centos7-candidate}
 
-declare -a WEB_APPS=({standalone,setup,django,numpy,app-home}-test-app)
+declare -a WEB_APPS=({standalone,setup,django,numpy,app-home,uwsgi}-test-app)
 
 # TODO: Make command compatible for Mac users
 test_dir="$(readlink -zf $(dirname "${BASH_SOURCE[0]}"))"
@@ -54,7 +54,7 @@ prepare() {
 }
 
 run_test_application() {
-  docker run --user=100001 ${CONTAINER_ARGS} --rm --cidfile=${cid_file} -p ${test_port} ${IMAGE_NAME}-testapp
+  docker run --user=100001 ${CONTAINER_ARGS} --rm --cidfile=${cid_file} ${IMAGE_NAME}-testapp
 }
 
 cleanup_app() {
