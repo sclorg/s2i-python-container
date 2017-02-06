@@ -7,7 +7,12 @@ MAINTAINER SoftwareCollections.org <sclorg@redhat.com>
 EXPOSE 8080
 
 ENV PYTHON_VERSION=2.7 \
+    PATH=$HOME/.local/bin/:$PATH \
+    PYTHONIOENCODING=UTF-8 \
+    LC_ALL=en_US.UTF-8 \
+    LANG=en_US.UTF-8 \
     PIP_NO_CACHE_DIR=off
+
 
 LABEL io.k8s.description="Platform for building and running Python 2.7 applications" \
       io.k8s.display-name="Python 2.7" \
