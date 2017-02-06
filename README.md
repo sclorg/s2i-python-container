@@ -34,7 +34,7 @@ To build a Python image, choose either the CentOS or RHEL based image:
 
     ```
     $ git clone https://github.com/sclorg/s2i-python-container.git
-    $ cd s2i-python
+    $ cd s2i-python-container
     $ make build TARGET=rhel7 VERSION=3.5
     ```
 
@@ -50,7 +50,7 @@ To build a Python image, choose either the CentOS or RHEL based image:
 
     ```
     $ git clone https://github.com/sclorg/s2i-python-container.git
-    $ cd s2i-python
+    $ cd s2i-python-container
     $ make build TARGET=centos7 VERSION=3.5
     ```
 
@@ -74,7 +74,7 @@ see [usage documentation](3.5/README.md).
 Test
 ---------------------
 This repository also provides a [S2I](https://github.com/openshift/source-to-image) test framework,
-which launches tests to check functionality of a simple Python application built on top of the s2i-python image.
+which launches tests to check functionality of a simple Python application built on top of the s2i-python-container image.
 
 Users can choose between testing a Python test application based on a RHEL or CentOS image.
 
@@ -83,14 +83,14 @@ Users can choose between testing a Python test application based on a RHEL or Ce
     To test a RHEL7-based Python image, you need to run the test on a properly subscribed RHEL machine.
 
     ```
-    $ cd s2i-python
+    $ cd s2i-python-container
     $ make test TARGET=rhel7 VERSION=3.5
     ```
 
 *  **CentOS based image**
 
     ```
-    $ cd s2i-python
+    $ cd s2i-python-container
     $ make test TARGET=centos7 VERSION=3.5
     ```
 
