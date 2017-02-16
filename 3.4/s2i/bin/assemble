@@ -14,18 +14,23 @@ shopt -s dotglob
 echo "---> Installing application source ..."
 mv /tmp/src/* ./
 
+if [[ ! -z "$UPGRADE_PIP_TO_LATEST" ]]; then
+  echo "---> Upgrading pip to latest version ..."
+  pip install -U pip
+fi
+
 if [[ -f requirements.txt ]]; then
   if [ -n "$PIP_INDEX_URL" ]; then
     echo "---> Installing dependencies via $PIP_INDEX_URL ..."
   else
     echo "---> Installing dependencies ..."
   fi
-  pip install --user -r requirements.txt
+  pip install -r requirements.txt
 fi
 
 if [[ -f setup.py ]]; then
   echo "---> Installing application ..."
-  python setup.py develop --user
+  python setup.py develop
 fi
 
 if should_collectstatic; then
