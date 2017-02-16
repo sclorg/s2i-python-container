@@ -32,6 +32,18 @@ function get_default_web_concurrency() {
   echo $default
 }
 
+app_script_check="${APP_SCRIPT-}"
+APP_SCRIPT="${APP_SCRIPT:-app.sh}"
+if [[ -f "$APP_SCRIPT" ]]; then
+  echo "---> Running application from script ($APP_SCRIPT) ..."
+  if [[ "$APP_SCRIPT" != /* ]]; then
+    APP_SCRIPT="./$APP_SCRIPT"
+  fi
+  exec "$APP_SCRIPT"
+else
+  test -n "$app_script_check" && (>&2 echo "ERROR: file '$app_script_check' not found.") && exit 1
+fi
+
 app_file_check="${APP_FILE-}"
 APP_FILE="${APP_FILE:-app.py}"
 if [[ -f "$APP_FILE" ]]; then
@@ -87,5 +99,5 @@ if is_django_installed; then
 fi
 
 >&2 echo "ERROR: don't know how to run your application."
->&2 echo "Please set either APP_MODULE or APP_FILE environment variables, or create a file 'app.py' to launch your application."
+>&2 echo "Please set either APP_MODULE, APP_FILE or APP_SCRIPT environment variables, or create a file 'app.py' to launch your application."
 exit 1
