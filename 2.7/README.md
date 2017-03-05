@@ -162,6 +162,7 @@ a `.s2i/environment` file inside your source code repository.
     [workers](http://docs.gunicorn.org/en/stable/settings.html#workers). By
     default, this is set to the number of available cores times 4.
 
+
 Source repository layout
 ------------------------
 
@@ -180,6 +181,13 @@ However, if these files exist they will affect the behavior of the build process
   dependencies, as documented
   [here](https://packaging.python.org/en/latest/distributing.html#setup-py).
   For most projects, it is sufficient to simply use `requirements.txt`.
+
+
+* **package.json**
+
+  List of dependencies to be installed with `npm`. The format is documented
+  [here](https://docs.npmjs.com/files/package.json).
+
 
 
 Run strategies

@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "local_module": "file:local_module"
+  }
+}
