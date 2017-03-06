@@ -55,6 +55,12 @@ if should_collectstatic; then
   )
 fi
 
+# npm
+if [[ -f package.json ]]; then
+  echo "---> Installing npm modules ..."
+  npm install
+fi
+
 # Fix source directory permissions
 fix-permissions ./
 # set permissions for any installed artifacts
