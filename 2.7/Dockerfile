@@ -14,7 +14,18 @@ ENV PYTHON_VERSION=2.7 \
     PIP_NO_CACHE_DIR=off
 
 
-LABEL io.k8s.description="Platform for building and running Python 2.7 applications" \
+ENV SUMMARY="Platform for building and running Python PYTHON_VERSION applications" \
+    DESCRIPTION="Python $PYTHON_VERSION available as docker container, is a base platform for \
+building and running various Python $PYTHON_VERSION applications and frameworks. \
+Python is an easy to learn, powerful programming language. It has efficient high-level \
+data structures and a simple but effective approach to object-oriented programming. \
+Python’s elegant syntax and dynamic typing, together with its interpreted nature, \
+make it an ideal language for scripting and rapid application development in many areas \
+on most platforms."
+
+LABEL summary="$SUMMARY" \
+      description="$DESCRIPTION" \
+      io.k8s.description="$SUMMARY" \
       io.k8s.display-name="Python 2.7" \
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,python,python27,rh-python27"
