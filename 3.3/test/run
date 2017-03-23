@@ -158,7 +158,7 @@ test_application() {
   # Wait for the container to write it's CID file
   wait_for_cid
 
-  test_scl_usage "python --version" "Python 3.3.2" "${cid_file}"
+  test_scl_usage "python --version" "Python 3.3." "${cid_file}"
   check_result $?
   test_connection
   check_result $?
