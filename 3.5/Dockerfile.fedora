@@ -5,7 +5,7 @@ FROM 25/s2i-base
 LABEL MAINTAINER SoftwareCollections.org <sclorg@redhat.com>
 
 ENV NAME=python \
-    VERSION=3.5 \
+    VERSION=0 \
     RELEASE=1 \
     ARCH=x86_64
 
@@ -13,18 +13,20 @@ LABEL BZComponent="$NAME" \
       Name="$FGC/$NAME" \
       Version="$VERSION" \
       Release="$RELEASE.$DISTTAG" \
-      Architecture="$ARCH"
+      Architecture="$ARCH" \
+      Usage="s2i build file:///your/app 25/python your-app" \
+      Help="help.1"
 
 EXPOSE 8080
 
-ENV PYTHON_VERSION=$VERSION \
+ENV PYTHON_VERSION=3.5 \
     PATH=$HOME/.local/bin/:$PATH \
     PYTHONIOENCODING=UTF-8 \
     LC_ALL=en_US.UTF-8 \
     LANG=en_US.UTF-8 \
     PIP_NO_CACHE_DIR=off
 
-ENV SUMMARY="Platform for building and running Python PYTHON_VERSION applications" \
+ENV SUMMARY="Platform for building and running Python $PYTHON_VERSION applications" \
     DESCRIPTION="Python $PYTHON_VERSION available as docker container, is a base platform for \
 building and running various Python $PYTHON_VERSION applications and frameworks. \
 Python is an easy to learn, powerful programming language. It has efficient high-level \
@@ -52,6 +54,9 @@ COPY ./s2i/bin/ $STI_SCRIPTS_PATH
 # Each language image can have 'contrib' a directory with extra files needed to
 # run and build the applications.
 COPY ./contrib/ /opt/app-root
+
+# Add help file
+COPY root /
 
 # Create a Python virtual environment for use by any application to avoid
 # potential conflicts with Python packages preinstalled in the main Python

@@ -1,0 +1,314 @@
+.TH "PYTHON-35-RHEL7" "1" " Container Image Pages" "Red Hat" "April 07, 2017"  ""
+
+
+.SH Python Docker image
+.PP
+This repository contains the source for building various versions of
+the Python application as a reproducible Docker image using
+
+\[la]https://github.com/openshift/source-to-image\[ra].
+Users can choose between RHEL and CentOS based builder images.
+The resulting image can be run using 
+\[la]http://docker.io\[ra].
+
+.SH Usage
+.PP
+To build a simple 
+\[la]https://github.com/openshift/s2i-python/tree/master/3.5/test/setup-test-app\[ra] application
+using standalone 
+\[la]https://github.com/openshift/source-to-image\[ra] and then run the
+resulting image with 
+\[la]http://docker.io\[ra] execute:
+.IP \n+[step]
+
+\item 
+.PP
+\fBFor RHEL based image\fP
+\fB\fC
+$ s2i build https://github.com/sclorg/s2i\-python\-container.git \-\-context\-dir=3.5/test/setup\-test\-app/ rhscl/python\-35\-rhel7 python\-sample\-app
+$ docker run \-p 8080:8080 python\-sample\-app
+\fR
+\item 
+.PP
+\fBFor CentOS based image\fP
+\fB\fC
+$ s2i build https://github.com/sclorg/s2i\-python\-container.git \-\-context\-dir=3.5/test/setup\-test\-app/ centos/python\-35\-centos7 python\-sample\-app
+$ docker run \-p 8080:8080 python\-sample\-app
+\fR
+.PP
+\fBAccessing the application:\fP
+
+.PP
+.RS
+
+.nf
+$ curl 127.0.0.1:8080
+
+.fi
+.RE
+
+.SH Repository organization.IP \n+[step]
+
+\item 
+.PP
+\fB\fB\fC<python\-version>\fR\fP.IP \n+[step]
+
+\item 
+.PP
+\fBDockerfile\fP
+.PP
+CentOS based Dockerfile.
+\item 
+.PP
+\fBDockerfile.rhel7\fP
+.PP
+RHEL based Dockerfile. In order to perform build or test actions on this
+Dockerfile you need to run the action on a properly subscribed RHEL machine.
+\item 
+.PP
+\fB\fB\fCs2i/bin/\fR\fP
+.PP
+This folder contains scripts that are run by 
+\[la]https://github.com/openshift/source-to-image\[ra]:
+.IP \n+[step]
+
+\item 
+.PP
+\fBassemble\fP
+.PP
+Used to install the sources into the location where the application
+will be run and prepare the application for deployment (eg. installing
+dependencies, etc.)
+\item 
+.PP
+\fBrun\fP
+.PP
+This script is responsible for running the application by using the
+application web server.
+\item 
+.PP
+\fBusage\fP*
+.PP
+This script prints the usage of this image.
+\item 
+.PP
+\fB\fB\fCcontrib/\fR\fP
+.PP
+This folder contains a file with commonly used modules.
+\item 
+.PP
+\fB\fB\fCtest/\fR\fP
+.PP
+This folder contains a 
+\[la]https://github.com/openshift/source-to-image\[ra]
+test framework with a simple server.
+.IP \n+[step]
+
+\item 
+.PP
+\fB\fB\fCsetup\-test\-app/\fR\fP
+.PP
+Simple Gunicorn application used for testing purposes by the 
+\[la]https://github.com/openshift/source-to-image\[ra] test framework.
+\item 
+.PP
+\fB\fB\fCstandalone\-test\-app/\fR\fP
+.PP
+Simple standalone application used for testing purposes by the 
+\[la]https://github.com/openshift/source-to-image\[ra] test framework.
+\item 
+.PP
+\fBrun\fP
+.PP
+Script that runs the 
+\[la]https://github.com/openshift/source-to-image\[ra] test framework.
+.SH Environment variables
+.PP
+To set these environment variables, you can place them as a key value pair into a \fB\fC.s2i/environment\fR
+file inside your source code repository.
+.IP \n+[step]
+
+\item 
+.PP
+\fBAPP\_SCRIPT\fP
+.PP
+Used to run the application from a script file.
+This should be a path to a script file (defaults to \fB\fCapp.sh\fR) that will be
+run to start the application.
+\item 
+.PP
+\fBAPP\_FILE\fP
+.PP
+Used to run the application from a Python script.
+This should be a path to a Python file (defaults to \fB\fCapp.py\fR) that will be
+passed to the Python interpreter to start the application.
+\item 
+.PP
+\fBAPP\_MODULE\fP
+.PP
+Used to run the application with Gunicorn, as documented
+
+\[la]http://docs.gunicorn.org/en/latest/run.html#gunicorn\[ra].
+This variable specifies a WSGI callable with the pattern
+\fB\fCMODULE\_NAME:VARIABLE\_NAME\fR, where \fB\fCMODULE\_NAME\fR is the full dotted path
+of a module, and \fB\fCVARIABLE\_NAME\fR refers to a WSGI callable inside the
+specified module.
+Gunicorn will look for a WSGI callable named \fB\fCapplication\fR if not specified.
+
+.PP
+If \fB\fCAPP\_MODULE\fR is not provided, the \fB\fCrun\fR script will look for a \fB\fCwsgi.py\fR
+file in your project and use it if it exists.
+
+.PP
+If using \fB\fCsetup.py\fR for installing the application, the \fB\fCMODULE\_NAME\fR part
+can be read from there. For an example, see
+
+\[la]https://github.com/openshift/s2i-python/tree/master/3.5/test/setup-test-app\[ra].
+\item 
+.PP
+\fBAPP\_HOME\fP
+.PP
+This variable can be used to specify a sub\-directory in which the application to be run is contained.
+The directory pointed to by this variable needs to contain \fB\fCwsgi.py\fR (for Gunicorn) or \fB\fCmanage.py\fR (for Django).
+
+.PP
+If \fB\fCAPP\_HOME\fR is not provided, the \fB\fCassemble\fR and \fB\fCrun\fR scripts will use the application's root
+directory.
+\item 
+.PP
+\fBAPP\_CONFIG\fP
+.PP
+Path to a valid Python file with a
+
+\[la]http://docs.gunicorn.org/en/latest/configure.html#configuration-file\[ra] file.
+\item 
+.PP
+\fBDISABLE\_COLLECTSTATIC\fP
+.PP
+Set this variable to a non\-empty value to inhibit the execution of
+'manage.py collectstatic' during the build. This only affects Django projects.
+\item 
+.PP
+\fBDISABLE\_MIGRATE\fP
+.PP
+Set this variable to a non\-empty value to inhibit the execution of 'manage.py migrate'
+when the produced image is run. This only affects Django projects.
+\item 
+.PP
+\fBPIP\_INDEX\_URL\fP
+.PP
+Set this variable to use a custom index URL or mirror to download required packages
+during build process. This only affects packages listed in requirements.txt.
+\item 
+.PP
+\fBUPGRADE\_PIP\_TO\_LATEST\fP
+.PP
+Set this variable to a non\-empty value to have the 'pip' program be upgraded
+to the most recent version before any Python packages are installed. If not
+set it will use whatever the default version is included by the platform
+for the Python version being used.
+\item 
+.PP
+\fBWEB\_CONCURRENCY\fP
+.PP
+Set this to change the default setting for the number of
+
+\[la]http://docs.gunicorn.org/en/stable/settings.html#workers\[ra]. By
+default, this is set to the number of available cores times 2.
+.SH Source repository layout
+.PP
+You do not need to change anything in your existing Python project's repository.
+However, if these files exist they will affect the behavior of the build process:
+.IP \n+[step]
+
+\item \fBrequirements.txt\fP
+.PP
+List of dependencies to be installed with \fB\fCpip\fR. The format is documented
+  
+\[la]https://pip.pypa.io/en/latest/user_guide.html#requirements-files\[ra].
+.IP \n+[step]
+
+\item \fBsetup.py\fP
+.PP
+Configures various aspects of the project, including installation of
+  dependencies, as documented
+  
+\[la]https://packaging.python.org/en/latest/distributing.html#setup-py\[ra].
+  For most projects, it is sufficient to simply use \fB\fCrequirements.txt\fR.
+
+.SH Run strategies
+.PP
+The Docker image produced by s2i\-python executes your project in one of the
+following ways, in precedence order:
+.IP \n+[step]
+
+\item \fBGunicorn\fP
+.PP
+The Gunicorn WSGI HTTP server is used to serve your application in the case that it
+  is installed. It can be installed by listing it either in the \fB\fCrequirements.txt\fR
+  file or in the \fB\fCinstall\_requires\fR section of the \fB\fCsetup.py\fR file.
+
+.PP
+If a file named \fB\fCwsgi.py\fR is present in your repository, it will be used as
+  the entry point to your application. This can be overridden with the
+  environment variable \fB\fCAPP\_MODULE\fR.
+  This file is present in Django projects by default.
+
+.PP
+If you have both Django and Gunicorn in your requirements, your Django project
+  will automatically be served using Gunicorn.
+.IP \n+[step]
+
+\item \fBDjango development server\fP
+.PP
+If you have Django in your requirements but don't have Gunicorn, then your
+  application will be served using Django's development web server. However, this is not
+  recommended for production environments.
+.IP \n+[step]
+
+\item \fBPython script\fP
+.PP
+This would be used where you provide a Python code file for running you
+  application. It will be used in the case where you specify a path to a
+  Python script via the \fB\fCAPP\_FILE\fR environment variable, defaulting to a
+  file named \fB\fCapp.py\fR if it exists. The script is passed to a regular
+  Python interpreter to launch your application.
+.IP \n+[step]
+
+\item \fBApplication script file\fP
+.PP
+This is the most general way of executing your application. It will be
+  used in the case where you specify a path to an executable script file
+  via the \fB\fCAPP\_SCRIPT\fR environment variable, defaulting to a file named
+  \fB\fCapp.sh\fR if it exists. The script is executed directly to launch your
+  application.
+
+.SH Hot deploy
+.PP
+If you are using Django, hot deploy will work out of the box.
+
+.PP
+To enable hot deploy while using Gunicorn, make sure you have a Gunicorn
+configuration file inside your repository with the
+
+\[la]https://gunicorn-docs.readthedocs.org/en/latest/settings.html#reload\[ra]
+option set to \fB\fCtrue\fR. Make sure to specify your config via the \fB\fCAPP\_CONFIG\fR
+environment variable.
+
+.PP
+To change your source code in running container, use Docker's
+
+\[la]https://docs.docker.com/reference/commandline/exec/\[ra] command:
+
+.PP
+.RS
+
+.nf
+docker exec \-it <CONTAINER\_ID> /bin/bash
+
+.fi
+.RE
+
+.PP
+After you enter into the running container, your current directory is set
+to \fB\fC/opt/app\-root/src\fR, where the source code is located.
