@@ -1,6 +1,6 @@
 # This image provides a Python 3.5 environment you can use to run your Python
 # applications.
-FROM 25/s2i-base
+FROM registry.fedoraproject.org/f25/s2i-base
 
 LABEL MAINTAINER SoftwareCollections.org <sclorg@redhat.com>
 
