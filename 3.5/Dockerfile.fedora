@@ -27,11 +27,11 @@ ENV PYTHON_VERSION=3.5 \
     PIP_NO_CACHE_DIR=off
 
 ENV SUMMARY="Platform for building and running Python $PYTHON_VERSION applications" \
-    DESCRIPTION="Python $PYTHON_VERSION available as docker container, is a base platform for \
+    DESCRIPTION="Python $PYTHON_VERSION available as docker container is a base platform for \
 building and running various Python $PYTHON_VERSION applications and frameworks. \
 Python is an easy to learn, powerful programming language. It has efficient high-level \
 data structures and a simple but effective approach to object-oriented programming. \
-Python’s elegant syntax and dynamic typing, together with its interpreted nature, \
+Python's elegant syntax and dynamic typing, together with its interpreted nature, \
 make it an ideal language for scripting and rapid application development in many areas \
 on most platforms."
 
@@ -61,7 +61,7 @@ COPY root /
 # Create a Python virtual environment for use by any application to avoid
 # potential conflicts with Python packages preinstalled in the main Python
 # installation.
-RUN virtualenv-$VERSION /opt/app-root
+RUN virtualenv-$PYTHON_VERSION /opt/app-root
 
 # In order to drop the root user, we have to make some directories world
 # writable as OpenShift default security model is to run the container under
