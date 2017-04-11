@@ -55,7 +55,8 @@ COPY ./s2i/bin/ $STI_SCRIPTS_PATH
 # run and build the applications.
 COPY ./contrib/ /opt/app-root
 
-# Add help file
+# Add help.1 file, that is generated using go-md2man manually (at this point)
+# TODO: we should make it transparent for the contributors
 COPY root /
 
 # Create a Python virtual environment for use by any application to avoid
