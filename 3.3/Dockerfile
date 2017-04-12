@@ -8,6 +8,7 @@ EXPOSE 8080
 
 ENV PYTHON_VERSION=3.3 \
     PATH=$HOME/.local/bin/:$PATH \
+    PYTHONUNBUFFERED=1 \
     PYTHONIOENCODING=UTF-8 \
     LC_ALL=en_US.UTF-8 \
     LANG=en_US.UTF-8 \
@@ -19,7 +20,8 @@ LABEL io.k8s.description="Platform for building and running Python 3.3 applicati
       io.openshift.tags="builder,python,python33"
 
 RUN yum install -y centos-release-scl && \
-    INSTALL_PKGS="python33 python33-python-devel python33-python-setuptools nss_wrapper httpd httpd-devel \
+    INSTALL_PKGS="python33 python33-python-devel python33-python-setuptools nss_wrapper httpd24 \
+        httpd24-httpd-devel httpd24-mod_ssl httpd24-mod_auth_kerb httpd24-mod_ldap httpd24-mod_session \
 	atlas-devel gcc-gfortran libffi-devel libtool-ltdl" && \
     yum install -y --setopt=tsflags=nodocs --enablerepo=centosplus $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \

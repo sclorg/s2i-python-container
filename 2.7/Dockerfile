@@ -8,11 +8,11 @@ EXPOSE 8080
 
 ENV PYTHON_VERSION=2.7 \
     PATH=$HOME/.local/bin/:$PATH \
+    PYTHONUNBUFFERED=1 \
     PYTHONIOENCODING=UTF-8 \
     LC_ALL=en_US.UTF-8 \
     LANG=en_US.UTF-8 \
     PIP_NO_CACHE_DIR=off
-
 
 ENV SUMMARY="Platform for building and running Python $PYTHON_VERSION applications" \
     DESCRIPTION="Python $PYTHON_VERSION available as docker container is a base platform for \
@@ -32,7 +32,8 @@ LABEL summary="$SUMMARY" \
 
 RUN yum install -y centos-release-scl && \
     INSTALL_PKGS="libjpeg-turbo libjpeg-turbo-devel python27 python27-python-devel python27-python-setuptools \ 
-	python27-python-pip nss_wrapper httpd httpd-devel atlas-devel gcc-gfortran libffi-devel libtool-ltdl" && \
+	python27-python-pip nss_wrapper httpd24 httpd24-httpd-devel httpd24-mod_ssl httpd24-mod_auth_kerb \
+        httpd24-mod_ldap httpd24-mod_session atlas-devel gcc-gfortran libffi-devel libtool-ltdl" && \
     yum install -y --setopt=tsflags=nodocs --enablerepo=centosplus $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     # Remove centos-logos (httpd dependency, ~20MB of graphics) to keep image
