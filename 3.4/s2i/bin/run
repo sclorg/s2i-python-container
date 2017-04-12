@@ -25,8 +25,8 @@ function get_default_web_concurrency() {
   fi
 
   local max=$((NUMBER_OF_CORES*2))
-  # Require at least 43 MiB and additional 10 MiB for every worker
-  local default=$(((${MEMORY_LIMIT_IN_BYTES:-MAX_MEMORY_LIMIT_IN_BYTES}/1024/1024 - 43) / 10))
+  # Require at least 43 MiB and additional 40 MiB for every worker
+  local default=$(((${MEMORY_LIMIT_IN_BYTES:-MAX_MEMORY_LIMIT_IN_BYTES}/1024/1024 - 43) / 40))
   default=$((default > max ? max : default))
   default=$((default < 1 ? 1 : default))
   echo $default
