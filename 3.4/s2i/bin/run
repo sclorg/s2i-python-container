@@ -45,7 +45,7 @@ else
 fi
 
 app_file_check="${APP_FILE-}"
-APP_FILE="${APP_FILE:-app.py}"
+APP_FILE="${APP_FILE-app.py}"
 if [[ -f "$APP_FILE" ]]; then
   echo "---> Running application from Python script ($APP_FILE) ..."
   exec python "$APP_FILE"
