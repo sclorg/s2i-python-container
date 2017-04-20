@@ -95,13 +95,13 @@ file inside your source code repository.
 * **APP_SCRIPT**
 
     Used to run the application from a script file.
-    This should be a path to a script file (defaults to `app.sh`) that will be
+    This should be a path to a script file (defaults to `app.sh` unless set to null) that will be
     run to start the application.
 
 * **APP_FILE**
 
     Used to run the application from a Python script.
-    This should be a path to a Python file (defaults to `app.py`) that will be
+    This should be a path to a Python file (defaults to `app.py` unless set to null) that will be
     passed to the Python interpreter to start the application.
 
 * **APP_MODULE**

@@ -33,7 +33,7 @@ function get_default_web_concurrency() {
 }
 
 app_script_check="${APP_SCRIPT-}"
-APP_SCRIPT="${APP_SCRIPT:-app.sh}"
+APP_SCRIPT="${APP_SCRIPT-app.sh}"
 if [[ -f "$APP_SCRIPT" ]]; then
   echo "---> Running application from script ($APP_SCRIPT) ..."
   if [[ "$APP_SCRIPT" != /* ]]; then
