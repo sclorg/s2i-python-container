@@ -1,7 +1,4 @@
-.TH "PYTHON-35-RHEL7" "1" " Container Image Pages" "Red Hat" "April 07, 2017"  ""
-
-
-.SH Python Docker image
+.TH Python Docker image
 .PP
 This repository contains the source for building various versions of
 the Python application as a reproducible Docker image using
@@ -133,14 +130,14 @@ file inside your source code repository.
 \fBAPP\_SCRIPT\fP
 .PP
 Used to run the application from a script file.
-This should be a path to a script file (defaults to \fB\fCapp.sh\fR) that will be
+This should be a path to a script file (defaults to \fB\fCapp.sh\fR unless set to null) that will be
 run to start the application.
 \item 
 .PP
 \fBAPP\_FILE\fP
 .PP
 Used to run the application from a Python script.
-This should be a path to a Python file (defaults to \fB\fCapp.py\fR) that will be
+This should be a path to a Python file (defaults to \fB\fCapp.py\fR unless set to null) that will be
 passed to the Python interpreter to start the application.
 \item 
 .PP

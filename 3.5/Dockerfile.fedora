@@ -56,6 +56,7 @@ COPY ./s2i/bin/ $STI_SCRIPTS_PATH
 COPY ./contrib/ /opt/app-root
 
 # Add help.1 file, that is generated using go-md2man manually (at this point)
+#  $ go-md2man -in README.md -out root/help.1
 # TODO: we should make it transparent for the contributors
 COPY root /
 
