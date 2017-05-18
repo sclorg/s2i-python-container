@@ -2,6 +2,9 @@
 staticfiles/
 openshift.local.*
 
+# help.1 files complied by container-common-scripts from README.md files
+*/root/help.1
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
