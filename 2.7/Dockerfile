@@ -2,8 +2,6 @@
 # applications.
 FROM centos/s2i-base-centos7
 
-MAINTAINER SoftwareCollections.org <sclorg@redhat.com>
-
 EXPOSE 8080
 
 ENV PYTHON_VERSION=2.7 \
@@ -28,7 +26,12 @@ LABEL summary="$SUMMARY" \
       io.k8s.description="$SUMMARY" \
       io.k8s.display-name="Python 2.7" \
       io.openshift.expose-services="8080:http" \
-      io.openshift.tags="builder,python,python27,rh-python27"
+      io.openshift.tags="builder,python,python27,rh-python27" \
+      com.redhat.component="python27-docker" \
+      name="centos/python-27-centos7" \
+      version="2.7" \
+      release="1" \
+      maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 RUN yum install -y centos-release-scl && \
     INSTALL_PKGS="libjpeg-turbo libjpeg-turbo-devel python27 python27-python-devel python27-python-setuptools \ 

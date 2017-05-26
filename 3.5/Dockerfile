@@ -28,7 +28,12 @@ LABEL summary="$SUMMARY" \
       io.k8s.description="$SUMMARY" \
       io.k8s.display-name="Python 3.5" \
       io.openshift.expose-services="8080:http" \
-      io.openshift.tags="builder,python,python35,rh-python35"
+      io.openshift.tags="builder,python,python35,rh-python35" \
+      com.redhat.component="python35-docker" \
+      name="centos/python-35-centos7" \
+      version="3.5" \
+      release="1" \
+      maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 RUN yum install -y centos-release-scl-rh && \
     yum-config-manager --enable centos-sclo-rh-testing && \

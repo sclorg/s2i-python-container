@@ -28,7 +28,12 @@ LABEL summary="$SUMMARY" \
       io.k8s.description="$SUMMARY" \
       io.k8s.display-name="Python 3.4" \
       io.openshift.expose-services="8080:http" \
-      io.openshift.tags="builder,python,python34,rh-python34"
+      io.openshift.tags="builder,python,python34,rh-python34" \
+      com.redhat.component="python34-docker" \
+      name="centos/python-34-centos7" \
+      version="3.4" \
+      release="1" \
+      maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 RUN yum install -y centos-release-scl && \
     INSTALL_PKGS="rh-python34 rh-python34-python-devel rh-python34-python-setuptools rh-python34-python-pip \
