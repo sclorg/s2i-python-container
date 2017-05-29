@@ -26,14 +26,11 @@ LABEL summary="$SUMMARY" \
       io.k8s.description="$SUMMARY" \
       io.k8s.display-name="Python 2.7" \
       io.openshift.expose-services="8080:http" \
-      io.openshift.tags="builder,python,python27,rh-python27"
-
-# Labels consumed by Red Hat build service.
-LABEL com.redhat.component="python27-docker" \
+      io.openshift.tags="builder,python,python27,rh-python27" \
+      com.redhat.component="python27-docker" \
       name="rhscl/python-27-rhel7" \
       version="2.7" \
-      release="1" \
-      architecture="x86_64"
+      release="1"
 
 # To use subscription inside container yum command has to be run first (before yum-config-manager)
 # https://access.redhat.com/solutions/1443553
