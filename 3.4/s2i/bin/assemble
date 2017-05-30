@@ -63,6 +63,3 @@ fi
 fix-permissions ./
 # set permissions for any installed artifacts
 fix-permissions /opt/app-root
-
-# remove pip temporary directory
-rm -rf /tmp/pip_build_default
