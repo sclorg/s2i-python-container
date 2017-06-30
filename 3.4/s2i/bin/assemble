@@ -59,7 +59,5 @@ if should_collectstatic; then
   )
 fi
 
-# Fix source directory permissions
-fix-permissions ./
 # set permissions for any installed artifacts
 fix-permissions /opt/app-root
