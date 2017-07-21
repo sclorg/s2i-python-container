@@ -179,7 +179,9 @@ However, if these files exist they will affect the behavior of the build process
   Configures various aspects of the project, including installation of
   dependencies, as documented
   [here](https://packaging.python.org/en/latest/distributing.html#setup-py).
-  For most projects, it is sufficient to simply use `requirements.txt`.
+  For most projects, it is sufficient to simply use `requirements.txt`, if this
+  file is present `setup.py` is not processed by default, please use `-e .` to
+  trigger its processing from the requirements.txt file.
 
 
 Run strategies

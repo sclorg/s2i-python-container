@@ -26,9 +26,7 @@ if [[ -f requirements.txt ]]; then
     echo "---> Installing dependencies ..."
   fi
   pip install -r requirements.txt
-fi
-
-if [[ -f setup.py ]]; then
+elif [[ -f setup.py ]]; then
   echo "---> Installing application ..."
   python setup.py develop
 fi
