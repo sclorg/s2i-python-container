@@ -261,7 +261,6 @@ to `/opt/app-root/src`, where the source code is located.
 
 See also
 --------
-Base Python environment Dockerfile and other sources for building the final image 
-with your Python application are available on https://github.com/sclorg/s2i-python-container.
+Dockerfile and other sources are available on https://github.com/sclorg/s2i-python-container.
 In that repository you also can find another versions of Python environment Dockerfiles.
 Dockerfile for CentOS is called Dockerfile, Dockerfile for RHEL is called Dockerfile.rhel7.
