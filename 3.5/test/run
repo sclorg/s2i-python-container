@@ -8,7 +8,7 @@
 #
 IMAGE_NAME=${IMAGE_NAME:-openshift/python-35-centos7-candidate}
 
-declare -a WEB_APPS=({standalone,setup,django,numpy,app-home,virtualenv-uwsgi,locale,mod-wsgi}-test-app)
+declare -a WEB_APPS=({standalone,setup,setup-requirements,django,numpy,app-home,virtualenv-uwsgi,locale,mod-wsgi}-test-app)
 
 # TODO: Make command compatible for Mac users
 test_dir="$(readlink -zf $(dirname "${BASH_SOURCE[0]}"))"
