@@ -1,19 +1,19 @@
-Python 3.5 Docker image
+Python 3.6 Docker image
 ===================
 
-This container image includes Python 3.5 as a [S2I](https://github.com/openshift/source-to-image) base image for your Python 3.5 applications.
+This container image includes Python 3.6 as a [S2I](https://github.com/openshift/source-to-image) base image for your Python 3.6 applications.
 Users can choose between RHEL and CentOS based builder images.
-The RHEL image is available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/python-35-rhel7)
-as registry.access.redhat.com/rhscl/python-35-rhel7.
-The CentOS image is then available on [Docker Hub](https://hub.docker.com/r/centos/python-35-centos7/)
-as centos/python-35-centos7. 
+The RHEL image is available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/python-36-rhel7)
+as registry.access.redhat.com/rhscl/python-36-rhel7.
+The CentOS image is then available on [Docker Hub](https://hub.docker.com/r/centos/python-36-centos7/)
+as centos/python-36-centos7. 
 The resulting image can be run using [Docker](http://docker.io).
 
 Description
 -----------
 
-Python 3.5 available as docker container is a base platform for 
-building and running various Python 3.5 applications and frameworks. 
+Python 3.6 available as docker container is a base platform for 
+building and running various Python 3.6 applications and frameworks. 
 Python is an easy to learn, powerful programming language. It has efficient high-level 
 data structures and a simple but effective approach to object-oriented programming. 
 Python's elegant syntax and dynamic typing, together with its interpreted nature, 
@@ -22,19 +22,19 @@ on most platforms.
 
 Usage
 ---------------------
-To build a simple [python-sample-app](https://github.com/sclorg/s2i-python-container/tree/master/3.5/test/setup-test-app) application
+To build a simple [python-sample-app](https://github.com/sclorg/s2i-python-container/tree/master/3.6/test/setup-test-app) application
 using standalone [S2I](https://github.com/openshift/source-to-image) and then run the
 resulting image with [Docker](http://docker.io) execute:
 
 *  **For RHEL based image**
     ```
-    $ s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.5/test/setup-test-app/ rhscl/python-35-rhel7 python-sample-app
+    $ s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.6/test/setup-test-app/ rhscl/python-36-rhel7 python-sample-app
     $ docker run -p 8080:8080 python-sample-app
     ```
 
 *  **For CentOS based image**
     ```
-    $ s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.5/test/setup-test-app/ centos/python-35-centos7 python-sample-app
+    $ s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.6/test/setup-test-app/ centos/python-36-centos7 python-sample-app
     $ docker run -p 8080:8080 python-sample-app
     ```
 
@@ -76,7 +76,7 @@ file inside your source code repository.
 
     If using `setup.py` for installing the application, the `MODULE_NAME` part
     can be read from there. For an example, see
-    [setup-test-app](https://github.com/sclorg/s2i-python-container/tree/master/3.5/test/setup-test-app).
+    [setup-test-app](https://github.com/sclorg/s2i-python-container/tree/master/3.6/test/setup-test-app).
 
 * **APP_HOME**
 

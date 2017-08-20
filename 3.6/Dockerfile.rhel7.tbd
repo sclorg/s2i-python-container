@@ -1,10 +1,10 @@
-# This image provides a Python 3.5 environment you can use to run your Python
+# This image provides a Python 3.6 environment you can use to run your Python
 # applications.
-FROM rhscl/s2i-base-rhel7
+FROM rhscl/s2i-base-rhel7:1
 
 EXPOSE 8080
 
-ENV PYTHON_VERSION=3.5 \
+ENV PYTHON_VERSION=3.6 \
     PATH=$HOME/.local/bin/:$PATH \
     PYTHONUNBUFFERED=1 \
     PYTHONIOENCODING=UTF-8 \
@@ -24,13 +24,12 @@ on most platforms."
 LABEL summary="$SUMMARY" \
       description="$DESCRIPTION" \
       io.k8s.description="$DESCRIPTION" \
-      io.k8s.display-name="Python 3.5" \
+      io.k8s.display-name="Python 3.6" \
       io.openshift.expose-services="8080:http" \
-      io.openshift.tags="builder,python,python35,rh-python35" \
-      com.redhat.component="rh-python35-docker" \
-      name="rhscl/python-35-rhel7" \
-      version="3.5" \
-      release="1"
+      io.openshift.tags="builder,python,python36,rh-python36" \
+      com.redhat.component="rh-python36-docker" \
+      name="rhscl-beta/python-36-rhel7" \
+      version="1"
 
 # We need to call 2 (!) yum commands before being able to enable repositories properly
 # This is a workaround for https://bugzilla.redhat.com/show_bug.cgi?id=1479388
@@ -40,7 +39,7 @@ RUN yum repolist > /dev/null && \
     yum-config-manager --enable rhel-server-rhscl-7-rpms && \
     yum-config-manager --enable rhel-7-server-rpms && \
     yum-config-manager --enable rhel-7-server-optional-rpms && \
-    INSTALL_PKGS="rh-python35 rh-python35-python-devel rh-python35-python-setuptools rh-python35-python-pip \
+    INSTALL_PKGS="rh-python36 rh-python36-python-devel rh-python36-python-setuptools rh-python36-python-pip \
 	nss_wrapper httpd24 httpd24-httpd-devel httpd24-mod_ssl httpd24-mod_auth_kerb httpd24-mod_ldap httpd24-mod_session \
         atlas-devel gcc-gfortran libffi-devel libtool-ltdl" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
@@ -58,7 +57,7 @@ COPY ./root/ /
 # Create a Python virtual environment for use by any application to avoid
 # potential conflicts with Python packages preinstalled in the main Python
 # installation.
-RUN source scl_source enable rh-python35 && \
+RUN source scl_source enable rh-python36 && \
     virtualenv /opt/app-root
 
 # In order to drop the root user, we have to make some directories world
