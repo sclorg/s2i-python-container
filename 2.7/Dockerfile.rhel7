@@ -34,10 +34,14 @@ LABEL summary="$SUMMARY" \
 
 # To use subscription inside container yum command has to be run first (before yum-config-manager)
 # https://access.redhat.com/solutions/1443553
+# We need to call 2 (!) yum commands before being able to enable repositories properly
+# This is a workaround for https://bugzilla.redhat.com/show_bug.cgi?id=1479388
 RUN yum repolist > /dev/null && \
-    yum-config-manager --enable rhel-server-rhscl-7-rpms && \
+    yum install -y yum-utils && \
+    yum-config-manager --disable \* &> /dev/null && \
+    yum-config-manager --enable rhel-7-server-rpms && \
     yum-config-manager --enable rhel-7-server-optional-rpms && \
-    yum-config-manager --enable rhel-7-server-ose-3.2-rpms && \
+    yum-config-manager --enable rhel-server-rhscl-7-rpms && \
     yum-config-manager --disable epel >/dev/null || : && \
     INSTALL_PKGS="python27 python27-python-devel python27-python-setuptools python27-python-pip \
 	nss_wrapper httpd24 httpd24-httpd-devel httpd24-mod_ssl httpd24-mod_auth_kerb httpd24-mod_ldap \
