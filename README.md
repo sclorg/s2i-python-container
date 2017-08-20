@@ -22,6 +22,7 @@ Python versions currently provided are:
 * [python-2.7](2.7)
 * [python-3.4](3.4)
 * [python-3.5](3.5)
+* [python-3.6](3.6)
 
 RHEL versions currently supported are:
 * RHEL7
@@ -41,7 +42,7 @@ To build a Python image, choose either the CentOS or RHEL based image:
     ```
     $ git clone https://github.com/sclorg/s2i-python-container.git
     $ cd s2i-python-container
-    $ make build TARGET=rhel7 VERSIONS=3.5
+    $ make build TARGET=rhel7 VERSIONS=3.6
     ```
 
 *  **CentOS based image**
@@ -57,7 +58,7 @@ To build a Python image, choose either the CentOS or RHEL based image:
     ```
     $ git clone https://github.com/sclorg/s2i-python-container.git
     $ cd s2i-python-container
-    $ make build TARGET=centos7 VERSIONS=3.5
+    $ make build TARGET=centos7 VERSIONS=3.6
     ```
 
 **Notice: By omitting the `VERSIONS` parameter, the build/test action will be performed
@@ -76,6 +77,9 @@ see [usage documentation](3.4/README.md).
 For information about usage of Dockerfile for Python 3.5,
 see [usage documentation](3.5/README.md).
 
+For information about usage of Dockerfile for Python 3.6,
+see [usage documentation](3.6/README.md).
+
 
 Test
 ---------------------
@@ -90,14 +94,14 @@ Users can choose between testing a Python test application based on a RHEL or Ce
 
     ```
     $ cd s2i-python-container
-    $ make test TARGET=rhel7 VERSIONS=3.5
+    $ make test TARGET=rhel7 VERSIONS=3.6
     ```
 
 *  **CentOS based image**
 
     ```
     $ cd s2i-python-container
-    $ make test TARGET=centos7 VERSIONS=3.5
+    $ make test TARGET=centos7 VERSIONS=3.6
     ```
 
 **Notice: By omitting the `VERSIONS` parameter, the build/test action will be performed
