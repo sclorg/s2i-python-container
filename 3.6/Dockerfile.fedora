@@ -1,4 +1,4 @@
-# This image provides a Python 3.5 environment you can use to run your Python
+# This image provides a Python 3.6 environment you can use to run your Python
 # applications.
 FROM registry.fedoraproject.org/f26/s2i-base:latest
 
