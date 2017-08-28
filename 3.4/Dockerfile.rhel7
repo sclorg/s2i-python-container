@@ -35,9 +35,10 @@ LABEL summary="$SUMMARY" \
 # To use subscription inside container yum command has to be run first (before yum-config-manager)
 # https://access.redhat.com/solutions/1443553
 RUN yum repolist > /dev/null && \
+    yum-config-manager --disable \* &> /dev/null && \
     yum-config-manager --enable rhel-server-rhscl-7-rpms && \
+    yum-config-manager --enable rhel-7-server-rpms && \
     yum-config-manager --enable rhel-7-server-optional-rpms && \
-    yum-config-manager --disable epel >/dev/null || : && \
     INSTALL_PKGS="rh-python34 rh-python34-python-devel rh-python34-python-setuptools rh-python34-python-pip nss_wrapper httpd24 \
         httpd24-httpd-devel httpd24-mod_ssl httpd24-mod_auth_kerb httpd24-mod_ldap httpd24-mod_session \
 	atlas-devel gcc-gfortran libffi-devel libtool-ltdl" && \
