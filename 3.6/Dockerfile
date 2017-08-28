@@ -50,16 +50,16 @@ COPY ./s2i/bin/ $STI_SCRIPTS_PATH
 # Copy extra files to the image.
 COPY ./root/ /
 
-# Create a Python virtual environment for use by any application to avoid
-# potential conflicts with Python packages preinstalled in the main Python
-# installation.
+# - Create a Python virtual environment for use by any application to avoid
+#   potential conflicts with Python packages preinstalled in the main Python
+#   installation.
+# - In order to drop the root user, we have to make some directories world
+#   writable as OpenShift default security model is to run the container
+#   under random UID.
 RUN source scl_source enable rh-python36 && \
-    virtualenv /opt/app-root
-
-# In order to drop the root user, we have to make some directories world
-# writable as OpenShift default security model is to run the container under
-# random UID.
-RUN chown -R 1001:0 /opt/app-root && chmod -R ug+rwx /opt/app-root && \
+    virtualenv /opt/app-root && \
+    chown -R 1001:0 /opt/app-root && \
+    fix-permissions /opt/app-root && \
     rpm-file-permissions
 
 USER 1001
