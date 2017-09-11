@@ -151,10 +151,10 @@ a `.s2i/environment` file inside your source code repository.
 
 * **UPGRADE_PIP_TO_LATEST**
 
-    Set this variable to a non-empty value to have the 'pip' program be upgraded
-    to the most recent version before any Python packages are installed. If not
-    set it will use whatever the default version is included by the platform
-    for the Python version being used.
+    Set this variable to a non-empty value to have the 'pip' program and related
+    python packages (setuptools and wheel) be upgraded to the most recent version
+    before any Python packages are installed. If not set it will use whatever
+    the default version is included by the platform for the Python version being used.
 
 * **WEB_CONCURRENCY**
 
