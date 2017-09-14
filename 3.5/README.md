@@ -10,7 +10,7 @@ The resulting image can be run using [Docker](http://docker.io).
 
 Usage
 ---------------------
-To build a simple [python-sample-app](https://github.com/openshift/s2i-python/tree/master/3.5/test/setup-test-app) application
+To build a simple [python-sample-app](https://github.com/sclorg/s2i-python-container/tree/master/3.5/test/setup-test-app) application
 using standalone [S2I](https://github.com/openshift/source-to-image) and then run the
 resulting image with [Docker](http://docker.io) execute:
 
@@ -119,7 +119,7 @@ file inside your source code repository.
 
     If using `setup.py` for installing the application, the `MODULE_NAME` part
     can be read from there. For an example, see
-    [setup-test-app](https://github.com/openshift/s2i-python/tree/master/3.5/test/setup-test-app).
+    [setup-test-app](https://github.com/sclorg/s2i-python-container/tree/master/3.5/test/setup-test-app).
 
 * **APP_HOME**
 

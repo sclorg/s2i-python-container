@@ -10,12 +10,18 @@ The resulting image can be run using [Docker](http://docker.io).
 For more information about using these images with OpenShift, please see the
 official [OpenShift Documentation](https://docs.openshift.org/latest/using_images/s2i_images/python.html).
 
+For more information about contributing, see
+[the Contribution Guidelines](https://github.com/sclorg/welcome/blob/master/contribution.md).
+For more information about concepts used in these docker images, see the
+[Landing page](https://github.com/sclorg/welcome).
+
+
 Versions
 ---------------
 Python versions currently provided are:
-* python-2.7
-* python-3.4
-* python-3.5
+* [python-2.7](2.7)
+* [python-3.4](3.4)
+* [python-3.5](3.5)
 
 RHEL versions currently supported are:
 * RHEL7
@@ -97,24 +103,4 @@ Users can choose between testing a Python test application based on a RHEL or Ce
 **Notice: By omitting the `VERSIONS` parameter, the build/test action will be performed
 on all provided versions of Python.**
 
-
-Repository organization
-------------------------
-* **`<python-version>`**
-
-    Dockerfile and scripts to build container images from.
-
-* **`hack/`**
-
-    Folder containing scripts which are responsible for build and test actions performed by the `Makefile`.
-
-
-Image name structure
-------------------------
-
-1. Platform name (lowercase) - python
-2. Platform version(without dots) - 35
-3. Base builder image - centos7/rhel7
-
-Examples: `python-35-centos7`, `python-35-rhel7`
 

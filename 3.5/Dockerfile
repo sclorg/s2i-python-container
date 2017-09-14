@@ -2,8 +2,6 @@
 # applications.
 FROM centos/s2i-base-centos7
 
-MAINTAINER SoftwareCollections.org <sclorg@redhat.com>
-
 EXPOSE 8080
 
 ENV PYTHON_VERSION=3.5 \
