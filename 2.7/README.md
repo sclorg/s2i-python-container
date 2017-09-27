@@ -1,4 +1,4 @@
-Python Docker image
+Python 2.7 Docker image
 ===================
 
 This repository contains the source for building various versions of
@@ -7,6 +7,17 @@ the Python application as a reproducible Docker image using
 Users can choose between RHEL and CentOS based builder images.
 The resulting image can be run using [Docker](http://docker.io).
 
+
+Description
+-----------
+
+Python 2.7 available as docker container is a base platform for 
+building and running various Python 2.7 applications and frameworks. 
+Python is an easy to learn, powerful programming language. It has efficient high-level 
+data structures and a simple but effective approach to object-oriented programming. 
+Python's elegant syntax and dynamic typing, together with its interpreted nature, 
+make it an ideal language for scripting and rapid application development in many areas 
+on most platforms.
 
 Usage
 ---------------------
@@ -246,3 +257,10 @@ docker exec -it <CONTAINER_ID> /bin/bash
 
 After you enter into the running container, your current directory is set
 to `/opt/app-root/src`, where the source code is located.
+
+
+See also
+--------
+Dockerfile and other sources are available on https://github.com/sclorg/s2i-python-container.
+In that repository you also can find another versions of Python environment Dockerfiles.
+Dockerfile for CentOS is called Dockerfile, Dockerfile for RHEL is called Dockerfile.rhel7.
