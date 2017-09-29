@@ -29,8 +29,7 @@ LABEL summary="$SUMMARY" \
       io.openshift.tags="builder,python,python36,rh-python36" \
       com.redhat.component="python36-docker" \
       name="centos/python-36-centos7" \
-      version="3.6" \
-      release="1" \
+      version="1" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 RUN yum install -y centos-release-scl-rh && \
