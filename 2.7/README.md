@@ -1,12 +1,13 @@
 Python 2.7 Docker image
 ===================
 
-This repository contains the source for building various versions of
-the Python application as a reproducible Docker image using
-[source-to-image](https://github.com/openshift/source-to-image).
+This container image includes Python 2.7 as a [S2I](https://github.com/openshift/source-to-image) base image for your Python 2.7 applications.
 Users can choose between RHEL and CentOS based builder images.
+The RHEL image is available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/python-27-rhel7)
+as registry.access.redhat.com/rhscl/python-27-rhel7.
+The CentOS image is then available on [Docker Hub](https://hub.docker.com/r/centos/python-27-centos7/)
+as centos/python-27-centos7. 
 The resulting image can be run using [Docker](http://docker.io).
-
 
 Description
 -----------
@@ -41,61 +42,6 @@ resulting image with [Docker](http://docker.io) execute:
 ```
 $ curl 127.0.0.1:8080
 ```
-
-
-Repository organization
-------------------------
-* **`<python-version>`**
-
-    * **Dockerfile**
-
-        CentOS based Dockerfile.
-
-    * **Dockerfile.rhel7**
-
-        RHEL based Dockerfile. In order to perform build or test actions on this
-        Dockerfile you need to run the action on a properly subscribed RHEL machine.
-
-    * **`s2i/bin/`**
-
-        This folder contains scripts that are run by [S2I](https://github.com/openshift/source-to-image):
-
-        *   **assemble**
-
-            Used to install the sources into the location where the application
-            will be run and prepare the application for deployment (eg. installing
-            dependencies, etc.)
-
-        *   **run**
-
-            This script is responsible for running the application by using the
-            application web server.
-
-        *   **usage***
-
-            This script prints the usage of this image.
-
-    * **`contrib/`**
-
-        This folder contains a file with commonly used modules.
-
-    * **`test/`**
-
-        This folder contains a [S2I](https://github.com/openshift/source-to-image)
-        test framework with a simple server.
-
-        * **`setup-test-app/`**
-
-            Simple Gunicorn application used for testing purposes by the [S2I](https://github.com/openshift/source-to-image) test framework.
-
-        * **`standalone-test-app/`**
-
-            Simple standalone application used for testing purposes by the [S2I](https://github.com/openshift/source-to-image) test framework.
-
-        * **run**
-
-            Script that runs the [S2I](https://github.com/openshift/source-to-image) test framework.
-
 
 Environment variables
 ---------------------
