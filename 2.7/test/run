@@ -8,7 +8,7 @@
 #
 IMAGE_NAME=${IMAGE_NAME:-centos/python-27-centos7-candidate}
 
-declare -a WEB_APPS=({standalone,setup,setup-requirements,django,numpy,app-home,virtualenv-uwsgi,locale,mod-wsgi}-test-app)
+declare -a WEB_APPS=({standalone,setup,setup-requirements,django,numpy,app-home,npm-virtualenv-uwsgi,locale,mod-wsgi}-test-app)
 
 # TODO: Make command compatible for Mac users
 test_dir="$(readlink -zf $(dirname "${BASH_SOURCE[0]}"))"
@@ -174,6 +174,10 @@ test_application() {
   wait_for_cid
 
   test_scl_usage "python --version" "Python 2.7." "${cid_file}"
+  check_result $?
+  test_scl_usage "node --version" "^v6." "${cid_file}"
+  check_result $?
+  test_scl_usage "npm --version" "^3." "${cid_file}"
   check_result $?
   test_connection
   check_result $?

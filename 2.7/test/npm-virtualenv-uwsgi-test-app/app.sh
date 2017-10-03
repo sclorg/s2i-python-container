@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# First test virtualenv environment and pip upgrade
+# Test virtualenv environment and pip upgrade
 
 # Get the latest stable version of the package released on PyPI
 function get_latest_stable_version() {
@@ -36,6 +36,35 @@ done
 
 
 # Now test the uwsgi server
+
+# Test that npm works correctly
+
+# Create a package.json file so npm doesn't throw off warnings
+echo "Initializing npm and testing the installation and use of a module ..."
+npm init -y
+
+# mkdirp chosen because it's on the list of 'most depended-upon packages':
+#   https://www.npmjs.com/browse/depended
+npm install mkdirp
+if [ $? -ne 0 ]; then
+    echo "ERROR: Installation of npm module 'mkdirp' failed"
+    exit 1
+fi
+
+# Use the mkdirp module to create a directory and it's subdirectory
+node -e "var mkdirp = require('mkdirp'); mkdirp('dir1/dir2')"
+if [ $? -ne 0 ]; then
+    echo "ERROR: Nodejs cannot use the freshly installed 'mkdirp' module."
+    exit 1
+fi
+
+if [ "$(ls dir1)" != "dir2" ]; then
+    echo "ERROR: The 'mkdirp' module could not create subdirectories at the current path."
+    exit 1
+fi
+
+
+# Test the uwsgi server
 
 exec uwsgi \
     --http-socket :8080 \
