@@ -1,12 +1,24 @@
-Python Docker image
+Python 3.5 Docker image
 ===================
 
-This repository contains the source for building various versions of
-the Python application as a reproducible Docker image using
-[source-to-image](https://github.com/openshift/source-to-image).
+This container image includes Python 3.5 as a [S2I](https://github.com/openshift/source-to-image) base image for your Python 3.5 applications.
 Users can choose between RHEL and CentOS based builder images.
+The RHEL image is available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/python-35-rhel7)
+as registry.access.redhat.com/rhscl/python-35-rhel7.
+The CentOS image is then available on [Docker Hub](https://hub.docker.com/r/centos/python-35-centos7/)
+as centos/python-35-centos7. 
 The resulting image can be run using [Docker](http://docker.io).
 
+Description
+-----------
+
+Python 3.5 available as docker container is a base platform for 
+building and running various Python 3.5 applications and frameworks. 
+Python is an easy to learn, powerful programming language. It has efficient high-level 
+data structures and a simple but effective approach to object-oriented programming. 
+Python's elegant syntax and dynamic typing, together with its interpreted nature, 
+make it an ideal language for scripting and rapid application development in many areas 
+on most platforms.
 
 Usage
 ---------------------
@@ -30,61 +42,6 @@ resulting image with [Docker](http://docker.io) execute:
 ```
 $ curl 127.0.0.1:8080
 ```
-
-
-Repository organization
-------------------------
-* **`<python-version>`**
-
-    * **Dockerfile**
-
-        CentOS based Dockerfile.
-
-    * **Dockerfile.rhel7**
-
-        RHEL based Dockerfile. In order to perform build or test actions on this
-        Dockerfile you need to run the action on a properly subscribed RHEL machine.
-
-    * **`s2i/bin/`**
-
-        This folder contains scripts that are run by [S2I](https://github.com/openshift/source-to-image):
-
-        *   **assemble**
-
-            Used to install the sources into the location where the application
-            will be run and prepare the application for deployment (eg. installing
-            dependencies, etc.)
-
-        *   **run**
-
-            This script is responsible for running the application by using the
-            application web server.
-
-        *   **usage***
-
-            This script prints the usage of this image.
-
-    * **`contrib/`**
-
-        This folder contains a file with commonly used modules.
-
-    * **`test/`**
-
-        This folder contains a [S2I](https://github.com/openshift/source-to-image)
-        test framework with a simple server.
-
-        * **`setup-test-app/`**
-
-            Simple Gunicorn application used for testing purposes by the [S2I](https://github.com/openshift/source-to-image) test framework.
-
-        * **`standalone-test-app/`**
-
-            Simple standalone application used for testing purposes by the [S2I](https://github.com/openshift/source-to-image) test framework.
-
-        * **run**
-
-            Script that runs the [S2I](https://github.com/openshift/source-to-image) test framework.
-
 
 Environment variables
 ---------------------
@@ -246,3 +203,10 @@ docker exec -it <CONTAINER_ID> /bin/bash
 
 After you enter into the running container, your current directory is set
 to `/opt/app-root/src`, where the source code is located.
+
+
+See also
+--------
+Dockerfile and other sources are available on https://github.com/sclorg/s2i-python-container.
+In that repository you also can find another versions of Python environment Dockerfiles.
+Dockerfile for CentOS is called Dockerfile, Dockerfile for RHEL is called Dockerfile.rhel7.
