@@ -42,7 +42,7 @@ To build a Python image, choose either the CentOS or RHEL based image:
     ```
     $ git clone https://github.com/sclorg/s2i-python-container.git
     $ cd s2i-python-container
-    $ make build TARGET=rhel7 VERSIONS=3.6
+    $ make build TARGET=rhel7 VERSIONS=3.5
     ```
 
 *  **CentOS based image**
@@ -50,7 +50,7 @@ To build a Python image, choose either the CentOS or RHEL based image:
     This image is available on DockerHub. To download it run:
 
     ```
-    $ docker pull centos/python-35-centos7
+    $ docker pull centos/python-36-centos7
     ```
 
     To build a Python image from scratch run:
@@ -94,7 +94,7 @@ Users can choose between testing a Python test application based on a RHEL or Ce
 
     ```
     $ cd s2i-python-container
-    $ make test TARGET=rhel7 VERSIONS=3.6
+    $ make test TARGET=rhel7 VERSIONS=3.5
     ```
 
 *  **CentOS based image**
