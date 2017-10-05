@@ -34,7 +34,6 @@ LABEL summary="$SUMMARY" \
 
 RUN yum install -y centos-release-scl-rh && \
     yum-config-manager --enable centos-sclo-rh-testing && \
-    yum-config-manager --add-repo https://cbs.centos.org/repos/sclo7-rh-python36-rh-candidate/x86_64/os/ && \
     INSTALL_PKGS="rh-python36 rh-python36-python-devel rh-python36-python-setuptools rh-python36-python-pip \
 	 nss_wrapper httpd24 httpd24-httpd-devel httpd24-mod_ssl httpd24-mod_auth_kerb httpd24-mod_ldap \
          httpd24-mod_session atlas-devel gcc-gfortran libffi-devel libtool-ltdl" && \
