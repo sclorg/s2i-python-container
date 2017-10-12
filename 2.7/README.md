@@ -105,6 +105,7 @@ a `.s2i/environment` file inside your source code repository.
 
     Set this variable to use a custom index URL or mirror to download required packages
     during build process. This only affects packages listed in requirements.txt.
+    Pipenv ignores this variable.
 
 * **UPGRADE_PIP_TO_LATEST**
 
@@ -112,6 +113,14 @@ a `.s2i/environment` file inside your source code repository.
     python packages (setuptools and wheel) be upgraded to the most recent version
     before any Python packages are installed. If not set it will use whatever
     the default version is included by the platform for the Python version being used.
+
+* **ENABLE_PIPENV**
+
+    Set this variable to use [Pipenv](https://github.com/kennethreitz/pipenv),
+    the higher-level Python packaging tool, to manage dependencies of the application.
+    This should be used only if your project contains properly formated Pipfile
+    and Pipfile.lock. (Implies `UPGRADE_PIP_TO_LATEST` to satisfy dependencies of
+    Pipenv.)
 
 * **WEB_CONCURRENCY**
 
@@ -131,14 +140,22 @@ However, if these files exist they will affect the behavior of the build process
   [here](https://pip.pypa.io/en/latest/user_guide.html#requirements-files).
 
 
+* **Pipfile**
+
+  The replacement for requirements.txt, project is currently under active
+  design and development, as documented [here](https://github.com/pypa/pipfile).
+  Set `ENABLE_PIPENV` environment variable to true in order to process this file.
+
+
 * **setup.py**
 
   Configures various aspects of the project, including installation of
   dependencies, as documented
   [here](https://packaging.python.org/en/latest/distributing.html#setup-py).
-  For most projects, it is sufficient to simply use `requirements.txt`, if this
-  file is present `setup.py` is not processed by default, please use `-e .` to
-  trigger its processing from the requirements.txt file.
+  For most projects, it is sufficient to simply use `requirements.txt` or
+  `Pipfile`, if one of these files is present `setup.py` is not processed
+  by default, please use `-e .` to trigger its processing from above mentioned
+  files.
 
 
 Run strategies
