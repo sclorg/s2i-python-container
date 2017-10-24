@@ -28,7 +28,7 @@ LABEL summary="$SUMMARY" \
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,python,python36,rh-python36" \
       com.redhat.component="rh-python36-docker" \
-      name="rhscl-beta/python-36-rhel7" \
+      name="rhscl/python-36-rhel7" \
       version="1"
 
 # We need to call 2 (!) yum commands before being able to enable repositories properly
@@ -37,7 +37,6 @@ RUN yum repolist > /dev/null && \
     yum install -y yum-utils && \
     yum-config-manager --disable \* &> /dev/null && \
     yum-config-manager --enable rhel-server-rhscl-7-rpms && \
-    yum-config-manager --enable rhel-server-rhscl-7-beta-rpms && \
     yum-config-manager --enable rhel-7-server-rpms && \
     yum-config-manager --enable rhel-7-server-optional-rpms && \
     INSTALL_PKGS="rh-python36 rh-python36-python-devel rh-python36-python-setuptools rh-python36-python-pip \
@@ -64,7 +63,8 @@ RUN source scl_source enable rh-python36 && \
 # In order to drop the root user, we have to make some directories world
 # writable as OpenShift default security model is to run the container under
 # random UID.
-RUN chown -R 1001:0 /opt/app-root && chmod -R og+rwx /opt/app-root
+RUN chown -R 1001:0 /opt/app-root && chmod -R ug+rwx /opt/app-root && \
+    rpm-file-permissions
 
 USER 1001
 
