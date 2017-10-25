@@ -31,10 +31,7 @@ LABEL summary="$SUMMARY" \
       name="rhscl-beta/python-36-rhel7" \
       version="1"
 
-# We need to call 2 (!) yum commands before being able to enable repositories properly
-# This is a workaround for https://bugzilla.redhat.com/show_bug.cgi?id=1479388
-RUN yum repolist > /dev/null && \
-    yum install -y yum-utils && \
+RUN yum install -y yum-utils && \
     yum-config-manager --disable \* &> /dev/null && \
     yum-config-manager --enable rhel-server-rhscl-7-rpms && \
     yum-config-manager --enable rhel-server-rhscl-7-beta-rpms && \
