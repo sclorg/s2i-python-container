@@ -117,7 +117,8 @@ a `.s2i/environment` file inside your source code repository.
 
     Set this to change the default setting for the number of
     [workers](http://docs.gunicorn.org/en/stable/settings.html#workers). By
-    default, this is set to the number of available cores times 4.
+    default, this is set to the number of available cores times 2, capped
+    at 12.
 
 Source repository layout
 ------------------------
