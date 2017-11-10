@@ -29,6 +29,9 @@ function get_default_web_concurrency() {
   local default=$(((${MEMORY_LIMIT_IN_BYTES:-MAX_MEMORY_LIMIT_IN_BYTES}/1024/1024 - 43) / 40))
   default=$((default > max ? max : default))
   default=$((default < 1 ? 1 : default))
+  # According to http://docs.gunicorn.org/en/stable/design.html#how-many-workers,
+  # 12 workers should be enough to handle hundreds or thousands requests per second
+  default=$((default > 12 ? 12 : default))
   echo $default
 }
 
