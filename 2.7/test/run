@@ -187,7 +187,7 @@ test_application() {
 
 # Since we built the candidate image locally, we don't want S2I attempt to pull
 # it from Docker hub
-s2i_args="--force-pull=false"
+s2i_args="--pull-policy=never"
 
 # Verify the 'usage' script is working properly when running the base image with 's2i usage ...'
 test_s2i_usage
