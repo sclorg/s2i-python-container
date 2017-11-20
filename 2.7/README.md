@@ -91,15 +91,19 @@ a `.s2i/environment` file inside your source code repository.
     Path to a valid Python file with a
     [Gunicorn configuration](http://docs.gunicorn.org/en/latest/configure.html#configuration-file) file.
 
+* **DISABLE_MIGRATE**
+
+    Set this variable to a non-empty value to inhibit the execution of 'manage.py migrate'
+    when the produced image is run. This only affects Django projects. See
+    "Handling Database Migrations" section of [Django blogpost on OpenShift blog](
+    https://blog.openshift.com/migrating-django-applications-openshift-3/) on suggestions
+    how/when to run DB migrations in OpenShift environment. Most importantly,
+    note that running DB migrations from two or more pods might corrupt your database.
+
 * **DISABLE_COLLECTSTATIC**
 
     Set this variable to a non-empty value to inhibit the execution of
     'manage.py collectstatic' during the build. This only affects Django projects.
-
-* **DISABLE_MIGRATE**
-
-    Set this variable to a non-empty value to inhibit the execution of 'manage.py migrate'
-    when the produced image is run. This only affects Django projects.
 
 * **PIP_INDEX_URL**
 
