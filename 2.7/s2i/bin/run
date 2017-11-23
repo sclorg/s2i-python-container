@@ -35,6 +35,26 @@ function get_default_web_concurrency() {
   echo $default
 }
 
+function maybe_run_in_init_wrapper() {
+  if [[ -z "$ENABLE_INIT_WRAPPER" ]]; then
+    exec $@
+  else
+    local wrapper=`mktemp -p .`
+    chmod u+x $wrapper
+    cat <<EOF > $wrapper
+trap 'kill -TERM \$PID' TERM INT
+$@
+PID=\$!
+wait \$PID
+trap - TERM INT
+wait \$PID
+STATUS=\$?
+exit \$STATUS
+EOF
+    exec $wrapper
+  fi
+}
+
 app_script_check="${APP_SCRIPT-}"
 APP_SCRIPT="${APP_SCRIPT-app.sh}"
 if [[ -f "$APP_SCRIPT" ]]; then
@@ -42,7 +62,7 @@ if [[ -f "$APP_SCRIPT" ]]; then
   if [[ "$APP_SCRIPT" != /* ]]; then
     APP_SCRIPT="./$APP_SCRIPT"
   fi
-  exec "$APP_SCRIPT"
+  maybe_run_in_init_wrapper "$APP_SCRIPT"
 else
   test -n "$app_script_check" && (>&2 echo "ERROR: file '$app_script_check' not found.") && exit 1
 fi
@@ -51,7 +71,7 @@ app_file_check="${APP_FILE-}"
 APP_FILE="${APP_FILE-app.py}"
 if [[ -f "$APP_FILE" ]]; then
   echo "---> Running application from Python script ($APP_FILE) ..."
-  exec python "$APP_FILE"
+  maybe_run_in_init_wrapper python "$APP_FILE"
 else
   test -n "$app_file_check" && (>&2 echo "ERROR: file '$app_file_check' not found.") && exit 1
 fi
@@ -94,7 +114,7 @@ if is_django_installed; then
     echo "---> Serving application with 'manage.py runserver' ..."
     echo "WARNING: this is NOT a recommended way to run you application in production!"
     echo "Consider using gunicorn or some other production web server."
-    exec python "$manage_file" runserver 0.0.0.0:8080
+    maybe_run_in_init_wrapper python "$manage_file" runserver 0.0.0.0:8080
   else
     echo "WARNING: seems that you're using Django, but we could not find a 'manage.py' file."
     echo "Skipped 'python manage.py runserver'."

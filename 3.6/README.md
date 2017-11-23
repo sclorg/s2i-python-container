@@ -132,6 +132,15 @@ file inside your source code repository.
     default, this is set to the number of available cores times 2, capped
     at 12.
 
+* **ENABLE_INIT_WRAPPER**
+
+    Set this variable to a non-empty value to make use of an init wrapper.
+    This is useful for servers that are not capable of reaping zombie
+    processes, such as Django development server or Tornado. This option can
+    be used together with **APP_SCRIPT** or **APP_FILE**. It never applies
+    to Gunicorn used through **APP_MODULE** as Gunicorn reaps zombie
+    processes correctly.
+
 Source repository layout
 ------------------------
 

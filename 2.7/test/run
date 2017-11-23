@@ -208,6 +208,9 @@ for app in ${WEB_APPS[@]}; do
   # test application with random user
   CONTAINER_ARGS="-u 12345" test_application
 
+  # test application with init wrapper
+  CONTAINER_ARGS="-e ENABLE_INIT_WRAPPER=true" test_application
+
   info "All tests for the ${app} finished successfully."
   cleanup ${app}
 done
