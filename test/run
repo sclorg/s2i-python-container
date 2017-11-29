@@ -1,0 +1,205 @@
+#!/bin/bash
+#
+# The 'run' performs a simple test that verifies that S2I image.
+# The main focus here is to excersise the S2I scripts.
+#
+# IMAGE_NAME specifies a name of the candidate image used for testing.
+# The image has to be available before this script is executed.
+#
+declare -a WEB_APPS=({standalone,setup,setup-requirements,django,numpy,app-home,npm-virtualenv-uwsgi,locale,mod-wsgi,pipenv}-test-app)
+
+# TODO: Make command compatible for Mac users
+test_dir="$(readlink -zf $(dirname "${BASH_SOURCE[0]}"))"
+image_dir=$(readlink -zf ${test_dir}/..)
+
+if [[ -z $VERSION ]]; then
+    echo "ERROR: The VERSION variable must be set."
+    exit 1
+fi
+
+IMAGE_NAME=${IMAGE_NAME:-centos/python-${VERSION//./}-centos7}
+
+# TODO: This should be part of the image metadata
+test_port=8080
+
+info() {
+  echo -e "\n\e[1m[INFO] $@\e[0m\n"
+}
+
+image_exists() {
+  docker inspect $1 &>/dev/null
+}
+
+container_exists() {
+  image_exists $(cat $cid_file)
+}
+
+container_ip() {
+  docker inspect --format="{{ .NetworkSettings.IPAddress }}" $(cat $cid_file)
+}
+
+run_s2i_build() {
+  info "Building the ${1} application image ..."
+  s2i build ${s2i_args} file://${test_dir}/${1} ${IMAGE_NAME} ${IMAGE_NAME}-testapp
+}
+
+prepare() {
+  if ! image_exists ${IMAGE_NAME}; then
+    echo "ERROR: The image ${IMAGE_NAME} must exist before this script is executed."
+    exit 1
+  fi
+  # TODO: S2I build require the application is a valid 'GIT' repository, we
+  # should remove this restriction in the future when a file:// is used.
+  info "Preparing to test ${1} ..."
+  pushd ${test_dir}/${1} >/dev/null
+  git init
+  git config user.email "build@localhost" && git config user.name "builder"
+  git add -A && git commit -m "Sample commit"
+  popd >/dev/null
+}
+
+run_test_application() {
+  docker run --user=100001 ${CONTAINER_ARGS} --rm --cidfile=${cid_file} ${IMAGE_NAME}-testapp
+}
+
+cleanup_app() {
+  info "Cleaning up app container ..."
+  if [ -f $cid_file ]; then
+    if container_exists; then
+      docker stop $(cat $cid_file)
+    fi
+  fi
+}
+
+cleanup() {
+  info "Cleaning up the test application image"
+  if image_exists ${IMAGE_NAME}-testapp; then
+    docker rmi -f ${IMAGE_NAME}-testapp
+  fi
+  rm -rf ${test_dir}/${1}/.git
+}
+
+check_result() {
+  local result="$1"
+  if [[ "$result" != "0" ]]; then
+    info "TEST FAILED (${result})"
+    cleanup
+    exit $result
+  fi
+}
+
+wait_for_cid() {
+  local max_attempts=10
+  local sleep_time=1
+  local attempt=1
+  local result=1
+  info "Waiting for application container to start $CONTAINER_ARGS ..."
+  while [ $attempt -le $max_attempts ]; do
+    [ -f $cid_file ] && [ -s $cid_file ] && break
+    attempt=$(( $attempt + 1 ))
+    sleep $sleep_time
+  done
+}
+
+test_s2i_usage() {
+  info "Testing 's2i usage' ..."
+  s2i usage ${s2i_args} ${IMAGE_NAME} &>/dev/null
+}
+
+test_docker_run_usage() {
+  info "Testing 'docker run' usage ..."
+  docker run ${IMAGE_NAME} &>/dev/null
+}
+
+test_scl_usage() {
+  local run_cmd="$1"
+  local expected="$2"
+  local cid_file="$3"
+
+  info "Testing the image SCL enable"
+  out=$(docker run --rm ${IMAGE_NAME} /bin/bash -c "${run_cmd}" 2>&1)
+  if ! echo "${out}" | grep -q "${expected}"; then
+    echo "ERROR[/bin/bash -c "${run_cmd}"] Expected '${expected}', got '${out}'"
+    return 1
+  fi
+  out=$(docker exec $(cat ${cid_file}) /bin/bash -c "${run_cmd}" 2>&1)
+  if ! echo "${out}" | grep -q "${expected}"; then
+    echo "ERROR[exec /bin/bash -c "${run_cmd}"] Expected '${expected}', got '${out}'"
+    return 1
+  fi
+  out=$(docker exec $(cat ${cid_file}) /bin/sh -ic "${run_cmd}" 2>&1)
+  if ! echo "${out}" | grep -q "${expected}"; then
+    echo "ERROR[exec /bin/sh -ic "${run_cmd}"] Expected '${expected}', got '${out}'"
+    return 1
+  fi
+}
+
+test_connection() {
+  info "Testing the HTTP connection (http://$(container_ip):${test_port}) ${CONTAINER_ARGS} ..."
+  local max_attempts=30
+  local sleep_time=1
+  local attempt=1
+  local result=1
+  while [ $attempt -le $max_attempts ]; do
+    response_code=$(curl -s -w %{http_code} -o /dev/null http://$(container_ip):${test_port}/)
+    status=$?
+    if [ $status -eq 0 ]; then
+      if [ $response_code -eq 200 ]; then
+        result=0
+      fi
+      break
+    fi
+    attempt=$(( $attempt + 1 ))
+    sleep $sleep_time
+  done
+  return $result
+}
+
+test_application() {
+  local cid_file=$(mktemp -u --suffix=.cid)
+  # Verify that the HTTP connection can be established to test application container
+  run_test_application &
+
+  # Wait for the container to write it's CID file
+  wait_for_cid
+
+  test_scl_usage "python --version" "Python $VERSION." "${cid_file}"
+  check_result $?
+  test_scl_usage "node --version" "^v6." "${cid_file}"
+  check_result $?
+  test_scl_usage "npm --version" "^3." "${cid_file}"
+  check_result $?
+  test_connection
+  check_result $?
+  cleanup_app
+}
+
+
+# Since we built the candidate image locally, we don't want S2I attempt to pull
+# it from Docker hub
+s2i_args="--pull-policy=never"
+
+# Verify the 'usage' script is working properly when running the base image with 's2i usage ...'
+test_s2i_usage
+check_result $?
+
+# Verify the 'usage' script is working properly when running the base image with 'docker run ...'
+test_docker_run_usage
+check_result $?
+
+for app in ${WEB_APPS[@]}; do
+  prepare ${app}
+  run_s2i_build ${app}
+  check_result $?
+
+  # test application with default user
+  test_application
+
+  # test application with random user
+  CONTAINER_ARGS="-u 12345" test_application
+
+  info "All tests for the ${app} finished successfully."
+  cleanup ${app}
+done
+
+info "All tests finished successfully."
