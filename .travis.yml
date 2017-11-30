@@ -10,9 +10,10 @@ services:
 
 language: go
 
-go: 1.6
+go: latest
 
 before_install: 
+  - sudo apt-get update -qq
   - sudo apt-get install -y go-md2man
 
 install: 
