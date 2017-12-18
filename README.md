@@ -4,7 +4,7 @@ Python Docker images
 This repository contains the source for building various versions of
 the Python application as a reproducible Docker image using
 [source-to-image](https://github.com/openshift/source-to-image).
-Users can choose between RHEL and CentOS based builder images.
+Users can choose between RHEL, Fedora and CentOS based builder images.
 The resulting image can be run using [Docker](http://docker.io).
 
 For more information about using these images with OpenShift, please see the
@@ -36,13 +36,20 @@ Installation
 To build a Python image, choose either the CentOS or RHEL based image:
 *  **RHEL based image**
 
+    These images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/python-36-rhel7).
+    To download it run:
+
+    ```
+    $ docker pull registry.access.redhat.com/rhscl/python-36-rhel7
+    ```
+
     To build a RHEL based Python image, you need to run the build on a properly
     subscribed RHEL machine.
 
     ```
     $ git clone https://github.com/sclorg/s2i-python-container.git
     $ cd s2i-python-container
-    $ make build TARGET=rhel7 VERSIONS=3.5
+    $ make build TARGET=rhel7 VERSIONS=3.6
     ```
 
 *  **CentOS based image**
@@ -94,7 +101,7 @@ Users can choose between testing a Python test application based on a RHEL or Ce
 
     ```
     $ cd s2i-python-container
-    $ make test TARGET=rhel7 VERSIONS=3.5
+    $ make test TARGET=rhel7 VERSIONS=3.6
     ```
 
 *  **CentOS based image**

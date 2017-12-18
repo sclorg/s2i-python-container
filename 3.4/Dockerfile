@@ -30,7 +30,7 @@ LABEL summary="$SUMMARY" \
       com.redhat.component="python34-docker" \
       name="centos/python-34-centos7" \
       version="3.4" \
-      release="1" \
+      usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.4/test/setup-test-app/ centos/python-34-centos7 python-sample-app" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 RUN yum install -y centos-release-scl && \
@@ -57,9 +57,9 @@ COPY ./root/ /
 #   writable as OpenShift default security model is to run the container
 #   under random UID.
 RUN source scl_source enable rh-python34 && \
-    virtualenv /opt/app-root && \
-    chown -R 1001:0 /opt/app-root && \
-    fix-permissions /opt/app-root && \
+    virtualenv ${APP_ROOT} && \
+    chown -R 1001:0 ${APP_ROOT} && \
+    fix-permissions ${APP_ROOT} && \
     rpm-file-permissions
 
 USER 1001
