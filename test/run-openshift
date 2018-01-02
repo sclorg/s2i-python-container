@@ -8,8 +8,8 @@
 
 THISDIR=$(dirname ${BASH_SOURCE[0]})
 
-source ${THISDIR}/test-lib.sh
-source ${THISDIR}/test-lib-openshift.sh
+source "${THISDIR}/test-lib.sh"
+source "${THISDIR}/test-lib-openshift.sh"
 
 set -exo nounset
 
@@ -18,11 +18,12 @@ test -n "${VERSION-}" || false 'make sure $VERSION is defined'
 
 ct_os_cluster_up
 
-ct_os_test_s2i_app ${IMAGE_NAME} ${THISDIR}/standalone-test-app . "Hello World from standalone WSGI application!"
+ct_os_test_s2i_app "${IMAGE_NAME}" "${THISDIR}/standalone-test-app" . "Hello World from standalone WSGI application!"
 
-ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/openshift/django-ex.git" . 'Welcome to your Django application on OpenShift'
+ct_os_test_s2i_app "${IMAGE_NAME}" "https://github.com/openshift/django-ex.git" . 'Welcome to your Django application on OpenShift'
 
-ct_os_test_template_app ${IMAGE_NAME} \
+# TODO: update the template reference to proper location, once https://github.com/openshift/django-ex/pull/115 is merged
+ct_os_test_template_app "${IMAGE_NAME}" \
                         https://raw.githubusercontent.com/hhorak/django-ex/python-3.6/openshift/templates/django-postgresql.json \
                         python \
                         'Welcome to your Django application on OpenShift' \
