@@ -1,0 +1,32 @@
+#!/bin/bash
+#
+# Test the Python image in the OpenShift.
+#
+# IMAGE_NAME specifies a name of the candidate image used for testing.
+# VERSION specifies a version of the python in the candidate image.
+# The image has to be available before this script is executed.
+
+THISDIR=$(dirname ${BASH_SOURCE[0]})
+
+source "${THISDIR}/test-lib.sh"
+source "${THISDIR}/test-lib-openshift.sh"
+
+set -exo nounset
+
+test -n "${IMAGE_NAME-}" || false 'make sure $IMAGE_NAME is defined'
+test -n "${VERSION-}" || false 'make sure $VERSION is defined'
+
+ct_os_cluster_up
+
+ct_os_test_s2i_app "${IMAGE_NAME}" "${THISDIR}/standalone-test-app" . "Hello World from standalone WSGI application!"
+
+ct_os_test_s2i_app "${IMAGE_NAME}" "https://github.com/openshift/django-ex.git" . 'Welcome to your Django application on OpenShift'
+
+# TODO: update the template reference to proper location, once https://github.com/openshift/django-ex/pull/115 is merged
+ct_os_test_template_app "${IMAGE_NAME}" \
+                        https://raw.githubusercontent.com/hhorak/django-ex/python-3.6/openshift/templates/django-postgresql.json \
+                        python \
+                        'Welcome to your Django application on OpenShift' \
+                        8080 http 200 "-p SOURCE_REPOSITORY_REF=master -p PYTHON_VERSION=${VERSION} -p POSTGRESQL_VERSION=9.6" \
+                        "centos/postgresql-96-centos7|postgresql:9.6"
+
