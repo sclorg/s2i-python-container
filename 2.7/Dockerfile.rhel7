@@ -59,7 +59,7 @@ COPY ./root/ /
 RUN source scl_source enable python27 && \
     virtualenv ${APP_ROOT} && \
     chown -R 1001:0 ${APP_ROOT} && \
-    fix-permissions ${APP_ROOT} && \
+    fix-permissions ${APP_ROOT} -P && \
     rpm-file-permissions
 
 USER 1001

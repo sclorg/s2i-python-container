@@ -61,7 +61,7 @@ COPY ./root/ /
 #   under random UID.
 RUN virtualenv-$PYTHON_VERSION ${APP_ROOT} && \
     chown -R 1001:0 ${APP_ROOT} && \
-    fix-permissions ${APP_ROOT}
+    fix-permissions ${APP_ROOT} -P
 
 USER 1001
 
