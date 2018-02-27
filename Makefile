@@ -8,3 +8,8 @@ OPENSHIFT_NAMESPACES = 3.3
 .PHONY: $(shell test -f common/common.mk || echo >&2 'Please do "git submodule update --init" first.')
 
 include common/common.mk
+
+sync:
+	cp 3.6/s2i/bin/{assemble,run} 3.5/s2i/bin/
+	cp 3.6/s2i/bin/{assemble,run} 3.4/s2i/bin/
+	cp 3.6/s2i/bin/{assemble,run} 2.7/s2i/bin/
