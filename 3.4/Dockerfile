@@ -13,7 +13,7 @@ ENV PYTHON_VERSION=3.4 \
     PIP_NO_CACHE_DIR=off
 
 ENV SUMMARY="Platform for building and running Python $PYTHON_VERSION applications" \
-    DESCRIPTION="Python $PYTHON_VERSION available as docker container is a base platform for \
+    DESCRIPTION="Python $PYTHON_VERSION available as container is a base platform for \
 building and running various Python $PYTHON_VERSION applications and frameworks. \
 Python is an easy to learn, powerful programming language. It has efficient high-level \
 data structures and a simple but effective approach to object-oriented programming. \
