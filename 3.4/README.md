@@ -1,4 +1,4 @@
-Python 3.4 Docker image
+Python 3.4 container image
 ===================
 
 This container image includes Python 3.4 as a [S2I](https://github.com/openshift/source-to-image) base image for your Python 3.4 applications.
@@ -12,7 +12,7 @@ The resulting image can be run using [Docker](http://docker.io).
 Description
 -----------
 
-Python 3.4 available as docker container is a base platform for 
+Python 3.4 available as container is a base platform for 
 building and running various Python 3.4 applications and frameworks. 
 Python is an easy to learn, powerful programming language. It has efficient high-level 
 data structures and a simple but effective approach to object-oriented programming. 
@@ -166,7 +166,7 @@ However, if these files exist they will affect the behavior of the build process
 Run strategies
 --------------
 
-The Docker image produced by s2i-python executes your project in one of the
+The container image produced by s2i-python executes your project in one of the
 following ways, in precedence order:
 
 * **Gunicorn**
