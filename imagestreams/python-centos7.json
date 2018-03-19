@@ -23,6 +23,9 @@
         "from": {
           "kind": "ImageStreamTag",
           "name": "3.6"
+        },
+        "referencePolicy": {
+          "type": "Local"
         }
       },
       {
@@ -40,6 +43,9 @@
         "from": {
           "kind": "DockerImage",
           "name": "docker.io/openshift/python-33-centos7:latest"
+        },
+        "referencePolicy": {
+          "type": "Local"
         }
       },
       {
@@ -57,6 +63,9 @@
         "from": {
           "kind": "DockerImage",
           "name": "docker.io/centos/python-27-centos7:latest"
+        },
+        "referencePolicy": {
+          "type": "Local"
         }
       },
       {
@@ -66,7 +75,7 @@
           "openshift.io/provider-display-name": "Red Hat, Inc.",
           "description": "Build and run Python 3.4 applications on CentOS 7. For more information about using this builder image, including OpenShift considerations, see https://github.com/sclorg/s2i-python-container/blob/master/3.4/README.md.",
           "iconClass": "icon-python",
-          "tags": "builder,python",
+          "tags": "hidden,builder,python",
           "supports":"python:3.4,python",
           "version": "3.4",
           "sampleRepo": "https://github.com/openshift/django-ex.git"
@@ -74,6 +83,9 @@
         "from": {
           "kind": "DockerImage",
           "name": "docker.io/centos/python-34-centos7:latest"
+        },
+        "referencePolicy": {
+          "type": "Local"
         }
       },
       {
@@ -91,6 +103,9 @@
         "from": {
           "kind": "DockerImage",
           "name": "docker.io/centos/python-35-centos7:latest"
+        },
+        "referencePolicy": {
+          "type": "Local"
         }
       },
       {
@@ -108,6 +123,9 @@
         "from": {
           "kind": "DockerImage",
           "name": "docker.io/centos/python-36-centos7:latest"
+        },
+        "referencePolicy": {
+          "type": "Local"
         }
       }
     ]
