@@ -15,6 +15,7 @@ function should_collectstatic() {
 # (pip script installer).
 function install_pipenv() {
   echo "---> Installing pipenv packaging tool ..."
+  pip install -U virtualenv
   VENV_DIR=$HOME/.local/venvs/pipenv
   virtualenv $VENV_DIR
   $VENV_DIR/bin/pip --isolated install -U pipenv
