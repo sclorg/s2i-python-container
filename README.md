@@ -10,11 +10,15 @@ The resulting image can be run using [Docker](http://docker.io).
 For more information about using these images with OpenShift, please see the
 official [OpenShift Documentation](https://docs.openshift.org/latest/using_images/s2i_images/python.html).
 
-For more information about contributing, see
-[the Contribution Guidelines](https://github.com/sclorg/welcome/blob/master/contribution.md).
 For more information about concepts used in these container images, see the
 [Landing page](https://github.com/sclorg/welcome).
 
+Contributing
+---------------
+In this repository [distgen](https://github.com/devexp-db/distgen/) > 0.14 is used for generating Dockerfiles. If you'd like update a Dockerfile, please make changes in specs/multispec.yml and/or templates under src/ (or other distgen file) and run `make generate-all`.
+
+For more information about contributing, see
+[the Contribution Guidelines](https://github.com/sclorg/welcome/blob/master/contribution.md).
 
 Versions
 ---------------

@@ -1,0 +1,82 @@
+version: 1
+
+specs:
+  distroinfo:
+    centos:
+      distros:
+        - centos-7-x86_64
+      s2i_base: centos/s2i-base-centos7
+      org: "centos"
+      prod: "centos7"
+      logos: "centos-logos"
+      enablerepo: "--enablerepo=centosplus"
+      preinstall_cmd: ['yum install -y centos-release-scl']
+      python_pkgs: ['{{ spec.scl }}', '{{ spec.scl }}-python-devel',
+                    '{{ spec.scl }}-python-setuptools', '{{ spec.scl }}-python-pip']
+      base_pkgs: ['nss_wrapper', 'httpd24', 'httpd24-httpd-devel', 'httpd24-mod_ssl',
+                  'httpd24-mod_auth_kerb', 'httpd24-mod_ldap', 'httpd24-mod_session',
+                  'atlas-devel', 'gcc-gfortran', 'libffi-devel', 'libtool-ltdl enchant']
+      extra_pkgs:
+        - version: "2.7"
+          value: ['libjpeg-turbo', 'libjpeg-turbo-devel']
+
+    rhel:
+      distros:
+        - rhel-7-x86_64
+      s2i_base: rhscl/s2i-base-rhel7
+      org: "rhscl"
+      prod: "rhel7"
+      logos: "redhat-logos"
+      python3_component_prefix: "rh-"
+      preinstall_cmd: ['yum install -y yum-utils',
+                      'prepare-yum-repositories rhel-server-rhscl-7-rpms']
+      python_pkgs: ['{{ spec.scl }}', '{{ spec.scl }}-python-devel',
+                    '{{ spec.scl }}-python-setuptools', '{{ spec.scl }}-python-pip']
+      base_pkgs: ['nss_wrapper', 'httpd24', 'httpd24-httpd-devel', 'httpd24-mod_ssl',
+                  'httpd24-mod_auth_kerb', 'httpd24-mod_ldap', 'httpd24-mod_session',
+                  'atlas-devel', 'gcc-gfortran', 'libffi-devel', 'libtool-ltdl enchant']
+
+    fedora:
+      distros:
+        - fedora-27-x86_64
+      s2i_base: registry.fedoraproject.org/f27/s2i-base
+      img_tag: "latest"
+      python_pkgs: ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip',
+                    'python3-virtualenv']
+      base_pkgs: ['nss_wrapper', 'httpd', 'httpd-devel', 'atlas-devel', 'gcc-gfortran',
+                  'libffi-devel', 'libtool-ltdl enchant']
+
+  version:
+    "3.6":
+      version: "3.6"
+      short_ver: "36"
+      base_img_version: "1"
+      python_img_version: "1"
+      scl: "rh-python36"
+
+    "3.5":
+      version: "3.5"
+      short_ver: "35"
+      scl: "rh-python35"
+
+    "3.4":
+      version: "3.4"
+      short_ver: "34"
+      scl: "rh-python34"
+
+    "2.7":
+      version: "2.7"
+      short_ver: "27"
+      scl: "python27"
+
+matrix:
+  exclude:
+    - distros:
+        - fedora-27-x86_64
+      version: "2.7"
+    - distros:
+        - fedora-27-x86_64
+      version: "3.4"
+    - distros:
+        - fedora-27-x86_64
+      version: "3.5"
