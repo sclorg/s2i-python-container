@@ -1,6 +1,6 @@
 # This image provides a Python 3.6 environment you can use to run your Python
 # applications.
-FROM registry.fedoraproject.org/f26/s2i-base:latest
+FROM registry.fedoraproject.org/f27/s2i-base:latest
 
 EXPOSE 8080
 
