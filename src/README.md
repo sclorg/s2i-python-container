@@ -1,19 +1,19 @@
-Python 2.7 container image
+Python {{ spec.version }} container image
 ===================
 
-This container image includes Python 2.7 as a [S2I](https://github.com/openshift/source-to-image) base image for your Python 2.7 applications.
+This container image includes Python {{ spec.version }} as a [S2I](https://github.com/openshift/source-to-image) base image for your Python {{ spec.version }} applications.
 Users can choose between RHEL and CentOS based builder images.
-The RHEL image is available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/python-27-rhel7)
-as registry.access.redhat.com/rhscl/python-27-rhel7.
-The CentOS image is then available on [Docker Hub](https://hub.docker.com/r/centos/python-27-centos7/)
-as centos/python-27-centos7. 
+The RHEL image is available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/python-{{ spec.short_ver }}-rhel7)
+as registry.access.redhat.com/rhscl/python-{{ spec.short_ver }}-rhel7.
+The CentOS image is then available on [Docker Hub](https://hub.docker.com/r/centos/python-{{ spec.short_ver }}-centos7/)
+as centos/python-{{ spec.short_ver }}-centos7. 
 The resulting image can be run using [Docker](http://docker.io).
 
 Description
 -----------
 
-Python 2.7 available as container is a base platform for 
-building and running various Python 2.7 applications and frameworks. 
+Python {{ spec.version }} available as container is a base platform for 
+building and running various Python {{ spec.version }} applications and frameworks. 
 Python is an easy to learn, powerful programming language. It has efficient high-level 
 data structures and a simple but effective approach to object-oriented programming. 
 Python's elegant syntax and dynamic typing, together with its interpreted nature, 
@@ -22,19 +22,19 @@ on most platforms.
 
 Usage
 ---------------------
-To build a simple [python-sample-app](https://github.com/sclorg/s2i-python-container/tree/master/2.7/test/setup-test-app) application
+To build a simple [python-sample-app](https://github.com/sclorg/s2i-python-container/tree/master/{{ spec.version }}/test/setup-test-app) application
 using standalone [S2I](https://github.com/openshift/source-to-image) and then run the
 resulting image with [Docker](http://docker.io) execute:
 
 *  **For RHEL based image**
     ```
-    $ s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=2.7/test/setup-test-app/ rhscl/python-27-rhel7 python-sample-app
+    $ s2i build https://github.com/sclorg/s2i-python-container.git --context-dir={{ spec.version }}/test/setup-test-app/ rhscl/python-{{ spec.short_ver }}-rhel7 python-sample-app
     $ docker run -p 8080:8080 python-sample-app
     ```
 
 *  **For CentOS based image**
     ```
-    $ s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=2.7/test/setup-test-app/ centos/python-27-centos7 python-sample-app
+    $ s2i build https://github.com/sclorg/s2i-python-container.git --context-dir={{ spec.version }}/test/setup-test-app/ centos/python-{{ spec.short_ver }}-centos7 python-sample-app
     $ docker run -p 8080:8080 python-sample-app
     ```
 
@@ -76,7 +76,7 @@ file inside your source code repository.
 
     If using `setup.py` for installing the application, the `MODULE_NAME` part
     can be read from there. For an example, see
-    [setup-test-app](https://github.com/sclorg/s2i-python-container/tree/master/2.7/test/setup-test-app).
+    [setup-test-app](https://github.com/sclorg/s2i-python-container/tree/master/{{ spec.version }}/test/setup-test-app).
 
 * **APP_HOME**
 
@@ -123,8 +123,9 @@ file inside your source code repository.
     Set this variable to use [Pipenv](https://github.com/kennethreitz/pipenv),
     the higher-level Python packaging tool, to manage dependencies of the application.
     This should be used only if your project contains properly formated Pipfile
-    and Pipfile.lock. (Implies `UPGRADE_PIP_TO_LATEST` to satisfy dependencies of
-    Pipenv.)
+    and Pipfile.lock.{% if spec.version in ["2.7", "3.4", "3.5"] %} (Implies `UPGRADE_PIP_TO_LATEST` to satisfy dependencies of
+    Pipenv.){% endif %}
+
 
 * **WEB_CONCURRENCY**
 

@@ -15,7 +15,7 @@ For more information about concepts used in these container images, see the
 
 Contributing
 ---------------
-In this repository [distgen](https://github.com/devexp-db/distgen/) > 0.14 is used for generating Dockerfiles. If you'd like update a Dockerfile, please make changes in specs/multispec.yml and/or templates under src/ (or other distgen file) and run `make generate-all`.
+In this repository [distgen](https://github.com/devexp-db/distgen/) > 1.0 is used for generating directories for Python versions. Also make sure distgen imports the jinja2 package >= 2.10. If you'd like to update some of the files, please make changes in specs/multispec.yml and/or templates under src/ and run `make generate-all`.
 
 For more information about contributing, see
 [the Contribution Guidelines](https://github.com/sclorg/welcome/blob/master/contribution.md).

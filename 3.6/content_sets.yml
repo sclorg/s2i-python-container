@@ -1,4 +1,4 @@
-# This is a file defining which content sets are needed to update content in 
+# This is a file defining which content sets are needed to update content in
 # this image. Data provided here helps determine which images are vulnerable to
 # specific CVEs. Generally you should only need to update this file when:
 #    1. You start depending on new product
