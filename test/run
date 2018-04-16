@@ -165,9 +165,9 @@ test_application() {
 
   test_scl_usage "python --version" "Python $VERSION." "${cid_file}"
   check_result $?
-  test_scl_usage "node --version" "^v6." "${cid_file}"
+  test_scl_usage "node --version" "^v[0-9]*\.[0-9]*\.[0-9]*" "${cid_file}"
   check_result $?
-  test_scl_usage "npm --version" "^3." "${cid_file}"
+  test_scl_usage "npm --version" "^[0-9]*\.[0-9]*\.[0-9]*" "${cid_file}"
   check_result $?
   test_connection
   check_result $?
