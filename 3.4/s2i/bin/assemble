@@ -8,6 +8,14 @@ function should_collectstatic() {
   is_django_installed && [[ -z "$DISABLE_COLLECTSTATIC" ]]
 }
 
+function virtualenv_bin() {
+  if [[ $(head /etc/redhat-release) =~ ^Fedora.* ]]; then
+    virtualenv-${PYTHON_VERSION} $1
+  else
+    virtualenv $1
+  fi
+}
+
 # Install pipenv to the separate virtualenv to isolate it
 # from system Python packages and packages in the main
 # virtualenv. Executable is simlinked into ~/.local/bin
@@ -17,7 +25,7 @@ function install_pipenv() {
   echo "---> Installing pipenv packaging tool ..."
   pip install -U virtualenv
   VENV_DIR=$HOME/.local/venvs/pipenv
-  virtualenv $VENV_DIR
+  virtualenv_bin $VENV_DIR
   $VENV_DIR/bin/pip --isolated install -U pipenv
   mkdir -p $HOME/.local/bin
   ln -s $VENV_DIR/bin/pipenv $HOME/.local/bin/pipenv
