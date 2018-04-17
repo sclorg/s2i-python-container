@@ -9,7 +9,7 @@ function should_collectstatic() {
 }
 
 function virtualenv_bin() {
-  if [[ $(head /etc/redhat-release) =~ ^Fedora.* ]]; then
+  if head "/etc/redhat-release" | grep -q "^Fedora"; then
     virtualenv-${PYTHON_VERSION} $1
   else
     virtualenv $1
