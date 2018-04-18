@@ -33,16 +33,16 @@ LABEL summary="$SUMMARY" \
       usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=2.7/test/setup-test-app/ centos/python-27-centos7 python-sample-app" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
-RUN yum install -y centos-release-scl && \
-    INSTALL_PKGS="libjpeg-turbo libjpeg-turbo-devel python27 python27-python-devel python27-python-setuptools \ 
-	python27-python-pip nss_wrapper httpd24 httpd24-httpd-devel httpd24-mod_ssl httpd24-mod_auth_kerb \
-        httpd24-mod_ldap httpd24-mod_session atlas-devel gcc-gfortran libffi-devel libtool-ltdl enchant" && \
-    yum install -y --setopt=tsflags=nodocs --enablerepo=centosplus $INSTALL_PKGS && \
+RUN INSTALL_PKGS="libjpeg-turbo libjpeg-turbo-devel python27 python27-python-devel python27-python-setuptools \
+        python27-python-pip nss_wrapper httpd24 httpd24-httpd-devel httpd24-mod_ssl \
+        httpd24-mod_auth_kerb httpd24-mod_ldap httpd24-mod_session atlas-devel gcc-gfortran \
+        libffi-devel libtool-ltdl enchant" && \
+    yum install -y centos-release-scl && \
+    yum -y --setopt=tsflags=nodocs install --enablerepo=centosplus $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
-    # Remove centos-logos (httpd dependency, ~20MB of graphics) to keep image
-    # size smaller.
+    # Remove centos-logos (httpd dependency) to keep image size smaller.
     rpm -e --nodeps centos-logos && \
-    yum clean all -y
+    yum -y clean all --enablerepo='*'
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH.
 COPY ./s2i/bin/ $STI_SCRIPTS_PATH

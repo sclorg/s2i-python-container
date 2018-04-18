@@ -10,11 +10,15 @@ The resulting image can be run using [Docker](http://docker.io).
 For more information about using these images with OpenShift, please see the
 official [OpenShift Documentation](https://docs.openshift.org/latest/using_images/s2i_images/python.html).
 
-For more information about contributing, see
-[the Contribution Guidelines](https://github.com/sclorg/welcome/blob/master/contribution.md).
 For more information about concepts used in these container images, see the
 [Landing page](https://github.com/sclorg/welcome).
 
+Contributing
+---------------
+In this repository [distgen](https://github.com/devexp-db/distgen/) > 1.0 is used for generating directories for Python versions. Also make sure distgen imports the jinja2 package >= 2.10. If you'd like to update some of the files, please make changes in specs/multispec.yml and/or templates under src/ and run `make generate-all`.
+
+For more information about contributing, see
+[the Contribution Guidelines](https://github.com/sclorg/welcome/blob/master/contribution.md).
 
 Versions
 ---------------
