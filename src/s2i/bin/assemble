@@ -56,9 +56,11 @@ if [[ ! -z "$ENABLE_PIPENV" ]]; then
 elif [[ -f requirements.txt ]]; then
   echo "---> Installing dependencies ..."
   pip install -r requirements.txt
-elif [[ -f setup.py ]]; then
+fi
+
+if [[ -f setup.py && -z "$DISABLE_SETUP_PY_PROCESSING" ]]; then
   echo "---> Installing application ..."
-  python setup.py develop
+  pip install .
 fi
 
 if should_collectstatic; then
