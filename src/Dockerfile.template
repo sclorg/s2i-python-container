@@ -1,11 +1,5 @@
 {% import "src/common.tpl" as common with context %}
 {% import "src/" + config.os.id + "/macros.tpl" as macros with context %}
-{% set ns = namespace(extra_pkgs=[]) %}
-{% for item in spec.extra_pkgs %}
-{%   if spec.version == item.version %}
-{%     set ns.extra_pkgs = item.value %}
-{%   endif %}
-{% endfor %}
 {% if config.os.id == 'rhel' and spec.base_img_version %}
 {%   set img_tag = spec.base_img_version %}
 {% elif spec.img_tag %}
@@ -43,7 +37,8 @@ LABEL summary="$SUMMARY" \
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,python,python{{ spec.short_ver }},rh-python{{ spec.short_ver }}" \
 {{ macros.labels(spec) }}
-RUN INSTALL_PKGS="{{ common.list_pkgs(ns.extra_pkgs + spec.python_pkgs + spec.base_pkgs) -}}
+{% set extra_pkgs = spec.extra_pkgs[spec.version] if spec.extra_pkgs and spec.extra_pkgs[spec.version] else [] %}
+RUN INSTALL_PKGS="{{ common.list_pkgs(extra_pkgs + spec.python_pkgs + spec.base_pkgs) -}}
     {% if spec.preinstall_cmd %}
 {{ common.preinstall_cmd(spec) -}}
     {% endif %}

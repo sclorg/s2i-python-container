@@ -17,8 +17,7 @@ specs:
                   'httpd24-mod_auth_kerb', 'httpd24-mod_ldap', 'httpd24-mod_session',
                   'atlas-devel', 'gcc-gfortran', 'libffi-devel', 'libtool-ltdl enchant']
       extra_pkgs:
-        - version: "2.7"
-          value: ['libjpeg-turbo', 'libjpeg-turbo-devel']
+        "2.7": ['libjpeg-turbo', 'libjpeg-turbo-devel']
 
     rhel:
       distros:
