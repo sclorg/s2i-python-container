@@ -58,11 +58,6 @@ specs:
       short_ver: "35"
       scl: "rh-python35"
 
-    "3.4":
-      version: "3.4"
-      short_ver: "34"
-      scl: "rh-python34"
-
     "2.7":
       version: "2.7"
       short_ver: "27"
@@ -73,9 +68,6 @@ matrix:
     - distros:
         - fedora-27-x86_64
       version: "2.7"
-    - distros:
-        - fedora-27-x86_64
-      version: "3.4"
     - distros:
         - fedora-27-x86_64
       version: "3.5"
