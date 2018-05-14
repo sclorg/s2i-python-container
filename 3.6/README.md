@@ -125,12 +125,19 @@ file inside your source code repository.
     This should be used only if your project contains properly formated Pipfile
     and Pipfile.lock.
 
+* **DISABLE_SETUP_PY_PROCESSING**
+
+    Set this to a non-empty value to skip processing of setup.py script if you
+    use `-e .` in requirements.txt to trigger its processing or you don't want
+    your application to be installed into site-packages directory.
+
 * **WEB_CONCURRENCY**
 
     Set this to change the default setting for the number of
     [workers](http://docs.gunicorn.org/en/stable/settings.html#workers). By
     default, this is set to the number of available cores times 2, capped
     at 12.
+
 
 Source repository layout
 ------------------------
@@ -157,10 +164,8 @@ However, if these files exist they will affect the behavior of the build process
   dependencies, as documented
   [here](https://packaging.python.org/en/latest/distributing.html#setup-py).
   For most projects, it is sufficient to simply use `requirements.txt` or
-  `Pipfile`, if one of these files is present `setup.py` is not processed
-  by default, please use `-e .` to trigger its processing from above mentioned
-  files.
-
+  `Pipfile`. Set `DISABLE_SETUP_PY_PROCESSING` environment variable to true
+  in order to skip processing of this file.
 
 Run strategies
 --------------
