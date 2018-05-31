@@ -22,5 +22,6 @@ install:
   - export PATH=$PATH:${GOPATH}/src/github.com/openshift/source-to-image/_output/local/bin/linux/amd64/
   - hack/build-go.sh
   - popd
+  - pip install --user distgen
 
-script: SKIP_SQUASH=1 make test TARGET=centos
+script: DG=dg SKIP_SQUASH=1 make test TARGET=centos
