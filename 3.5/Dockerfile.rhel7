@@ -27,7 +27,7 @@ LABEL summary="$SUMMARY" \
       io.k8s.display-name="Python 3.5" \
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,python,python35,rh-python35" \
-      com.redhat.component="rh-python35-docker" \
+      com.redhat.component="rh-python35-container" \
       name="rhscl/python-35-rhel7" \
       version="3.5" \
       usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.5/test/setup-test-app/ rhscl/python-35-rhel7 python-sample-app" \
