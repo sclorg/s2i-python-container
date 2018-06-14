@@ -27,7 +27,7 @@ LABEL summary="$SUMMARY" \
       io.k8s.display-name="Python 3.6" \
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,python,python36,rh-python36" \
-      com.redhat.component="python36-docker" \
+      com.redhat.component="python36-container" \
       name="centos/python-36-centos7" \
       version="1" \
       usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.6/test/setup-test-app/ centos/python-36-centos7 python-sample-app" \

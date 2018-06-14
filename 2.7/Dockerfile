@@ -27,7 +27,7 @@ LABEL summary="$SUMMARY" \
       io.k8s.display-name="Python 2.7" \
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,python,python27,rh-python27" \
-      com.redhat.component="python27-docker" \
+      com.redhat.component="python27-container" \
       name="centos/python-27-centos7" \
       version="2.7" \
       usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=2.7/test/setup-test-app/ centos/python-27-centos7 python-sample-app" \
