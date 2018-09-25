@@ -19,6 +19,8 @@ fi
 
 IMAGE_NAME=${IMAGE_NAME:-centos/python-${VERSION//./}-centos7}
 
+. test/test-lib.sh
+
 # TODO: This should be part of the image metadata
 test_port=8080
 
@@ -40,7 +42,7 @@ container_ip() {
 
 run_s2i_build() {
   info "Building the ${1} application image ..."
-  s2i build ${s2i_args} file://${test_dir}/${1} ${IMAGE_NAME} ${IMAGE_NAME}-testapp
+  ct_s2i_build_as_df file://${test_dir}/${1} ${IMAGE_NAME} ${IMAGE_NAME}-testapp ${s2i_args}
 }
 
 prepare() {
@@ -103,7 +105,7 @@ wait_for_cid() {
 
 test_s2i_usage() {
   info "Testing 's2i usage' ..."
-  s2i usage ${s2i_args} ${IMAGE_NAME} &>/dev/null
+  ct_s2i_usage ${IMAGE_NAME} ${s2i_args} 1>/dev/null
 }
 
 test_docker_run_usage() {
@@ -196,7 +198,7 @@ for app in ${WEB_APPS[@]}; do
   test_application
 
   # test application with random user
-  CONTAINER_ARGS="-u 12345" test_application
+  CONTAINER_ARGS="--user 12345" test_application
 
   info "All tests for the ${app} finished successfully."
   cleanup ${app}
