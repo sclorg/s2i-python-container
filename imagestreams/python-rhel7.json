@@ -18,7 +18,7 @@
           "iconClass": "icon-python",
           "tags": "builder,python",
           "supports":"python",
-          "sampleRepo": "https://github.com/openshift/django-ex.git"
+          "sampleRepo": "https://github.com/sclorg/django-ex.git"
         },
         "from": {
           "kind": "ImageStreamTag",
@@ -38,7 +38,7 @@
           "tags": "hidden,builder,python",
           "supports":"python:3.3,python",
           "version": "3.3",
-          "sampleRepo": "https://github.com/openshift/django-ex.git"
+          "sampleRepo": "https://github.com/sclorg/django-ex.git"
         },
         "from": {
           "kind": "DockerImage",
@@ -58,7 +58,7 @@
           "tags": "builder,python",
           "supports":"python:2.7,python",
           "version": "2.7",
-          "sampleRepo": "https://github.com/openshift/django-ex.git"
+          "sampleRepo": "https://github.com/sclorg/django-ex.git"
         },
         "from": {
           "kind": "DockerImage",
@@ -78,7 +78,7 @@
           "tags": "hidden,builder,python",
           "supports":"python:3.4,python",
           "version": "3.4",
-          "sampleRepo": "https://github.com/openshift/django-ex.git"
+          "sampleRepo": "https://github.com/sclorg/django-ex.git"
         },
         "from": {
           "kind": "DockerImage",
@@ -98,7 +98,7 @@
           "tags": "builder,python",
           "supports":"python:3.5,python",
           "version": "3.5",
-          "sampleRepo": "https://github.com/openshift/django-ex.git"
+          "sampleRepo": "https://github.com/sclorg/django-ex.git"
         },
         "from": {
           "kind": "DockerImage",
@@ -118,7 +118,7 @@
           "tags": "builder,python",
           "supports":"python:3.6,python",
           "version": "3.6",
-          "sampleRepo": "https://github.com/openshift/django-ex.git"
+          "sampleRepo": "https://github.com/sclorg/django-ex.git"
         },
         "from": {
           "kind": "DockerImage",

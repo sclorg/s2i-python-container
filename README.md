@@ -8,7 +8,7 @@ Users can choose between RHEL, Fedora and CentOS based builder images.
 The resulting image can be run using [Docker](http://docker.io).
 
 For more information about using these images with OpenShift, please see the
-official [OpenShift Documentation](https://docs.openshift.org/latest/using_images/s2i_images/python.html).
+official [OpenShift Documentation](https://docs.okd.io/latest/using_images/s2i_images/python.html).
 
 For more information about concepts used in these container images, see the
 [Landing page](https://github.com/sclorg/welcome).
