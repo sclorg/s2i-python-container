@@ -18,7 +18,7 @@
           "iconClass": "icon-python",
           "tags": "builder,python,ppc64le",
           "supports":"python",
-          "sampleRepo": "https://github.com/openshift/django-ex.git"
+          "sampleRepo": "https://github.com/sclorg/django-ex.git"
         },
         "from": {
           "kind": "ImageStreamTag",
@@ -38,7 +38,7 @@
           "tags": "builder,python",
           "supports":"python:2.7,python,ppc64le",
           "version": "2.7",
-          "sampleRepo": "https://github.com/openshift/django-ex.git"
+          "sampleRepo": "https://github.com/sclorg/django-ex.git"
         },
         "from": {
           "kind": "DockerImage",
@@ -58,7 +58,7 @@
           "tags": "builder,python,ppc64le",
           "supports":"python:3.6,python",
           "version": "3.6",
-          "sampleRepo": "https://github.com/openshift/django-ex.git"
+          "sampleRepo": "https://github.com/sclorg/django-ex.git"
         },
         "from": {
           "kind": "DockerImage",
