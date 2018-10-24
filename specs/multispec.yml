@@ -37,8 +37,8 @@ specs:
 
     fedora:
       distros:
-        - fedora-27-x86_64
-      s2i_base: registry.fedoraproject.org/f27/s2i-base
+        - fedora-28-x86_64
+      s2i_base: registry.fedoraproject.org/f28/s2i-base
       img_tag: "latest"
       python_pkgs: ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip',
                     'python3-virtualenv']
@@ -66,8 +66,8 @@ specs:
 matrix:
   exclude:
     - distros:
-        - fedora-27-x86_64
+        - fedora-28-x86_64
       version: "2.7"
     - distros:
-        - fedora-27-x86_64
+        - fedora-28-x86_64
       version: "3.5"
