@@ -14,7 +14,6 @@ ENV PYTHON_VERSION=3.6 \
 
 ENV NAME=python3 \
     VERSION=0 \
-    RELEASE=1 \
     ARCH=x86_64
 
 ENV SUMMARY="Platform for building and running Python $PYTHON_VERSION applications" \
@@ -35,7 +34,6 @@ LABEL summary="$SUMMARY" \
       com.redhat.component="$NAME" \
       name="$FGC/$NAME" \
       version="$VERSION" \
-      release="$RELEASE.$DISTTAG" \
       usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.6/test/setup-test-app/ $FGC/$NAME python-sample-app" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
