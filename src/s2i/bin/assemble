@@ -68,12 +68,11 @@ if should_collectstatic; then
     echo "---> Collecting Django static files ..."
 
     APP_HOME=$(readlink -f "${APP_HOME:-.}")
-    # Change the working directory to APP_HOME if set
-      if [[ "$APP_HOME" != "." ]]; then
-        PYTHONPATH=$(pwd):$PYTHONPATH
-        cd "$APP_HOME"
-      fi
-    # Look for 'manage.py' in the directory specified by APP_HOME, or the current directory
+    # Change the working directory to APP_HOME
+    PYTHONPATH=$(pwd):$PYTHONPATH
+    cd "$APP_HOME"
+
+    # Look for 'manage.py' in the current directory
     manage_file=./manage.py
 
     if [[ ! -f "$manage_file" ]]; then
