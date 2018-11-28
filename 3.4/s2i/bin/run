@@ -35,13 +35,6 @@ function get_default_web_concurrency() {
   echo $default
 }
 
-APP_HOME=$(readlink -f "${APP_HOME:-.}")
-# Change the working directory to APP_HOME if set
-if [[ "$APP_HOME" != "." ]]; then
-  PYTHONPATH=$(pwd):$PYTHONPATH
-  cd "$APP_HOME"
-fi
-
 app_script_check="${APP_SCRIPT-}"
 APP_SCRIPT="${APP_SCRIPT-app.sh}"
 if [[ -f "$APP_SCRIPT" ]]; then
@@ -63,8 +56,9 @@ else
   test -n "$app_file_check" && (>&2 echo "ERROR: file '$app_file_check' not found.") && exit 1
 fi
 
-# Look for 'manage.py' in the current directory
-manage_file=./manage.py
+APP_HOME=${APP_HOME:-.}
+# Look for 'manage.py' in the directory specified by APP_HOME, or the current direcotry
+manage_file=$APP_HOME/manage.py
 
 if should_migrate; then
   if [[ -f "$manage_file" ]]; then
@@ -77,12 +71,14 @@ if should_migrate; then
 fi
 
 if is_gunicorn_installed; then
-  setup_py=$(find "$HOME" -maxdepth 2 -type f -name 'setup.py' -print -quit)
-  # Look for wsgi module in the current directory
-  if [[ -z "$APP_MODULE" && -f "./wsgi.py" ]]; then
-    APP_MODULE=wsgi
-  elif [[ -z "$APP_MODULE" && -f "$setup_py" ]]; then
-    APP_MODULE="$(python "$setup_py" --name)"
+  if [[ -z "$APP_MODULE" ]]; then
+    # Look only in the directory specified by APP_HOME, or the current directory
+    # replace all "/" with ".", remove leading "." and ".py" suffix
+    APP_MODULE=$(find $APP_HOME -maxdepth 1 -type f -name 'wsgi.py' | sed 's:/:.:g;s:^\.\+::;s:\.py$::')
+  fi
+
+  if [[ -z "$APP_MODULE" && -f setup.py ]]; then
+    APP_MODULE="$(python setup.py --name)"
   fi
 
   if [[ "$APP_MODULE" ]]; then
