@@ -66,7 +66,7 @@ if should_collectstatic; then
 
     APP_HOME=$(readlink -f "${APP_HOME:-.}")
     # Change the working directory to APP_HOME
-    PYTHONPATH=$(pwd):$PYTHONPATH
+    PYTHONPATH="$(pwd)${PYTHONPATH:+:$PYTHONPATH}"
     cd "$APP_HOME"
 
     # Look for 'manage.py' in the current directory

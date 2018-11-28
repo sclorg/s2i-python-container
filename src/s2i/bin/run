@@ -37,7 +37,7 @@ function get_default_web_concurrency() {
 
 APP_HOME=$(readlink -f "${APP_HOME:-.}")
 # Change the working directory to APP_HOME
-PYTHONPATH=$(pwd):$PYTHONPATH
+PYTHONPATH="$(pwd)${PYTHONPATH:+:$PYTHONPATH}"
 cd "$APP_HOME"
 
 app_script_check="${APP_SCRIPT-}"
