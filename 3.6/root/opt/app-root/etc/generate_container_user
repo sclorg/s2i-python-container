@@ -1,10 +1,11 @@
 # Set current user in nss_wrapper
 USER_ID=$(id -u)
 GROUP_ID=$(id -g)
+NSS_WRAPPER_TMP_DIR=$(mktemp -d)
 
 if [ x"$USER_ID" != x"0" -a x"$USER_ID" != x"1001" ]; then
 
-    NSS_WRAPPER_PASSWD=/opt/app-root/etc/passwd
+    NSS_WRAPPER_PASSWD=${NSS_WRAPPER_TMP_DIR}/passwd
     NSS_WRAPPER_GROUP=/etc/group
 
     cat /etc/passwd | sed -e 's/^default:/builder:/' > $NSS_WRAPPER_PASSWD
