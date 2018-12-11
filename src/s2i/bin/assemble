@@ -37,7 +37,7 @@ set -e
 
 shopt -s dotglob
 echo "---> Installing application source ..."
-mv /tmp/src/* ./
+mv /tmp/src/* "$HOME"
 
 if [[ ! -z "$UPGRADE_PIP_TO_LATEST"{% if spec.version in ["2.7", "3.4", "3.5"] %} || ! -z "$ENABLE_PIPENV"{% endif %} ]]; then
   echo "---> Upgrading pip to latest version ..."
@@ -67,10 +67,13 @@ if should_collectstatic; then
   (
     echo "---> Collecting Django static files ..."
 
+    APP_HOME=$(readlink -f "${APP_HOME:-.}")
+    # Change the working directory to APP_HOME
+    PYTHONPATH="$(pwd)${PYTHONPATH:+:$PYTHONPATH}"
+    cd "$APP_HOME"
 
-    APP_HOME=${APP_HOME:-.}
-    # Look for 'manage.py' in the directory specified by APP_HOME, or the current directory
-    manage_file=$APP_HOME/manage.py
+    # Look for 'manage.py' in the current directory
+    manage_file=./manage.py
 
     if [[ ! -f "$manage_file" ]]; then
       echo "WARNING: seems that you're using Django, but we could not find a 'manage.py' file."
