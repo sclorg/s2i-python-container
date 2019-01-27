@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ -d .local ]; then
+  tar cf - .local
+elif [ ! -z "${PYTHONUSERBASE}" ] && [ -d "${PYTHONUSERBASE}" ]; then
+  cd $(dirname ${PYTHONUSERBASE})
+  tar cf - $(basename ${PYTHONUSERBASE})
+fi

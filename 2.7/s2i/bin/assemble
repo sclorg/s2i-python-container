@@ -1,5 +1,16 @@
 #!/bin/bash
 
+if [ "$(ls -A /tmp/artifacts/ 2>/dev/null)" ]; then
+  echo "---> Restoring found build artifacts..."
+  cp -Rf /tmp/artifacts/. ./
+  rc=$?
+  if [ $rc -eq 0 ] && [ ! -z "${PYTHONUSERBASE}" ] && [ -d "$(dirname ${PYTHONUSERBASE})" ]; then
+    cp -Rf /tmp/artifacts/. $(dirname ${PYTHONUSERBASE})
+  else
+    ls -la $(dirname ${PYTHONUSERBASE})
+  fi
+fi
+
 function is_django_installed() {
   python -c "import django" &>/dev/null
 }
