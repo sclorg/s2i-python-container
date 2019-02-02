@@ -10,6 +10,7 @@ THISDIR=$(dirname ${BASH_SOURCE[0]})
 
 source "${THISDIR}/test-lib.sh"
 source "${THISDIR}/test-lib-openshift.sh"
+source "${THISDIR}/test-lib-python.sh"
 
 set -exo nounset
 
@@ -28,4 +29,21 @@ ct_os_test_template_app "${IMAGE_NAME}" \
                         'Welcome to your Django application on OpenShift' \
                         8080 http 200 "-p SOURCE_REPOSITORY_REF=master -p PYTHON_VERSION=${VERSION} -p POSTGRESQL_VERSION=9.6 -p NAME=python-testing" \
                         "centos/postgresql-96-centos7|postgresql:9.6"
+
+# test with the just built image and an integrated template
+test_python_integration "${IMAGE_NAME}" "${VERSION}" python
+
+# test with a released image and an integrated template
+if [ "${OS}" == "rhel7" ] ; then
+  PUBLIC_IMAGE_NAME=${PUBLIC_IMAGE_NAME:-${REGISTRY:-registry.access.redhat.com/}rhscl/${BASE_IMAGE_NAME}-${VERSION//./}-rhel7}
+else
+  PUBLIC_IMAGE_NAME=${PUBLIC_IMAGE_NAME:-${REGISTRY:-}centos/${BASE_IMAGE_NAME}-${VERSION//./}-centos7}
+fi
+
+export CT_SKIP_UPLOAD_IMAGE=true
+test_python_integration python "${VERSION}" "${PUBLIC_IMAGE_NAME}"
+
+OS_TESTSUITE_RESULT=0
+
+ct_os_cluster_down
 
