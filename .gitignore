@@ -2,6 +2,11 @@
 staticfiles/
 openshift.local.*
 
+# Generated scripts / data
+auto_targets.mk
+.image-id
+.image-id.raw
+
 # help.1 files complied by container-common-scripts from README.md files
 */root/help.1
 
