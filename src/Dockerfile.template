@@ -35,7 +35,7 @@ LABEL summary="$SUMMARY" \
       io.k8s.description="$DESCRIPTION" \
       io.k8s.display-name="Python {{ spec.version }}" \
       io.openshift.expose-services="8080:http" \
-      io.openshift.tags="builder,python,python{{ spec.short_ver }},rh-python{{ spec.short_ver }}" \
+      io.openshift.tags="builder,python,python{{ spec.short_ver }},python-{{ spec.short_ver }},rh-python{{ spec.short_ver }}" \
 {{ macros.labels(spec) }}
 {% set extra_pkgs = spec.extra_pkgs[spec.version] if spec.extra_pkgs and spec.extra_pkgs[spec.version] else [] %}
 RUN INSTALL_PKGS="{{ common.list_pkgs(extra_pkgs + spec.python_pkgs + spec.base_pkgs) -}}
