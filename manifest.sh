@@ -84,9 +84,6 @@ SYMLINK_RULES="
 
 # Files to copy
 COPY_RULES="
-    src=src/content_sets.yml
-    dest=content_sets.yml;
-
     src=src/root/opt/app-root/etc/generate_container_user
     dest=root/opt/app-root/etc/generate_container_user;
 
