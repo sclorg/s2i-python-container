@@ -1,20 +1,18 @@
-Python 3.6 container image
+Python 3.7 container image
 ===================
 
-This container image includes Python 3.6 as a [S2I](https://github.com/openshift/source-to-image) base image for your Python 3.6 applications.
-Users can choose between RHEL and CentOS based builder images.
-The RHEL7 image is available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/python-36-rhel7)
-as registry.access.redhat.com/rhscl/python-36-rhel7
-and the RHEL8 image as [registry.access.redhat.com/rhel8/python-36](https://access.redhat.com/containers/#/registry.access.redhat.com/rhel8/python-36).
-The CentOS7 image is then available on [Docker Hub](https://hub.docker.com/r/centos/python-36-centos7/)
-as centos/python-36-centos7.
+This container image includes Python 3.7 as a [S2I](https://github.com/openshift/source-to-image) base image for your Python 3.7 applications.
+
+Python 3.7 is currently available only in Fedora as a default Python 3 version.
+If you need RHEL or Centos based images, use [Python 3.6](https://github.com/sclorg/s2i-python-container/tree/master/3.6).
+
 The resulting image can be run using [Docker](http://docker.io).
 
 Description
 -----------
 
-Python 3.6 available as container is a base platform for 
-building and running various Python 3.6 applications and frameworks. 
+Python 3.7 available as container is a base platform for
+building and running various Python 3.7 applications and frameworks.
 Python is an easy to learn, powerful programming language. It has efficient high-level 
 data structures and a simple but effective approach to object-oriented programming. 
 Python's elegant syntax and dynamic typing, together with its interpreted nature, 
@@ -28,25 +26,13 @@ the nodejs itself is included just to make the npm work.
 
 Usage
 ---------------------
-To build a simple [python-sample-app](https://github.com/sclorg/s2i-python-container/tree/master/3.6/test/setup-test-app) application
+To build a simple [python-sample-app](https://github.com/sclorg/s2i-python-container/tree/master/3.7/test/setup-test-app) application
 using standalone [S2I](https://github.com/openshift/source-to-image) and then run the
 resulting image with [Docker](http://docker.io) execute:
 
-*  **For RHEL7 based image**
+*  **For Fedora 29 based image**
     ```
-    $ s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.6/test/setup-test-app/ rhscl/python-36-rhel7 python-sample-app
-    $ docker run -p 8080:8080 python-sample-app
-    ```
-
-*  **For RHEL8 based image**
-    ```
-    $ s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.6/test/setup-test-app/ rhel8/python-36 python-sample-app
-    $ docker run -p 8080:8080 python-sample-app
-    ```
-
-*  **For CentOS7 based image**
-    ```
-    $ s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.6/test/setup-test-app/ centos/python-36-centos7 python-sample-app
+    $ s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.7/test/setup-test-app/ f29/python3 python-sample-app
     $ docker run -p 8080:8080 python-sample-app
     ```
 
@@ -88,7 +74,7 @@ file inside your source code repository.
 
     If using `setup.py` for installing the application, the `MODULE_NAME` part
     can be read from there. For an example, see
-    [setup-test-app](https://github.com/sclorg/s2i-python-container/tree/master/3.6/test/setup-test-app).
+    [setup-test-app](https://github.com/sclorg/s2i-python-container/tree/master/3.7/test/setup-test-app).
 
 * **APP_HOME**
 
@@ -246,4 +232,3 @@ See also
 --------
 Dockerfile and other sources are available on https://github.com/sclorg/s2i-python-container.
 In that repository you also can find another versions of Python environment Dockerfiles.
-Dockerfile for CentOS is called `Dockerfile`, Dockerfile for RHEL7 is called `Dockerfile.rhel7` and for RHEL8 it's `Dockerfile.rhel8`.
