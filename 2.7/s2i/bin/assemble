@@ -10,7 +10,8 @@ function should_collectstatic() {
 
 function virtualenv_bin() {
   if head "/etc/redhat-release" | grep -q "^CentOS Linux release 7" || \
-     head "/etc/redhat-release" | grep -q "^Red Hat Enterprise Linux\( Server\)\? release 7"; then
+     head "/etc/redhat-release" | grep -q "^Red Hat Enterprise Linux\( Server\)\? release 7" || \
+     head "/etc/redhat-release" | grep -q "^Fedora release 29 \(Twenty Nine\)\?"; then
     virtualenv $1
   else
     virtualenv-${PYTHON_VERSION} $1
