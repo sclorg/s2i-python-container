@@ -25,8 +25,8 @@ ENV PYTHON_VERSION={{ spec.version }} \
 # images, however, don't as most images don't need SCLs any more. But we want
 # to run it even on RHEL8, because we set the virtualenv environment as part of
 # that script
-ENV BASH_ENV=${APP_ROOT}/etc/scl_enable \	
-    ENV=${APP_ROOT}/etc/scl_enable \	
+ENV BASH_ENV=${APP_ROOT}/etc/scl_enable \
+    ENV=${APP_ROOT}/etc/scl_enable \
     PROMPT_COMMAND=". ${APP_ROOT}/etc/scl_enable"
 {% endif %}
 
