@@ -2,7 +2,7 @@ version: 1
 
 specs:
   distroinfo:
-    centos:
+    centos7:
       distros:
         - centos-7-x86_64
       el_version: "7"
@@ -20,7 +20,7 @@ specs:
       extra_pkgs:
         "2.7": ['libjpeg-turbo', 'libjpeg-turbo-devel']
 
-    rhel:
+    rhel7:
       distros:
         - rhel-7-x86_64
       el_version: "7"
@@ -56,7 +56,7 @@ specs:
         "2.7": ['{{ spec.pkg_prefix }}', '{{ spec.pkg_prefix }}-devel', 'glibc-langpack-en']
         "3.6": ['python36', 'python36-devel']
 
-    fedora:
+    fedora28:
       distros:
         - fedora-28-x86_64
       fedora_version: "28"
