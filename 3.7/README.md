@@ -225,7 +225,7 @@ configuration file inside your repository with the
 option set to `true`. Make sure to specify your config via the `APP_CONFIG`
 environment variable.
 
-To change your source code in running container, use podman's
+To change your source code in running container, use podman's (or docker's)
 [exec](https://github.com/containers/libpod/blob/master/docs/podman-exec.1.md) command:
 
 ```
