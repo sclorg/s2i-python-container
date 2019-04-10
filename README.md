@@ -5,7 +5,8 @@ This repository contains the source for building various versions of
 the Python application as a reproducible container image using
 [source-to-image](https://github.com/openshift/source-to-image).
 Users can choose between RHEL, Fedora and CentOS based builder images.
-The resulting image can be run using [Docker](http://docker.io).
+The resulting image can be run using [podman](https://github.com/containers/libpod) or
+[docker](http://docker.io).
 
 For more information about using these images with OpenShift, please see the
 official [OpenShift Documentation](https://docs.okd.io/latest/using_images/s2i_images/python.html).
@@ -44,7 +45,7 @@ To build a Python image, choose either the CentOS or RHEL based image:
     To download it run:
 
     ```
-    $ docker pull registry.access.redhat.com/rhscl/python-36-rhel7
+    $ podman pull registry.access.redhat.com/rhscl/python-36-rhel7
     ```
 
     To build a RHEL based Python image, you need to run the build on a properly
@@ -61,7 +62,7 @@ To build a Python image, choose either the CentOS or RHEL based image:
     This image is available on DockerHub. To download it run:
 
     ```
-    $ docker pull centos/python-36-centos7
+    $ podman pull centos/python-36-centos7
     ```
 
     To build a Python image from scratch run:
@@ -71,6 +72,8 @@ To build a Python image, choose either the CentOS or RHEL based image:
     $ cd s2i-python-container
     $ make build TARGET=centos7 VERSIONS=3.6
     ```
+
+Note: while the installation steps are calling `podman`, you can replace any such calls by `docker` with the same arguments.
 
 **Notice: By omitting the `VERSIONS` parameter, the build/test action will be performed
 on all provided versions of Python.**
@@ -87,7 +90,6 @@ see [usage documentation](3.5/README.md).
 
 For information about usage of Dockerfile for Python 3.6,
 see [usage documentation](3.6/README.md).
-
 
 Test
 ---------------------

@@ -3,12 +3,13 @@ Python 3.7 container image
 
 This container image includes Python 3.7 as a [S2I](https://github.com/openshift/source-to-image) base image for your Python 3.7 applications.
 Users can choose between RHEL and CentOS based builder images.
-The RHEL7 image is available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/python-37-rhel7)
-as registry.access.redhat.com/rhscl/python-37-rhel7
-and the RHEL8 image as [registry.access.redhat.com/rhel8/python-37](https://access.redhat.com/containers/#/registry.access.redhat.com/rhel8/python-37).
-The CentOS7 image is then available on [Docker Hub](https://hub.docker.com/r/centos/python-37-centos7/)
-as centos/python-37-centos7.
-The resulting image can be run using [Docker](http://docker.io).
+The RHEL images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/),
+the CentOS images are available on [Docker Hub](https://hub.docker.com/r/centos/),
+and the Fedora images are available in [Fedora Registry](https://registry.fedoraproject.org/).
+The resulting image can be run using [podman](https://github.com/containers/libpod) or
+[docker](http://docker.io).
+
+Note: while the examples in this README are calling `podman`, you can replace any such calls by `docker` with the same arguments
 
 Description
 -----------
@@ -28,26 +29,19 @@ the nodejs itself is included just to make the npm work.
 
 Usage
 ---------------------
-To build a simple [python-sample-app](https://github.com/sclorg/s2i-python-container/tree/master/3.7/test/setup-test-app) application
-using standalone [S2I](https://github.com/openshift/source-to-image) and then run the
-resulting image with [Docker](http://docker.io) execute:
 
-*  **For RHEL7 based image**
+For this, we will assume that you are using the `rhscl/python-37-rhel7 image`, available via `python:3.7` imagestream tag in Openshift.
+Building a simple [python-sample-app](https://github.com/sclorg/s2i-python-container/tree/master/3.7/test/setup-test-app) application
+in Openshift can be achieved with the following step:
+
+    ```
+    oc new-app python:3.6~https://github.com/sclorg/s2i-python-container.git --context-dir=3.7/test/setup-test-app/
+    ```
+
+The same application can also be built using the standalone [S2I](https://github.com/openshift/source-to-image) application on systems that have it available:
+
     ```
     $ s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.7/test/setup-test-app/ rhscl/python-37-rhel7 python-sample-app
-    $ docker run -p 8080:8080 python-sample-app
-    ```
-
-*  **For RHEL8 based image**
-    ```
-    $ s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.7/test/setup-test-app/ rhel8/python-37 python-sample-app
-    $ docker run -p 8080:8080 python-sample-app
-    ```
-
-*  **For CentOS7 based image**
-    ```
-    $ s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.7/test/setup-test-app/ centos/python-37-centos7 python-sample-app
-    $ docker run -p 8080:8080 python-sample-app
     ```
 
 **Accessing the application:**
@@ -231,11 +225,11 @@ configuration file inside your repository with the
 option set to `true`. Make sure to specify your config via the `APP_CONFIG`
 environment variable.
 
-To change your source code in running container, use Docker's
-[exec](https://docs.docker.com/reference/commandline/exec/) command:
+To change your source code in running container, use podman's (or docker's)
+[exec](https://github.com/containers/libpod/blob/master/docs/podman-exec.1.md) command:
 
 ```
-docker exec -it <CONTAINER_ID> /bin/bash
+podman exec -it <CONTAINER_ID> /bin/bash
 ```
 
 After you enter into the running container, your current directory is set
@@ -246,4 +240,5 @@ See also
 --------
 Dockerfile and other sources are available on https://github.com/sclorg/s2i-python-container.
 In that repository you also can find another versions of Python environment Dockerfiles.
-Dockerfile for CentOS is called `Dockerfile`, Dockerfile for RHEL7 is called `Dockerfile.rhel7` and for RHEL8 it's `Dockerfile.rhel8`.
+Dockerfile for CentOS is called `Dockerfile`, Dockerfile for RHEL7 is called `Dockerfile.rhel7`,
+for RHEL8 it's `Dockerfile.rhel8` and the Fedora Dockerfile is called `Dockerfile.fedora`.
