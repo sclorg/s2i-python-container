@@ -94,6 +94,10 @@ COPY_RULES="
     dest=s2i/bin/run
     mode=0755;
 
+    src=src/s2i/bin/init-wrapper
+    dest=s2i/bin/init-wrapper
+    mode=0755;
+
     src=examples/pipenv-test-app/testapp.py
     dest=test/pipenv-test-app/testapp.py;
 
