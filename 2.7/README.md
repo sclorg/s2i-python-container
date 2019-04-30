@@ -124,6 +124,16 @@ file inside your source code repository.
     This should be used only if your project contains properly formated Pipfile
     and Pipfile.lock. (Implies `UPGRADE_PIP_TO_LATEST` to satisfy dependencies of
     Pipenv.)
+
+* **ENABLE_INIT_WRAPPER**
+
+    Set this variable to a non-empty value to make use of an init wrapper.
+    This is useful for servers that are not capable of reaping zombie
+    processes, such as Django development server or Tornado. This option can
+    be used together with **APP_SCRIPT** or **APP_FILE**. It never applies
+    to Gunicorn used through **APP_MODULE** as Gunicorn reaps zombie
+    processes correctly.
+
 * **PIP_INDEX_URL**
 
     Set this variable to use a custom index URL or mirror to download required packages

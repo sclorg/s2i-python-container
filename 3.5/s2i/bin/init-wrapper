@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# Set a trap to kill the main app process when this
+# init script receives SIGTERM or SIGINT
+trap 'kill -s TERM $PID' TERM INT
+# Execute the main application in the background
+"$@" &
+PID=$!
+wait $PID
+# Remove the trap and wait till the app process finishes completely
+trap - TERM INT
+wait $PID
+# Exit with the exit code of the app process
+STATUS=$?
+exit $STATUS
