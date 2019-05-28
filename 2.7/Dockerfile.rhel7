@@ -32,6 +32,7 @@ LABEL summary="$SUMMARY" \
       name="rhscl/python-27-rhel7" \
       version="2.7" \
       usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=2.7/test/setup-test-app/ rhscl/python-27-rhel7 python-sample-app" \
+      com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 RUN INSTALL_PKGS="python27 python27-python-devel python27-python-setuptools python27-python-pip nss_wrapper \
