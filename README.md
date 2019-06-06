@@ -24,12 +24,10 @@ A typical way how to contribute is:
 
 1. Add a feature or fix a bug in templates (src directory) or values (specs/multispec.yml file).
 1. Commit the changes.
-1. Regenerate all files via ```make generate-all```.
+1. Regenerate all files via `make generate-all`.
 1. Commit generated files.
-1. Build an image you want to test via ```make build TARGET=fedora VERSIONS=3.7```
-1. Tag it if you want via ```make tag```
-1. Test it via ```make test TARGET=fedora VERSIONS=3.7```
-1. Open a pull request
+1. Test changes via `make test TARGET=fedora VERSIONS=3.7` which will `build`, `tag` and `test` an image in one step.
+1. Open a pull request or clean all local changes via `make clean-versions`.
 
 For more information about contributing, see
 [the Contribution Guidelines](https://github.com/sclorg/welcome/blob/master/contribution.md).
