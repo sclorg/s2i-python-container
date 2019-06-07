@@ -16,7 +16,18 @@ For more information about concepts used in these container images, see the
 
 Contributing
 ---------------
-In this repository [distgen](https://github.com/devexp-db/distgen/) > 1.0 is used for generating directories for Python versions. Also make sure distgen imports the jinja2 package >= 2.10. If you'd like to update some of the files, please make changes in specs/multispec.yml and/or templates under src/ and run `make generate-all`.
+In this repository [distgen](https://github.com/devexp-db/distgen/) > 1.0 is used for generating directories for Python versions. Also make sure distgen imports the jinja2 package >= 2.10.
+
+Files in directories for a specific Python version are generated from templates in the src directory with values from specs/multispec.yml.
+
+A typical way how to contribute is:
+
+1. Add a feature or fix a bug in templates (src directory) or values (specs/multispec.yml file).
+1. Commit the changes.
+1. Regenerate all files via `make generate-all`.
+1. Commit generated files.
+1. Test changes via `make test TARGET=fedora VERSIONS=3.7` which will `build`, `tag` and `test` an image in one step.
+1. Open a pull request!
 
 For more information about contributing, see
 [the Contribution Guidelines](https://github.com/sclorg/welcome/blob/master/contribution.md).
