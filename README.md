@@ -27,7 +27,7 @@ A typical way how to contribute is:
 1. Regenerate all files via `make generate-all`.
 1. Commit generated files.
 1. Test changes via `make test TARGET=fedora VERSIONS=3.7` which will `build`, `tag` and `test` an image in one step.
-1. Open a pull request or clean all local changes via `make clean-versions`.
+1. Open a pull request!
 
 For more information about contributing, see
 [the Contribution Guidelines](https://github.com/sclorg/welcome/blob/master/contribution.md).
