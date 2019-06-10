@@ -42,9 +42,9 @@ specs:
       distros:
         - rhel-8-x86_64
       el_version: "8"
-      s2i_base: rhel8/s2i-base
+      s2i_base: ubi8/s2i-base
       img_tag: "1"
-      org: "rhel8"
+      org: "ubi8"
       prod: "rhel8"
       logos: "redhat-logos-httpd"
       preinstall_cmd: ['yum -y module enable {{ spec.module_stream }} httpd:2.4']
