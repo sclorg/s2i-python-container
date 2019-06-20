@@ -36,7 +36,6 @@ Versions
 ---------------
 Python versions currently provided are:
 * [python-2.7](2.7)
-* [python-3.5](3.5)
 * [python-3.6](3.6)
 * [python-3.7](3.7)
 
@@ -95,9 +94,6 @@ Usage
 
 For information about usage of Dockerfile for Python 2.7,
 see [usage documentation](2.7/README.md).
-
-For information about usage of Dockerfile for Python 3.5,
-see [usage documentation](3.5/README.md).
 
 For information about usage of Dockerfile for Python 3.6,
 see [usage documentation](3.6/README.md).
