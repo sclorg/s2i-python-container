@@ -28,7 +28,7 @@ RUN yum install -y centos-release-scl && \
     # Remove centos-logos (httpd dependency, ~20MB of graphics) to keep image
     # size smaller.
     rpm -e --nodeps centos-logos && \
-    yum clean all -y
+    yum -y clean all --enablerepo='*'
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH.
 COPY ./s2i/bin/ $STI_SCRIPTS_PATH
