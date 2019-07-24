@@ -1,6 +1,6 @@
 Python container images
 ====================
-
+ 
 This repository contains the source for building various versions of
 the Python application as a reproducible container image using
 [source-to-image](https://github.com/openshift/source-to-image).
