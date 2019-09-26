@@ -42,7 +42,7 @@ echo "---> Installing application source ..."
 mv /tmp/src/* "$HOME"
 
 # set permissions for any installed artifacts
-fix-permissions /opt/app-root
+fix-permissions /opt/app-root -P
 
 if [[ ! -z "$UPGRADE_PIP_TO_LATEST"{% if spec.version in ["2.7", "3.4", "3.5"] %} || ! -z "$ENABLE_PIPENV"{% endif %} ]]; then
   echo "---> Upgrading pip to latest version ..."
@@ -98,4 +98,4 @@ if should_collectstatic; then
 fi
 
 # set permissions for any installed artifacts
-fix-permissions /opt/app-root
+fix-permissions /opt/app-root -P
