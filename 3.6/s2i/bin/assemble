@@ -38,6 +38,9 @@ shopt -s dotglob
 echo "---> Installing application source ..."
 mv /tmp/src/* "$HOME"
 
+# set permissions for any installed artifacts
+fix-permissions /opt/app-root -P
+
 if [[ ! -z "$UPGRADE_PIP_TO_LATEST" ]]; then
   echo "---> Upgrading pip to latest version ..."
   pip install -U pip setuptools wheel
@@ -92,4 +95,4 @@ if should_collectstatic; then
 fi
 
 # set permissions for any installed artifacts
-fix-permissions /opt/app-root
+fix-permissions /opt/app-root -P
