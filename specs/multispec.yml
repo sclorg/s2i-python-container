@@ -54,8 +54,8 @@ specs:
                   'mod_auth_gssapi', 'mod_ldap', 'mod_session',
                   'atlas-devel', 'gcc-gfortran', 'libffi-devel', 'libtool-ltdl enchant']
       extra_pkgs:
-        "2.7": ['{{ spec.pkg_prefix }}', '{{ spec.pkg_prefix }}-devel', 'glibc-langpack-en']
-        "3.6": ['python36', 'python36-devel', 'glibc-langpack-en']
+        "2.7": ['{{ spec.pkg_prefix }}', '{{ spec.pkg_prefix }}-devel', 'glibc-langpack-en', 'redhat-rpm-config']
+        "3.6": ['python36', 'python36-devel', 'glibc-langpack-en', 'redhat-rpm-config']
 
     fedora28:
       distros:
