@@ -41,10 +41,10 @@ LABEL summary="$SUMMARY" \
       usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=2.7/test/setup-test-app/ ubi8/python-27 python-sample-app" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
-RUN INSTALL_PKGS="python2 python2-devel glibc-langpack-en python2-setuptools python2-pip \
-        python2-virtualenv nss_wrapper httpd httpd-devel mod_ssl \
-        mod_auth_gssapi mod_ldap mod_session atlas-devel gcc-gfortran \
-        libffi-devel libtool-ltdl enchant" && \
+RUN INSTALL_PKGS="python2 python2-devel glibc-langpack-en redhat-rpm-config python2-setuptools \
+        python2-pip python2-virtualenv nss_wrapper httpd httpd-devel \
+        mod_ssl mod_auth_gssapi mod_ldap mod_session atlas-devel \
+        gcc-gfortran libffi-devel libtool-ltdl enchant" && \
     yum -y module enable python27:2.7 httpd:2.4 && \
     yum -y --setopt=tsflags=nodocs install $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
