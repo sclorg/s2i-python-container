@@ -97,11 +97,6 @@ specs:
       module_stream: "python36:3.6"
       pkg_prefix: "python3"
 
-    "3.5":
-      version: "3.5"
-      short_ver: "35"
-      scl: "rh-python35"
-
     "2.7":
       version: "2.7"
       short_ver: "27"
@@ -115,11 +110,6 @@ matrix:
         - fedora-28-x86_64
         - fedora-29-x86_64
       version: "2.7"
-    - distros:
-        - fedora-28-x86_64
-        - fedora-29-x86_64
-        - rhel-8-x86_64
-      version: "3.5"
     - distros:
         - fedora-29-x86_64
       version: "3.6"
