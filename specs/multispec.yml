@@ -57,22 +57,11 @@ specs:
         "2.7": ['{{ spec.pkg_prefix }}', '{{ spec.pkg_prefix }}-devel', 'glibc-langpack-en']
         "3.6": ['python36', 'python36-devel']
 
-    fedora28:
+    fedora31:
       distros:
-        - fedora-28-x86_64
-      fedora_version: "28"
-      s2i_base: registry.fedoraproject.org/f28/s2i-base
-      img_tag: "latest"
-      python_pkgs: ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip',
-                    'python3-virtualenv']
-      base_pkgs: ['nss_wrapper', 'httpd', 'httpd-devel', 'atlas-devel', 'gcc-gfortran',
-                  'libffi-devel', 'libtool-ltdl enchant']
-
-    fedora29:
-      distros:
-        - fedora-29-x86_64
-      fedora_version: "29"
-      s2i_base: registry.fedoraproject.org/f29/s2i-base
+        - fedora-31-x86_64
+      fedora_version: "31"
+      s2i_base: registry.fedoraproject.org/f31/s2i-base
       img_tag: "latest"
       python_pkgs: ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip',
                     'python3-virtualenv']
@@ -107,15 +96,13 @@ specs:
 matrix:
   exclude:
     - distros:
-        - fedora-28-x86_64
-        - fedora-29-x86_64
+      - fedora-31-x86_64
       version: "2.7"
     - distros:
-        - fedora-29-x86_64
+        - fedora-31-x86_64
       version: "3.6"
     - distros:
         - centos-7-x86_64
-        - fedora-28-x86_64
         - rhel-7-x86_64
         - rhel-8-x86_64
       version: "3.7"
