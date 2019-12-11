@@ -11,7 +11,7 @@ function should_collectstatic() {
 function virtualenv_bin() {
   if head "/etc/redhat-release" | grep -q "^CentOS Linux release 7" || \
      head "/etc/redhat-release" | grep -q "^Red Hat Enterprise Linux\( Server\)\? release 7" || \
-     head "/etc/redhat-release" | grep -q "^Fedora release 29 \(Twenty Nine\)\?"; then
+     head "/etc/redhat-release" | grep -q "^Fedora release"; then
     virtualenv $1
   else
     virtualenv-${PYTHON_VERSION} $1
@@ -25,7 +25,7 @@ function virtualenv_bin() {
 # (pip script installer).
 function install_pipenv() {
   echo "---> Installing pipenv packaging tool ..."
-  {% if spec.version in ["2.7", "3.4", "3.5"] %}
+  {% if spec.version in ["2.7"] %}
   pip install -U virtualenv
   {% endif %}
   VENV_DIR=$HOME/.local/venvs/pipenv
@@ -44,7 +44,7 @@ mv /tmp/src/* "$HOME"
 # set permissions for any installed artifacts
 fix-permissions /opt/app-root -P
 
-if [[ ! -z "$UPGRADE_PIP_TO_LATEST"{% if spec.version in ["2.7", "3.4", "3.5"] %} || ! -z "$ENABLE_PIPENV"{% endif %} ]]; then
+if [[ ! -z "$UPGRADE_PIP_TO_LATEST"{% if spec.version in ["2.7"] %} || ! -z "$ENABLE_PIPENV"{% endif %} ]]; then
   echo "---> Upgrading pip to latest version ..."
   pip install -U pip setuptools wheel
 fi

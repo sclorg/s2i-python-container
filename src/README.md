@@ -122,7 +122,7 @@ file inside your source code repository.
     Set this variable to use [Pipenv](https://github.com/kennethreitz/pipenv),
     the higher-level Python packaging tool, to manage dependencies of the application.
     This should be used only if your project contains properly formated Pipfile
-    and Pipfile.lock.{% if spec.version in ["2.7", "3.4", "3.5"] %} (Implies `UPGRADE_PIP_TO_LATEST` to satisfy dependencies of
+    and Pipfile.lock.{% if spec.version in ["2.7"] %} (Implies `UPGRADE_PIP_TO_LATEST` to satisfy dependencies of
     Pipenv.){% endif %}
 
 

@@ -15,13 +15,9 @@ ENV NAME=python3 \
 {% endmacro %}
 
 {% macro permissions_setup(spec) %}
-{% if spec.fedora_version == '28' %}
-RUN virtualenv-$PYTHON_VERSION ${APP_ROOT} && \
-{% else %}
 RUN virtualenv ${APP_ROOT} && \
-{% endif %}
-    chown -R 1001:0 ${APP_ROOT} && \
-    fix-permissions ${APP_ROOT} -P
+chown -R 1001:0 ${APP_ROOT} && \
+fix-permissions ${APP_ROOT} -P
 
 # For Fedora scl_enable isn't sourced automatically in s2i-core
 # so virtualenv needs to be activated this way
