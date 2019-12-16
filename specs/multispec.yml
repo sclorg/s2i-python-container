@@ -56,6 +56,7 @@ specs:
       extra_pkgs:
         "2.7": ['{{ spec.pkg_prefix }}', '{{ spec.pkg_prefix }}-devel', 'glibc-langpack-en']
         "3.6": ['python36', 'python36-devel']
+      ubi_versions: ['2.7', '3.6']
 
     fedora31:
       distros:
