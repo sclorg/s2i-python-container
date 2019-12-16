@@ -39,6 +39,7 @@ LABEL summary="$SUMMARY" \
       name="ubi8/python-27" \
       version="2.7" \
       usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=2.7/test/setup-test-app/ ubi8/python-27 python-sample-app" \
+      com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 RUN INSTALL_PKGS="python2 python2-devel glibc-langpack-en python2-setuptools python2-pip \
