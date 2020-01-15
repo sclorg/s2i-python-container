@@ -16,7 +16,7 @@
           "openshift.io/provider-display-name": "Red Hat, Inc.",
           "description": "Build and run Python applications on RHEL 7. For more information about using this builder image, including OpenShift considerations, see https://github.com/sclorg/s2i-python-container/blob/master/3.6/README.md.\n\nWARNING: By selecting this tag, your application will automatically update to use the latest version of Python available on OpenShift, including major version updates.",
           "iconClass": "icon-python",
-          "tags": "builder,python",
+          "tags": "builder,python,s390x",
           "supports":"python",
           "sampleRepo": "https://github.com/sclorg/django-ex.git"
         },
@@ -36,7 +36,7 @@
           "description": "Build and run Python 2.7 applications on RHEL 7. For more information about using this builder image, including OpenShift considerations, see https://github.com/sclorg/s2i-python-container/blob/master/2.7/README.md.",
           "iconClass": "icon-python",
           "tags": "builder,python",
-          "supports":"python:2.7,python",
+          "supports":"python:2.7,python,s390x",
           "version": "2.7",
           "sampleRepo": "https://github.com/sclorg/django-ex.git"
         },
@@ -55,7 +55,7 @@
           "openshift.io/provider-display-name": "Red Hat, Inc.",
           "description": "Build and run Python 3.6 applications on RHEL 7. For more information about using this builder image, including OpenShift considerations, see https://github.com/sclorg/s2i-python-container/blob/master/3.6/README.md.",
           "iconClass": "icon-python",
-          "tags": "builder,python",
+          "tags": "builder,python,s390x",
           "supports":"python:3.6,python",
           "version": "3.6",
           "sampleRepo": "https://github.com/sclorg/django-ex.git"
