@@ -16,16 +16,23 @@ set -exo nounset
 test -n "${IMAGE_NAME-}" || false 'make sure $IMAGE_NAME is defined'
 test -n "${VERSION-}" || false 'make sure $VERSION is defined'
 
+if [ -z "${EPHEMERAL_TEMPLATES:-}" ]; then
+    EPHEMERAL_TEMPLATES="
+https://raw.githubusercontent.com/sclorg/django-ex/master/openshift/templates/django-postgresql.json \
+https://raw.githubusercontent.com/openshift/origin/master/examples/quickstarts/django-postgresql.json"
+fi
+
 ct_os_cluster_up
 
 ct_os_test_s2i_app "${IMAGE_NAME}" "${THISDIR}/standalone-test-app" . "Hello World from standalone WSGI application!"
 
 ct_os_test_s2i_app "${IMAGE_NAME}" "https://github.com/sclorg/django-ex.git" . 'Welcome to your Django application on OpenShift'
 
-ct_os_test_template_app "${IMAGE_NAME}" \
-                        https://raw.githubusercontent.com/sclorg/django-ex/master/openshift/templates/django-postgresql.json \
-                        python \
-                        'Welcome to your Django application on OpenShift' \
-                        8080 http 200 "-p SOURCE_REPOSITORY_REF=master -p PYTHON_VERSION=${VERSION} -p POSTGRESQL_VERSION=9.6 -p NAME=python-testing" \
-                        "centos/postgresql-96-centos7|postgresql:9.6"
-
+for template in $EPHEMERAL_TEMPLATES; do
+    ct_os_test_template_app "$IMAGE_NAME" \
+                            "$template" \
+                            python \
+                            'Welcome to your Django application on OpenShift' \
+                            8080 http 200 "-p SOURCE_REPOSITORY_REF=master -p PYTHON_VERSION=${VERSION} -p POSTGRESQL_VERSION=9.6 -p NAME=python-testing" \
+                            "centos/postgresql-96-centos7|postgresql:9.6"
+done
