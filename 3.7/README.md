@@ -22,7 +22,9 @@ Python's elegant syntax and dynamic typing, together with its interpreted nature
 make it an ideal language for scripting and rapid application development in many areas 
 on most platforms.
 
-This container image includes an npm utility, so users can use it to install JavaScript
+This container image includes an npm utility
+(see [base image repository](https://github.com/sclorg/s2i-base-container/tree/master/base)),
+so users can use it to install JavaScript
 modules for their web applications. There is no guarantee for any specific npm or nodejs
 version, that is included in the image; those versions can be changed anytime and
 the nodejs itself is included just to make the npm work.
