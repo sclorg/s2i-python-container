@@ -22,7 +22,9 @@ Python's elegant syntax and dynamic typing, together with its interpreted nature
 make it an ideal language for scripting and rapid application development in many areas 
 on most platforms.
 
-This container image includes an npm utility, so users can use it to install JavaScript
+This container image includes an npm utility
+(see [base image repository](https://github.com/sclorg/s2i-base-container/tree/master/base)),
+so users can use it to install JavaScript
 modules for their web applications. There is no guarantee for any specific npm or nodejs
 version, that is included in the image; those versions can be changed anytime and
 the nodejs itself is included just to make the npm work.
@@ -35,7 +37,7 @@ Building a simple [python-sample-app](https://github.com/sclorg/s2i-python-conta
 in Openshift can be achieved with the following step:
 
     ```
-    oc new-app python:3.6~https://github.com/sclorg/s2i-python-container.git --context-dir=3.7/test/setup-test-app/
+    oc new-app python:3.7~https://github.com/sclorg/s2i-python-container.git --context-dir=3.7/test/setup-test-app/
     ```
 
 The same application can also be built using the standalone [S2I](https://github.com/openshift/source-to-image) application on systems that have it available:
