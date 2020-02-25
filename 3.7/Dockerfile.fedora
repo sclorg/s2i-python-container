@@ -43,7 +43,8 @@ RUN INSTALL_PKGS="python3 python3-devel python3-setuptools python3-pip python3-v
         libffi-devel libtool-ltdl enchant redhat-rpm-config" && \
     dnf -y --setopt=tsflags=nodocs install $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
-    dnf -y clean all --enablerepo='*'
+    dnf -y clean all --enablerepo='*' && \
+    pip3 install micropipenv[toml]==0.0.3
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH.
 COPY ./s2i/bin/ $STI_SCRIPTS_PATH

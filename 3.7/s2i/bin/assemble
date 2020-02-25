@@ -18,20 +18,6 @@ function virtualenv_bin() {
   fi
 }
 
-# Install pipenv to the separate virtualenv to isolate it
-# from system Python packages and packages in the main
-# virtualenv. Executable is simlinked into ~/.local/bin
-# to be accessible. This approach is inspired by pipsi
-# (pip script installer).
-function install_pipenv() {
-  echo "---> Installing pipenv packaging tool ..."
-  VENV_DIR=$HOME/.local/venvs/pipenv
-  virtualenv_bin "$VENV_DIR"
-  $VENV_DIR/bin/pip --isolated install -U pipenv
-  mkdir -p $HOME/.local/bin
-  ln -s $VENV_DIR/bin/pipenv $HOME/.local/bin/pipenv
-}
-
 set -e
 
 shopt -s dotglob
@@ -54,10 +40,9 @@ if [[ ! -z "$UPGRADE_PIP_TO_LATEST" ]]; then
 fi
 
 if [[ ! -z "$ENABLE_PIPENV" ]]; then
-  install_pipenv
-  echo "---> Installing dependencies via pipenv ..."
+  echo "---> Installing dependencies via micropipenv ..."
   if [[ -f Pipfile ]]; then
-    pipenv install --deploy
+    micropipenv install --deploy
   elif [[ -f requirements.txt ]]; then
     pipenv install -r requirements.txt
   fi
