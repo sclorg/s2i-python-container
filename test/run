@@ -198,7 +198,7 @@ check_result $?
 test_docker_run_usage
 check_result $?
 
-for app in ${WEB_APPS[@]}; do
+for app in ${@:-${WEB_APPS[@]}}; do
   prepare ${app}
   run_s2i_build ${app}
   RESULT=$?
