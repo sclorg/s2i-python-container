@@ -1,0 +1,9 @@
+# IMPORTANT: Do not add more content to this file unless you know what you are
+#            doing. This file is sourced everytime the shell session is opened.
+# This will make scl collection binaries work out of box.
+unset BASH_ENV PROMPT_COMMAND ENV
+if head "/etc/redhat-release" | grep -q "^CentOS Linux release 7" || \
+   head "/etc/redhat-release" | grep -q "^Red Hat Enterprise Linux\( Server\)\? release 7"; then
+    source scl_source enable httpd24 $NODEJS_SCL rh-python38
+fi
+source /opt/app-root/bin/activate
