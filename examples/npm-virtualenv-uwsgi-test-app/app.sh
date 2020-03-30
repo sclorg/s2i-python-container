@@ -2,6 +2,23 @@
 
 # Test virtualenv environment and pip upgrade
 
+# Get the latest stable version of the package released on PyPI
+function get_latest_stable_version() {
+  echo $(curl -sL 'https://pypi.org/pypi/'$1'/json' | python -c \
+"""
+import sys
+import json
+from pip._vendor.packaging.version import parse
+versions = [parse(v) for v in json.load(sys.stdin)['releases'].keys()]
+print(str((sorted([v for v in versions if not v.is_prerelease])[-1])))
+""")
+}
+
+# Get version of the package installed on the system
+function get_installed_version() {
+  echo $(pip freeze --all | grep $1 | cut -d"=" -f3)
+}
+
 echo "Testing that the virtual environment's Python is being used ..."
 if [ "$(which python)" != "/opt/app-root/bin/python" ]; then
     echo "ERROR: Initialization of the virtual environment failed."
@@ -11,10 +28,7 @@ fi
 echo "Testing UPGRADE_PIP_TO_LATEST=1 (set in .s2i/environment) ..."
 packages=("pip" "setuptools" "wheel")
 for pkg in ${packages[@]}; do
-  # grep returns exit code 1 if the output contains only one line starting
-  # with "Requirement already …" which means that the package is updated
-  python -m pip install -U --no-python-version-warning $pkg 2>&1 | grep -v "^Requirement already up-to-date: "
-  if [ $? -eq 0 ]; then
+  if [ $(get_latest_stable_version $pkg) != $(get_installed_version $pkg) ]; then
     echo "ERROR: Failed to upgrade '$pkg' to the latest version."
     exit 1
   fi
