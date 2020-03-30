@@ -32,7 +32,7 @@ the nodejs itself is included just to make the npm work.
 Usage
 ---------------------
 
-For this, we will assume that you are using the `rhscl/python-36-rhel7 image`, available via `python:3.6` imagestream tag in Openshift.
+For this, we will assume that you are using the supported image, available via `python:3.6` imagestream tag in Openshift.
 Building a simple [python-sample-app](https://github.com/sclorg/s2i-python-container/tree/master/3.6/test/setup-test-app) application
 in Openshift can be achieved with the following step:
 
@@ -43,7 +43,7 @@ in Openshift can be achieved with the following step:
 The same application can also be built using the standalone [S2I](https://github.com/openshift/source-to-image) application on systems that have it available:
 
     ```
-    $ s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.6/test/setup-test-app/ rhscl/python-36-rhel7 python-sample-app
+    $ s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.6/test/setup-test-app/ <image_name> python-sample-app
     ```
 
 **Accessing the application:**
