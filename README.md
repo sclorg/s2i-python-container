@@ -14,6 +14,8 @@ official [OpenShift Documentation](https://docs.okd.io/latest/using_images/s2i_i
 For more information about concepts used in these container images, see the
 [Landing page](https://github.com/sclorg/welcome).
 
+Note: while the examples in this README are calling `podman`, you can replace any such calls by `docker` with the same arguments
+
 Contributing
 ---------------
 In this repository [distgen](https://github.com/devexp-db/distgen/) > 1.0 is used for generating directories for Python versions. Also make sure distgen imports the jinja2 package >= 2.10.
