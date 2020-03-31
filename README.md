@@ -41,8 +41,8 @@ Python versions currently provided are:
 * [python-3.8](3.8)
 
 RHEL versions currently supported are:
-* RHEL 7 ([catalog.redhat.com](https://catalog.redhat.com/software/containers))
-* RHEL 8 ([catalog.redhat.com](https://catalog.redhat.com/software/containers))
+* RHEL 7 ([catalog.redhat.com](https://catalog.redhat.com/software/containers/search))
+* RHEL 8 ([catalog.redhat.com](https://catalog.redhat.com/software/containers/search))
 
 CentOS versions currently supported are:
 * CentOS 7 ([hub.docker.com](https://hub.docker.com/r/centos/))
