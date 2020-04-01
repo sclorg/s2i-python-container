@@ -46,6 +46,8 @@ The same application can also be built using the standalone [S2I](https://github
     $ s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.6/test/setup-test-app/ <image_name> python-sample-app
     ```
 
+Where `<image_name>` is the s2i-python image you [downloaded from RHEL, Centos or Fedora registry](../README.md#Download) or [built](../README.md#Build) from these sources. For example ubi8/python-36, centos/python-36-centos7 or f31/python3.
+
 **Accessing the application:**
 ```
 $ curl 127.0.0.1:8080
