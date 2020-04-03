@@ -15,7 +15,7 @@ ENV NAME=python3 \
 {% endmacro %}
 
 {% macro permissions_setup(spec) %}
-RUN virtualenv ${APP_ROOT} && \
+RUN python{{ spec.version }} -m venv ${APP_ROOT} && \
 chown -R 1001:0 ${APP_ROOT} && \
 fix-permissions ${APP_ROOT} -P
 

@@ -9,13 +9,9 @@ function should_collectstatic() {
 }
 
 function virtualenv_bin() {
-  if head "/etc/redhat-release" | grep -q "^CentOS Linux release 7" || \
-     head "/etc/redhat-release" | grep -q "^Red Hat Enterprise Linux\( Server\)\? release 7" || \
-     head "/etc/redhat-release" | grep -q "^Fedora release"; then
-    virtualenv $1
-  else
-    virtualenv-${PYTHON_VERSION} $1
-  fi
+    # New versions of Python (>3.6) should use venv module
+    # from stdlib instead of virtualenv package
+    python3.7 -m venv $1
 }
 
 # Install pipenv to the separate virtualenv to isolate it

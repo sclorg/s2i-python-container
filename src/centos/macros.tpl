@@ -27,11 +27,19 @@ python
 {% endmacro %}
 
 {% macro permissions_setup(spec) %}
+{# Enable SCL only for RHEL 7 #}
 {% if spec.el_version == '7' %}
 RUN source scl_source enable {{ spec.scl }} && \
+{% else %}
+RUN \
+{% endif %}
+{# Use different virtualenv command of venv module based on Python and platform version #}
+{% if spec.version not in ["2.7", "3.6"] %}
+    python{{ spec.version }} -m venv ${APP_ROOT} && \
+{% elif spec.el_version == '7' %}
     virtualenv ${APP_ROOT} && \
 {% else %}
-RUN virtualenv-$PYTHON_VERSION ${APP_ROOT} && \
+    virtualenv-$PYTHON_VERSION ${APP_ROOT} && \
 {% endif %}
     chown -R 1001:0 ${APP_ROOT} && \
     fix-permissions ${APP_ROOT} -P && \
