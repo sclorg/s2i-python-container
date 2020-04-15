@@ -127,6 +127,14 @@ file inside your source code repository.
     and Pipfile.lock.{% if spec.version in ["2.7"] %} (Implies `UPGRADE_PIP_TO_LATEST` to satisfy dependencies of
     Pipenv.){% endif %}
 
+{% if spec.version.startswith("3.") %}
+* **ENABLE_MICROPIPENV**
+
+    Set this variable to use [micropipenv](https://github.com/thoth-station/micropipenv),
+    a lightweight wrapper for pip to support requirements.txt, Pipenv and Poetry lock
+    files or converting them to pip-tools compatible output. Designed for containerized Python applications.
+    Available only for Python 3 images.
+{% endif %}
 
 * **ENABLE_INIT_WRAPPER**
 
