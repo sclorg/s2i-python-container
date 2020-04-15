@@ -125,6 +125,12 @@ file inside your source code repository.
     the higher-level Python packaging tool, to manage dependencies of the application.
     This should be used only if your project contains properly formated Pipfile
     and Pipfile.lock.
+* **ENABLE_MICROPIPENV**
+
+    Set this variable to use [micropipenv](https://github.com/thoth-station/micropipenv),
+    a lightweight wrapper for pip to support requirements.txt, Pipenv and Poetry lock
+    files or converting them to pip-tools compatible output. Designed for containerized Python applications.
+    Available only for Python 3 images.
 
 * **ENABLE_INIT_WRAPPER**
 
