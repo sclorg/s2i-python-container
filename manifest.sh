@@ -20,11 +20,21 @@ DISTGEN_RULES="
     dest=s2i/bin/usage
     mode=0755;
 
+    src=test/run
+    dest=test/run
+    mode=0755;
+
     src=src/test/pipenv-test-app/Pipfile
     dest=test/pipenv-test-app/Pipfile;
 
     src=src/test/pipenv-test-app/Pipfile.lock
     dest=test/pipenv-test-app/Pipfile.lock;
+
+    src=src/test/pipenv-test-app/Pipfile
+    dest=test/micropipenv-test-app/Pipfile;
+
+    src=src/test/pipenv-test-app/Pipfile.lock
+    dest=test/micropipenv-test-app/Pipfile.lock;
 "
 
 # Files containing distgen directives, which are used for each
@@ -54,6 +64,9 @@ SYMLINK_RULES="
     link_target=../../examples/locale-test-app
     link_name=test/locale-test-app;
 
+    link_target=../../examples/micropipenv-requirements-test-app
+    link_name=test/micropipenv-requirements-test-app;
+
     link_target=../../examples/mod-wsgi-test-app
     link_name=test/mod-wsgi-test-app;
 
@@ -72,8 +85,8 @@ SYMLINK_RULES="
     link_target=../../examples/standalone-test-app
     link_name=test/standalone-test-app;
 
-    link_target=../../test/run
-    link_name=test/run;
+    link_target=../../src/test/pipenv-and-micropipenv-fails-test-app
+    link_name=test/pipenv-and-micropipenv-fails-test-app;
 
     link_target=../../test/run-openshift
     link_name=test/run-openshift;
@@ -109,4 +122,16 @@ COPY_RULES="
 
     src=examples/pipenv-test-app/.gitignore
     dest=test/pipenv-test-app/.gitignore;
+
+    src=examples/micropipenv-test-app/testapp.py
+    dest=test/micropipenv-test-app/testapp.py;
+
+    src=examples/micropipenv-test-app/setup.py
+    dest=test/micropipenv-test-app/setup.py;
+
+    src=examples/micropipenv-test-app/.s2i/environment
+    dest=test/micropipenv-test-app/.s2i/environment;
+
+    src=examples/micropipenv-test-app/.gitignore
+    dest=test/micropipenv-test-app/.gitignore;
 "

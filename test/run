@@ -6,7 +6,7 @@
 # IMAGE_NAME specifies a name of the candidate image used for testing.
 # The image has to be available before this script is executed.
 #
-declare -a WEB_APPS=({standalone,setup,setup-requirements,django,numpy,app-home,npm-virtualenv-uwsgi,locale,mod-wsgi,pipenv}-test-app)
+declare -a WEB_APPS=({standalone,setup,setup-requirements,django,numpy,app-home,npm-virtualenv-uwsgi,locale,mod-wsgi,pipenv,pipenv-and-micropipenv-fails{% if spec.version.startswith("3.") %},micropipenv,micropipenv-requirements{% endif %}}-test-app)
 
 # TODO: Make command compatible for Mac users
 test_dir="$(readlink -zf $(dirname "${BASH_SOURCE[0]}"))"
@@ -36,9 +36,11 @@ container_exists() {
   image_exists $(cat $cid_file)
 }
 
+{% raw %}
 container_ip() {
   docker inspect --format="{{ .NetworkSettings.IPAddress }}" $(cat $cid_file)
 }
+{% endraw %}
 
 run_s2i_build() {
   info "Building the ${1} application image ..."
@@ -82,11 +84,18 @@ cleanup() {
 }
 
 check_result() {
+  # positive test & non-zero exit status = ERROR
+  # negative test & zero exit status = ERROR
   local result="$1"
-  if [[ "$result" != "0" ]]; then
-    info "TEST FAILED (${result})"
+  local test=${2:-positive}  # if not defined, we expect possitive test type (zero exit code)
+  if [[ "$type" == "positive" && "$result" != "0" ]]; then
+    info "TEST FAILED (${type}), EXPECTED:0 GOT:${result}"
     cleanup
     exit $result
+  elif [[ "$type" == "negative" && "$result" == "0" ]]; then
+    info "TEST FAILED (${type}), EXPECTED: non-zero GOT:${result}"
+    cleanup
+    exit 1
   fi
 }
 
@@ -192,7 +201,14 @@ check_result $?
 for app in ${WEB_APPS[@]}; do
   prepare ${app}
   run_s2i_build ${app}
-  check_result $?
+  RESULT=$?
+  if [[ "$app" == "pipenv-and-micropipenv-fails-test-app" ]]; then
+    # This test should fail during a build, expecting non-zero exit status
+    check_result $RESULT "negative"
+    continue
+  else
+    check_result $RESULT
+  fi
 
   # test application with default user
   test_application
