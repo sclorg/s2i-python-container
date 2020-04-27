@@ -37,13 +37,13 @@ Building a simple [python-sample-app](https://github.com/sclorg/s2i-python-conta
 in Openshift can be achieved with the following step:
 
     ```
-    oc new-app python:3.6~https://github.com/sclorg/s2i-python-container.git --context-dir=3.6/test/setup-test-app/
+    oc new-app python:3.6~https://github.com/sclorg/s2i-python-container.git --context-dir=examples/setup-test-app/
     ```
 
 The same application can also be built using the standalone [S2I](https://github.com/openshift/source-to-image) application on systems that have it available:
 
     ```
-    $ s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.6/test/setup-test-app/ rhscl/python-36-rhel7 python-sample-app
+    $ s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=examples/setup-test-app/ rhscl/python-36-rhel7 python-sample-app
     ```
 
 **Accessing the application:**
