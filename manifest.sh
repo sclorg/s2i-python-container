@@ -85,8 +85,8 @@ SYMLINK_RULES="
     link_target=../../examples/standalone-test-app
     link_name=test/standalone-test-app;
 
-    link_target=../../src/test/pipenv-and-micropipenv-fails-test-app
-    link_name=test/pipenv-and-micropipenv-fails-test-app;
+    link_target=../../src/test/pipenv-and-micropipenv-should-fail-test-app
+    link_name=test/pipenv-and-micropipenv-should-fail-test-app;
 
     link_target=../../test/run-openshift
     link_name=test/run-openshift;
