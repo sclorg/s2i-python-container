@@ -18,22 +18,30 @@ function virtualenv_bin() {
   fi
 }
 
-# Install pipenv to the separate virtualenv to isolate it
+# Install pipenv or micropipenv to the separate virtualenv to isolate it
 # from system Python packages and packages in the main
 # virtualenv. Executable is simlinked into ~/.local/bin
 # to be accessible. This approach is inspired by pipsi
 # (pip script installer).
-function install_pipenv() {
-  echo "---> Installing pipenv packaging tool ..."
+function install_tool() {
+  echo "---> Installing $1 packaging tool ..."
   pip install -U virtualenv
-  VENV_DIR=$HOME/.local/venvs/pipenv
+  VENV_DIR=$HOME/.local/venvs/$1
   virtualenv_bin "$VENV_DIR"
-  $VENV_DIR/bin/pip --isolated install -U pipenv
+  $VENV_DIR/bin/pip --isolated install -U $1$2  # Combines package name with [extras] if [extras] is defined as $2
   mkdir -p $HOME/.local/bin
-  ln -s $VENV_DIR/bin/pipenv $HOME/.local/bin/pipenv
+  ln -s $VENV_DIR/bin/$1 $HOME/.local/bin/$1
 }
 
 set -e
+
+# First of all, check that we don't have disallowed combination of ENVs
+if [[ ! -z "$ENABLE_PIPENV" && ! -z "$ENABLE_MICROPIPENV" ]]; then
+  echo "ERROR: Pipenv and micropipenv cannot be enabled at the same time!"
+  # podman/buildah does not relay this exit code but it will be fixed hopefuly
+  # https://github.com/containers/buildah/issues/2305
+  exit 3
+fi
 
 shopt -s dotglob
 echo "---> Installing application source ..."
@@ -55,7 +63,7 @@ if [[ ! -z "$UPGRADE_PIP_TO_LATEST" || ! -z "$ENABLE_PIPENV" ]]; then
 fi
 
 if [[ ! -z "$ENABLE_PIPENV" ]]; then
-  install_pipenv
+  install_tool "pipenv"
   echo "---> Installing dependencies via pipenv ..."
   if [[ -f Pipfile ]]; then
     pipenv install --deploy
@@ -63,6 +71,11 @@ if [[ ! -z "$ENABLE_PIPENV" ]]; then
     pipenv install -r requirements.txt
   fi
   # pipenv check
+elif [[ ! -z "$ENABLE_MICROPIPENV" ]]; then
+  install_tool "micropipenv" "[toml]"
+  echo "---> Installing dependencies via micropipenv ..."
+  # micropipenv detects Pipfile.lock and requirements.txt in this order
+  micropipenv install --deploy
 elif [[ -f requirements.txt ]]; then
   echo "---> Installing dependencies ..."
   pip install -r requirements.txt
