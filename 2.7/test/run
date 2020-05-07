@@ -6,7 +6,7 @@
 # IMAGE_NAME specifies a name of the candidate image used for testing.
 # The image has to be available before this script is executed.
 #
-declare -a WEB_APPS=({standalone,setup,setup-requirements,django,numpy,app-home,npm-virtualenv-uwsgi,locale,mod-wsgi,pipenv,pipenv-and-micropipenv-fails}-test-app)
+declare -a WEB_APPS=({standalone,setup,setup-requirements,django,numpy,app-home,npm-virtualenv-uwsgi,locale,mod-wsgi,pipenv,pipenv-and-micropipenv-should-fail}-test-app)
 
 # TODO: Make command compatible for Mac users
 test_dir="$(readlink -zf $(dirname "${BASH_SOURCE[0]}"))"
@@ -201,8 +201,8 @@ for app in ${WEB_APPS[@]}; do
   prepare ${app}
   run_s2i_build ${app}
   RESULT=$?
-  if [[ "$app" == "pipenv-and-micropipenv-fails-test-app" ]]; then
-    # This test should fail during a build, expecting non-zero exit status
+  if [[ "$app" == *"-should-fail-"* ]]; then
+    # Tests with '-should-fail-' in their name should fail during a build, expecting non-zero exit status
     check_result $RESULT "negative"
     continue
   else
