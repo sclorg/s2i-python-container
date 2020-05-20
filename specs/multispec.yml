@@ -81,20 +81,20 @@ specs:
                   'libffi-devel', 'libtool-ltdl enchant', 'redhat-rpm-config']
 
   version:
-    "3.7":
-      version: "3.7"
-      short_ver: "37"
-      base_img_version: "1"
-      python_img_version: "1"
-      scl: "rh-python37"
-      pkg_prefix: "python3"
-
     "3.8":
       version: "3.8"
       short_ver: "38"
       base_img_version: "1"
       python_img_version: "1"
       scl: "rh-python38"
+      pkg_prefix: "python3"
+
+    "3.7":
+      version: "3.7"
+      short_ver: "37"
+      base_img_version: "1"
+      python_img_version: "1"
+      scl: "rh-python37"
       pkg_prefix: "python3"
 
     "3.6":
