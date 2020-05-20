@@ -42,8 +42,8 @@ LABEL summary="$SUMMARY" \
       com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
-RUN INSTALL_PKGS="python2 python2-devel glibc-langpack-en python2-setuptools python2-pip \
-        python2-virtualenv nss_wrapper httpd httpd-devel mod_ssl \
+RUN INSTALL_PKGS="python2 python2-devel glibc-langpack-en python2-virtualenv python2-setuptools \
+        python2-pip nss_wrapper httpd httpd-devel mod_ssl \
         mod_auth_gssapi mod_ldap mod_session atlas-devel gcc-gfortran \
         libffi-devel libtool-ltdl enchant" && \
     yum -y module enable python27:2.7 httpd:2.4 && \
