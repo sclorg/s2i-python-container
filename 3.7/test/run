@@ -197,7 +197,10 @@ check_result $?
 test_docker_run_usage
 check_result $?
 
-for app in ${WEB_APPS[@]}; do
+# For debugging purposes, this script can be run with one or more arguments
+# those arguments list is a sub-set of values in the WEB_APPS array defined above
+# Example: ./run app-home-test-app pipenv-test-app
+for app in ${@:-${WEB_APPS[@]}}; do
   prepare ${app}
   run_s2i_build ${app}
   RESULT=$?

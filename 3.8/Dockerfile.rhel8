@@ -1,10 +1,10 @@
-# This image provides a Python 3.6 environment you can use to run your Python
+# This image provides a Python 3.8 environment you can use to run your Python
 # applications.
 FROM ubi8/s2i-base:1
 
 EXPOSE 8080
 
-ENV PYTHON_VERSION=3.6 \
+ENV PYTHON_VERSION=3.8 \
     PATH=$HOME/.local/bin/:$PATH \
     PYTHONUNBUFFERED=1 \
     PYTHONIOENCODING=UTF-8 \
@@ -32,21 +32,20 @@ on most platforms."
 LABEL summary="$SUMMARY" \
       description="$DESCRIPTION" \
       io.k8s.description="$DESCRIPTION" \
-      io.k8s.display-name="Python 3.6" \
+      io.k8s.display-name="Python 3.8" \
       io.openshift.expose-services="8080:http" \
-      io.openshift.tags="builder,python,python36,python-36,rh-python36" \
-      com.redhat.component="python-36-container" \
-      name="ubi8/python-36" \
+      io.openshift.tags="builder,python,python38,python-38,rh-python38" \
+      com.redhat.component="python-38-container" \
+      name="ubi8/python-38" \
       version="1" \
-      usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.6/test/setup-test-app/ ubi8/python-36 python-sample-app" \
+      usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.8/test/setup-test-app/ ubi8/python-38 python-sample-app" \
       com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
-RUN INSTALL_PKGS="python36 python36-devel python3-virtualenv python3-setuptools python3-pip \
-        nss_wrapper httpd httpd-devel mod_ssl mod_auth_gssapi \
-        mod_ldap mod_session atlas-devel gcc-gfortran libffi-devel \
-        libtool-ltdl enchant" && \
-    yum -y module enable python36:3.6 httpd:2.4 && \
+RUN INSTALL_PKGS="python38 python38-devel python38-setuptools python38-pip nss_wrapper \
+        httpd httpd-devel mod_ssl mod_auth_gssapi mod_ldap \
+        mod_session atlas-devel gcc-gfortran libffi-devel libtool-ltdl enchant" && \
+    yum -y module enable python38:3.8 httpd:2.4 && \
     yum -y --setopt=tsflags=nodocs install $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     # Remove redhat-logos-httpd (httpd dependency) to keep image size smaller.
@@ -66,7 +65,7 @@ COPY ./root/ /
 #   writable as OpenShift default security model is to run the container
 #   under random UID.
 RUN \
-    virtualenv-$PYTHON_VERSION ${APP_ROOT} && \
+    python3.8 -m venv ${APP_ROOT} && \
     chown -R 1001:0 ${APP_ROOT} && \
     fix-permissions ${APP_ROOT} -P && \
     rpm-file-permissions

@@ -38,9 +38,9 @@ LABEL summary="$SUMMARY" \
       usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.8/test/setup-test-app/ $FGC/$NAME python-sample-app" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
-RUN INSTALL_PKGS="python3 python3-devel python3-setuptools python3-pip python3-virtualenv \
-        nss_wrapper httpd httpd-devel atlas-devel gcc-gfortran \
-        libffi-devel libtool-ltdl enchant redhat-rpm-config" && \
+RUN INSTALL_PKGS="python3 python3-devel python3-setuptools python3-pip nss_wrapper \
+        httpd httpd-devel atlas-devel gcc-gfortran libffi-devel \
+        libtool-ltdl enchant redhat-rpm-config" && \
     dnf -y --setopt=tsflags=nodocs install $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     dnf -y clean all --enablerepo='*'
