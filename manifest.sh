@@ -96,6 +96,12 @@ SYMLINK_RULES="
 
     link_target=../../common/test-lib-openshift.sh
     link_name=test/test-lib-openshift.sh;
+
+    link_target=../../test/test-lib-python.sh
+    link_name=test/test-lib-python.sh;
+
+    link_target=../../imagestreams
+    link_name=test/imagestreams;
 "
 
 # Files to copy
