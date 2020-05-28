@@ -18,7 +18,14 @@ trap ct_os_cleanup EXIT SIGINT
 
 ct_os_check_compulsory_vars
 
-ct_os_enable_print_logs
+oc status || false "It looks like oc is not properly logged in."
+
+export CT_SKIP_NEW_PROJECT=true
+export CT_SKIP_UPLOAD_IMAGE=true
+export CT_NAMESPACE=openshift
+
+test -n "${IMAGE_NAME-}" || false 'make sure $IMAGE_NAME is defined'
+test -n "${VERSION-}" || false 'make sure $VERSION is defined'
 
 if [ -z "${EPHEMERAL_TEMPLATES:-}" ]; then
     EPHEMERAL_TEMPLATES="
@@ -26,10 +33,7 @@ https://raw.githubusercontent.com/sclorg/django-ex/master/openshift/templates/dj
 https://raw.githubusercontent.com/openshift/origin/master/examples/quickstarts/django-postgresql.json"
 fi
 
-ct_os_cluster_up
-
-#ct_os_test_s2i_app "${IMAGE_NAME}" "${THISDIR}/standalone-test-app" . "Hello World from standalone WSGI application!"
-
+#ct_os_test_s2i_app "${IMAGE_NAME}" "https://github.com/sclorg/s2i-python-container.git" "examples/standalone-test-app" "Hello World from standalone WSGI application!"
 #ct_os_test_s2i_app "${IMAGE_NAME}" "https://github.com/sclorg/django-ex.git" . 'Welcome to your Django application on OpenShift'
 
 for template in $EPHEMERAL_TEMPLATES; do
@@ -46,8 +50,6 @@ done
 test_python_imagestream
 
 OS_TESTSUITE_RESULT=0
-
-ct_os_cluster_down
 
 # vim: set tabstop=2:shiftwidth=2:expandtab:
 
