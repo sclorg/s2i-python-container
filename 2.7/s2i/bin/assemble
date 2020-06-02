@@ -63,7 +63,7 @@ if [[ ! -z "$UPGRADE_PIP_TO_LATEST" || ! -z "$ENABLE_PIPENV" ]]; then
 fi
 
 if [[ ! -z "$ENABLE_PIPENV" ]]; then
-  install_tool "pipenv"
+  install_tool "pipenv" "==2018.11.26"
   echo "---> Installing dependencies via pipenv ..."
   if [[ -f Pipfile ]]; then
     pipenv install --deploy
