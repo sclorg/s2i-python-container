@@ -79,7 +79,11 @@ if [[ ! -z "$UPGRADE_PIP_TO_LATEST"{% if spec.version in ["2.7"] %} || ! -z "$EN
 fi
 
 if [[ ! -z "$ENABLE_PIPENV" ]]; then
-  install_tool "pipenv" "==2018.11.26"
+  if [[ ! -z "$PIN_PIPENV_VERSION" ]]; then
+    # Add == as a prefix to pipenv version, if defined
+    PIN_PIPENV_VERSION="==$PIN_PIPENV_VERSION"
+  fi
+  install_tool "pipenv" "$PIN_PIPENV_VERSION"
   echo "---> Installing dependencies via pipenv ..."
   if [[ -f Pipfile ]]; then
     pipenv install --deploy
