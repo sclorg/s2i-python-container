@@ -86,7 +86,7 @@ check_result() {
   # positive test & non-zero exit status = ERROR
   # negative test & zero exit status = ERROR
   local result="$1"
-  local test=${2:-positive}  # if not defined, we expect possitive test type (zero exit code)
+  local type=${2:-positive}  # if not defined, we expect possitive test type (zero exit code)
   if [[ "$type" == "positive" && "$result" != "0" ]]; then
     info "TEST FAILED (${type}), EXPECTED:0 GOT:${result}"
     cleanup
