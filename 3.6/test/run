@@ -102,13 +102,13 @@ wait_for_cid() {
   local max_attempts=10
   local sleep_time=1
   local attempt=1
-  local result=1
   info "Waiting for application container to start $CONTAINER_ARGS ..."
   while [ $attempt -le $max_attempts ]; do
-    [ -f $cid_file ] && [ -s $cid_file ] && break
+    [ -f $cid_file ] && [ -s $cid_file ] && return 0
     attempt=$(( $attempt + 1 ))
     sleep $sleep_time
   done
+  return 1
 }
 
 test_s2i_usage() {
@@ -172,6 +172,9 @@ test_application() {
 
   # Wait for the container to write it's CID file
   wait_for_cid
+  # Some test apps have tests in their startup code so we have to check
+  # that the container starts at all
+  check_result $?
 
   test_scl_usage "python --version" "Python $VERSION." "${cid_file}"
   check_result $?
