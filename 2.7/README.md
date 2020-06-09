@@ -123,11 +123,16 @@ file inside your source code repository.
 
 * **ENABLE_PIPENV**
 
-    Set this variable to use [Pipenv](https://github.com/kennethreitz/pipenv),
+    Set this variable to use [Pipenv](https://github.com/pypa/pipenv),
     the higher-level Python packaging tool, to manage dependencies of the application.
     This should be used only if your project contains properly formated Pipfile
     and Pipfile.lock. (Implies `UPGRADE_PIP_TO_LATEST` to satisfy dependencies of
     Pipenv.)
+* **PIN_PIPENV_VERSION**
+
+    Set this variable together with `ENABLE_PIPENV` to use a specific version of Pipenv.
+    For example `PIN_PIPENV_VERSION=2018.11.26` installs `pipenv==2018.11.26`.
+
 
 * **ENABLE_INIT_WRAPPER**
 
