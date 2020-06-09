@@ -76,6 +76,9 @@ SYMLINK_RULES="
     link_target=../../examples/numpy-test-app
     link_name=test/numpy-test-app;
 
+    link_target=../../examples/pin-pipenv-version-test-app
+    link_name=test/pin-pipenv-version-test-app;
+
     link_target=../../examples/setup-requirements-test-app
     link_name=test/setup-requirements-test-app;
 
