@@ -5,6 +5,8 @@ pipenv_version=`pipenv --version`
 expected="pipenv, version 2018.11.26"
 if [ "$pipenv_version" != "$expected" ]; then
   echo "ERROR: pipenv version is different than expected."
+  echo "Expected: ${expected}"
+  echo "Actual: ${pipenv_version}"
   exit 1
 fi
 

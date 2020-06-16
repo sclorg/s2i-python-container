@@ -132,6 +132,7 @@ file inside your source code repository.
 * **PIN_PIPENV_VERSION**
 
     Set this variable together with `ENABLE_PIPENV` to use a specific version of Pipenv.
+    If not set, the latest stable version from PyPI is installed.
     For example `PIN_PIPENV_VERSION=2018.11.26` installs `pipenv==2018.11.26`.
 
 {% if spec.version.startswith("3.") %}
