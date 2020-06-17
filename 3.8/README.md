@@ -14,12 +14,12 @@ Note: while the examples in this README are calling `podman`, you can replace an
 Description
 -----------
 
-Python 3.8 available as container is a base platform for 
-building and running various Python 3.8 applications and frameworks. 
-Python is an easy to learn, powerful programming language. It has efficient high-level 
-data structures and a simple but effective approach to object-oriented programming. 
-Python's elegant syntax and dynamic typing, together with its interpreted nature, 
-make it an ideal language for scripting and rapid application development in many areas 
+Python 3.8 available as container is a base platform for
+building and running various Python 3.8 applications and frameworks.
+Python is an easy to learn, powerful programming language. It has efficient high-level
+data structures and a simple but effective approach to object-oriented programming.
+Python's elegant syntax and dynamic typing, together with its interpreted nature,
+make it an ideal language for scripting and rapid application development in many areas
 on most platforms.
 
 This container image includes an npm utility
@@ -123,10 +123,16 @@ file inside your source code repository.
 
 * **ENABLE_PIPENV**
 
-    Set this variable to use [Pipenv](https://github.com/kennethreitz/pipenv),
+    Set this variable to use [Pipenv](https://github.com/pypa/pipenv),
     the higher-level Python packaging tool, to manage dependencies of the application.
     This should be used only if your project contains properly formated Pipfile
     and Pipfile.lock.
+* **PIN_PIPENV_VERSION**
+
+    Set this variable together with `ENABLE_PIPENV` to use a specific version of Pipenv.
+    If not set, the latest stable version from PyPI is installed.
+    For example `PIN_PIPENV_VERSION=2018.11.26` installs `pipenv==2018.11.26`.
+
 * **ENABLE_MICROPIPENV**
 
     Set this variable to use [micropipenv](https://github.com/thoth-station/micropipenv),

@@ -6,7 +6,7 @@
 # IMAGE_NAME specifies a name of the candidate image used for testing.
 # The image has to be available before this script is executed.
 #
-declare -a WEB_APPS=({standalone,setup,setup-requirements,django,numpy,app-home,npm-virtualenv-uwsgi,locale,mod-wsgi,pipenv,pipenv-and-micropipenv-should-fail,micropipenv,micropipenv-requirements}-test-app)
+declare -a WEB_APPS=({standalone,setup,setup-requirements,django,numpy,app-home,npm-virtualenv-uwsgi,locale,mod-wsgi,pipenv,pipenv-and-micropipenv-should-fail,pin-pipenv-version,micropipenv,micropipenv-requirements}-test-app)
 
 # TODO: Make command compatible for Mac users
 test_dir="$(readlink -zf $(dirname "${BASH_SOURCE[0]}"))"
@@ -86,7 +86,7 @@ check_result() {
   # positive test & non-zero exit status = ERROR
   # negative test & zero exit status = ERROR
   local result="$1"
-  local test=${2:-positive}  # if not defined, we expect possitive test type (zero exit code)
+  local type=${2:-positive}  # if not defined, we expect possitive test type (zero exit code)
   if [[ "$type" == "positive" && "$result" != "0" ]]; then
     info "TEST FAILED (${type}), EXPECTED:0 GOT:${result}"
     cleanup
@@ -102,13 +102,13 @@ wait_for_cid() {
   local max_attempts=10
   local sleep_time=1
   local attempt=1
-  local result=1
   info "Waiting for application container to start $CONTAINER_ARGS ..."
   while [ $attempt -le $max_attempts ]; do
-    [ -f $cid_file ] && [ -s $cid_file ] && break
+    [ -f $cid_file ] && [ -s $cid_file ] && return 0
     attempt=$(( $attempt + 1 ))
     sleep $sleep_time
   done
+  return 1
 }
 
 test_s2i_usage() {
@@ -172,6 +172,9 @@ test_application() {
 
   # Wait for the container to write it's CID file
   wait_for_cid
+  # Some test apps have tests in their startup code so we have to check
+  # that the container starts at all
+  check_result $?
 
   test_scl_usage "python --version" "Python $VERSION." "${cid_file}"
   check_result $?

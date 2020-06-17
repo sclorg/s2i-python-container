@@ -28,7 +28,15 @@ function install_tool() {
   pip install -U virtualenv
   VENV_DIR=$HOME/.local/venvs/$1
   virtualenv_bin "$VENV_DIR"
-  $VENV_DIR/bin/pip --isolated install -U $1$2  # Combines package name with [extras] if [extras] is defined as $2
+  # First, try to install the tool without --isolated which means that if you
+  # have your own PyPI mirror, it will take it from there. If this try fails, try it
+  # again with --isolated which ignores external pip settings (env vars, config file)
+  # and installs the tool from PyPI (needs internet connetion).
+  $VENV_DIR/bin/pip install -U $1$2  # Combines package name with [extras] or version specifier if is defined as $2```
+  if [ $? -ne 0 ]; then
+    echo "WARNING: Installation of $1 failed, trying again from official PyPI with pip --isolated install"
+    $VENV_DIR/bin/pip install -U $1$2  # Combines package name with [extras] or version specifier if is defined as $2```
+  fi
   mkdir -p $HOME/.local/bin
   ln -s $VENV_DIR/bin/$1 $HOME/.local/bin/$1
 }
@@ -63,7 +71,11 @@ if [[ ! -z "$UPGRADE_PIP_TO_LATEST" || ! -z "$ENABLE_PIPENV" ]]; then
 fi
 
 if [[ ! -z "$ENABLE_PIPENV" ]]; then
-  install_tool "pipenv" "==2018.11.26"
+  if [[ ! -z "$PIN_PIPENV_VERSION" ]]; then
+    # Add == as a prefix to pipenv version, if defined
+    PIN_PIPENV_VERSION="==$PIN_PIPENV_VERSION"
+  fi
+  install_tool "pipenv" "$PIN_PIPENV_VERSION"
   echo "---> Installing dependencies via pipenv ..."
   if [[ -f Pipfile ]]; then
     pipenv install --deploy
