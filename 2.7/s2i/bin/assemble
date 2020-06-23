@@ -35,7 +35,7 @@ function install_tool() {
   $VENV_DIR/bin/pip install -U $1$2  # Combines package name with [extras] or version specifier if is defined as $2```
   if [ $? -ne 0 ]; then
     echo "WARNING: Installation of $1 failed, trying again from official PyPI with pip --isolated install"
-    $VENV_DIR/bin/pip install -U $1$2  # Combines package name with [extras] or version specifier if is defined as $2```
+    $VENV_DIR/bin/pip install --isolated -U $1$2  # Combines package name with [extras] or version specifier if is defined as $2```
   fi
   mkdir -p $HOME/.local/bin
   ln -s $VENV_DIR/bin/$1 $HOME/.local/bin/$1
