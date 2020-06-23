@@ -31,8 +31,8 @@ function install_tool() {
   # have your own PyPI mirror, it will take it from there. If this try fails, try it
   # again with --isolated which ignores external pip settings (env vars, config file)
   # and installs the tool from PyPI (needs internet connetion).
-  $VENV_DIR/bin/pip install -U $1$2  # Combines package name with [extras] or version specifier if is defined as $2```
-  if [ $? -ne 0 ]; then
+  # $1$2 combines package name with [extras] or version specifier if is defined as $2```
+  if ! $VENV_DIR/bin/pip install -U $1$2; then
     echo "WARNING: Installation of $1 failed, trying again from official PyPI with pip --isolated install"
     $VENV_DIR/bin/pip install --isolated -U $1$2  # Combines package name with [extras] or version specifier if is defined as $2```
   fi
@@ -62,11 +62,17 @@ fix-permissions /opt/app-root -P
 # * pip < 19.3 does not support manylinux2014 wheels. Only manylinux2014 wheels
 #   support platforms like ppc64le, aarch64 or armv7
 echo "---> Upgrading pip to version 19.3.1 ..."
-pip install -U "pip==19.3.1"
+if ! pip install -U "pip==19.3.1"; then
+  echo "WARNING: Installation of 'pip==19.3.1' failed, trying again from official PyPI with pip --isolated install"
+  pip install --isolated -U "pip==19.3.1"
+fi
 
 if [[ ! -z "$UPGRADE_PIP_TO_LATEST" ]]; then
   echo "---> Upgrading pip to latest version ..."
-  pip install -U pip setuptools wheel
+  if ! pip install -U pip setuptools wheel; then
+    echo "WARNING: Installation of the latest pip,setuptools and wheel failed, trying again from official PyPI with pip --isolated install"
+    pip install --isolated -U pip setuptools wheel
+  fi
 fi
 
 if [[ ! -z "$ENABLE_PIPENV" ]]; then
