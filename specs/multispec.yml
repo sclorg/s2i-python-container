@@ -130,6 +130,5 @@ matrix:
         - rhel-8-x86_64
       version: "3.7"
     - distros:
-        - centos-7-x86_64
         - fedora-31-x86_64
       version: "3.8"
