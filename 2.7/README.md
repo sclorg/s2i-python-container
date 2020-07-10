@@ -146,9 +146,12 @@ file inside your source code repository.
 
 * **PIP_INDEX_URL**
 
-    Set this variable to use a custom index URL or mirror to download required packages
-    during build process. This only affects packages listed in requirements.txt.
-    Pipenv ignores this variable.
+    Set this variable to use a custom index URL or mirror to download required
+    packages during build process. This affects packages listed in
+    requirements.txt. It also affects the installation of pipenv and
+    micropipenv and the update of pip in the container, though if not found in
+    the custom index, the container will try to install/update them from
+    upstream PyPI afterwards.
 
 * **UPGRADE_PIP_TO_LATEST**
 
