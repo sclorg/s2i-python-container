@@ -14,7 +14,7 @@
         "annotations": {
           "openshift.io/display-name": "Python (Latest)",
           "openshift.io/provider-display-name": "Red Hat, Inc.",
-          "description": "Build and run Python applications on CentOS 7. For more information about using this builder image, including OpenShift considerations, see https://github.com/sclorg/s2i-python-container/blob/master/3.6/README.md.\n\nWARNING: By selecting this tag, your application will automatically update to use the latest version of Python available on OpenShift, including major version updates.",
+          "description": "Build and run Python applications on CentOS 7. For more information about using this builder image, including OpenShift considerations, see https://github.com/sclorg/s2i-python-container/blob/master/3.8/README.md.\n\nWARNING: By selecting this tag, your application will automatically update to use the latest version of Python available on OpenShift, including major version updates.",
           "iconClass": "icon-python",
           "tags": "builder,python",
           "supports":"python",
@@ -22,7 +22,27 @@
         },
         "from": {
           "kind": "ImageStreamTag",
-          "name": "3.6"
+          "name": "3.8"
+        },
+        "referencePolicy": {
+          "type": "Local"
+        }
+      },
+      {
+        "name": "3.8",
+        "annotations": {
+          "openshift.io/display-name": "Python 3.8",
+          "openshift.io/provider-display-name": "Red Hat, Inc.",
+          "description": "Build and run Python 3.8 applications on CentOS 7. For more information about using this builder image, including OpenShift considerations, see https://github.com/sclorg/s2i-python-container/blob/master/3.8/README.md.",
+          "iconClass": "icon-python",
+          "tags": "builder,python",
+          "supports":"python:3.8,python",
+          "version": "3.8",
+          "sampleRepo": "https://github.com/sclorg/django-ex.git"
+        },
+        "from": {
+          "kind": "DockerImage",
+          "name": "docker.io/centos/python-38-centos7:latest"
         },
         "referencePolicy": {
           "type": "Local"
