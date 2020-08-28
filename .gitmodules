@@ -1,3 +1,4 @@
 [submodule "common"]
 	path = common
-	url = https://github.com/sclorg/container-common-scripts.git
+	url = https://github.com/pkubatrh/container-common-scripts.git
+	branch = fix_check_version
