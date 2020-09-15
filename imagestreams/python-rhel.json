@@ -109,46 +109,6 @@
         }
       },
       {
-        "name": "3.6-ubi7",
-        "annotations": {
-          "openshift.io/display-name": "Python 3.6 (UBI 7)",
-          "openshift.io/provider-display-name": "Red Hat, Inc.",
-          "description": "Build and run Python 3.6 applications on UBI 7. For more information about using this builder image, including OpenShift considerations, see https://github.com/sclorg/s2i-python-container/blob/master/3.6/README.md.",
-          "iconClass": "icon-python",
-          "tags": "builder,python",
-          "supports":"python:3.6,python",
-          "version": "3.6",
-          "sampleRepo": "https://github.com/sclorg/django-ex.git"
-        },
-        "from": {
-          "kind": "DockerImage",
-          "name": "registry.redhat.io/ubi7/python-36:latest"
-        },
-        "referencePolicy": {
-          "type": "Local"
-        }
-      },
-      {
-        "name": "3.6",
-        "annotations": {
-          "openshift.io/display-name": "Python 3.6",
-          "openshift.io/provider-display-name": "Red Hat, Inc.",
-          "description": "Build and run Python 3.6 applications on RHEL 7. For more information about using this builder image, including OpenShift considerations, see https://github.com/sclorg/s2i-python-container/blob/master/3.6/README.md.",
-          "iconClass": "icon-python",
-          "tags": "builder,python,hidden",
-          "supports":"python:3.6,python",
-          "version": "3.6",
-          "sampleRepo": "https://github.com/sclorg/django-ex.git"
-        },
-        "from": {
-          "kind": "DockerImage",
-          "name": "registry.redhat.io/rhscl/python-36-rhel7:latest"
-        },
-        "referencePolicy": {
-          "type": "Local"
-        }
-      },
-      {
         "name": "2.7-ubi8",
         "annotations": {
           "openshift.io/display-name": "Python 2.7 (UBI 8)",
