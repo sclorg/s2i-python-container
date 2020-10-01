@@ -4,7 +4,7 @@ Python container images
 This repository contains the source for building various versions of
 the Python application as a reproducible container image using
 [source-to-image](https://github.com/openshift/source-to-image).
-Users can choose between RHEL, Fedora and CentOS based builder images.
+Users can choose between RHEL(Red Hat Enterprise Linux), Fedora and CentOS based builder images.
 The resulting image can be run using [podman](https://github.com/containers/libpod) or
 [docker](http://docker.io).
 
@@ -53,8 +53,8 @@ Fedora versions currently supported are:
 * Fedora 31 ([registry.fedoraproject.org](https://registry.fedoraproject.org/repo/f31/python3/tags/))
 * Fedora 32 ([registry.fedoraproject.org](https://registry.fedoraproject.org/repo/f32/python3/tags/))
 
-Download
---------
+How to Download
+---------------
 To download one of the base Python images, follow the instructions you find in registries mentioned above.
 
 For example, Centos image can be downloaded via:
@@ -63,8 +63,8 @@ For example, Centos image can be downloaded via:
 $ podman pull centos/python-36-centos7
 ```
 
-Build
------
+Build Process
+-------------
 To build a Python image from scratch run:
 
 ```
