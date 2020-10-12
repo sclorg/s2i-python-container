@@ -79,7 +79,26 @@ specs:
       base_pkgs: ['nss_wrapper', 'httpd', 'httpd-devel', 'atlas-devel', 'gcc-gfortran',
                   'libffi-devel', 'libtool-ltdl enchant', 'redhat-rpm-config']
 
+    fedora33:
+      distros:
+        - fedora-33-x86_64
+      fedora_version: "33"
+      s2i_base: registry.fedoraproject.org/f33/s2i-base
+      img_tag: "latest"
+      python_pkgs: ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip']
+      base_pkgs: ['nss_wrapper', 'httpd', 'httpd-devel', 'atlas-devel', 'gcc-gfortran',
+                  'libffi-devel', 'libtool-ltdl enchant', 'redhat-rpm-config']
+
   version:
+    "3.9":
+      version: "3.9"
+      short_ver: "39"
+      base_img_version: "1"
+      python_img_version: "1"
+      scl: "rh-python39"
+      module_stream: "python39:3.9"
+      pkg_prefix: "python39"
+
     "3.8":
       version: "3.8"
       short_ver: "38"
@@ -118,17 +137,28 @@ matrix:
     - distros:
       - fedora-31-x86_64
       - fedora-32-x86_64
+      - fedora-33-x86_64
       version: "2.7"
     - distros:
         - fedora-31-x86_64
         - fedora-32-x86_64
+        - fedora-33-x86_64
       version: "3.6"
     - distros:
         - centos-7-x86_64
         - fedora-32-x86_64
+        - fedora-33-x86_64
         - rhel-7-x86_64
         - rhel-8-x86_64
       version: "3.7"
     - distros:
         - fedora-31-x86_64
+        - fedora-33-x86_64
       version: "3.8"
+    - distros:
+        - centos-7-x86_64
+        - fedora-31-x86_64
+        - fedora-32-x86_64
+        - rhel-7-x86_64
+        - rhel-8-x86_64
+      version: "3.9"
