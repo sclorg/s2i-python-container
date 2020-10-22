@@ -16,6 +16,17 @@ set -eo nounset
 
 trap ct_os_cleanup EXIT SIGINT
 
+test_latest_imagestreams() {
+  local result=1
+  info "Testing the latest version in imagestreams"
+  # Switch to root directory of a container
+  pushd "${test_dir}/../.." >/dev/null || return 1
+  ct_check_latest_imagestreams
+  result=$?
+  popd >/dev/null || return 1
+  check_result $result
+}
+
 ct_os_check_compulsory_vars
 
 ct_os_enable_print_logs
@@ -43,6 +54,9 @@ done
 
 # Check the imagestream
 test_python_imagestream
+
+# check if latest imagestream version is correct
+test_latest_imagestreams
 
 OS_TESTSUITE_RESULT=0
 
