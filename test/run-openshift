@@ -7,6 +7,7 @@
 # The image has to be available before this script is executed.
 
 THISDIR=$(dirname ${BASH_SOURCE[0]})
+test_dir="$(readlink -f $(dirname ${BASH_SOURCE[0]}))"
 
 source "${THISDIR}/test-lib.sh"
 source "${THISDIR}/test-lib-openshift.sh"
@@ -17,14 +18,11 @@ set -eo nounset
 trap ct_os_cleanup EXIT SIGINT
 
 test_latest_imagestreams() {
-  local result=1
   info "Testing the latest version in imagestreams"
   # Switch to root directory of a container
-  pushd "${test_dir}/../.." >/dev/null || return 1
+  pushd "${test_dir}/../.." >/dev/null
   ct_check_latest_imagestreams
-  result=$?
-  popd >/dev/null || return 1
-  check_result $result
+  popd >/dev/null
 }
 
 ct_os_check_compulsory_vars
