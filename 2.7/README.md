@@ -29,33 +29,112 @@ modules for their web applications. There is no guarantee for any specific npm o
 version, that is included in the image; those versions can be changed anytime and
 the nodejs itself is included just to make the npm work.
 
-Usage
----------------------
+Usage in Openshift
+------------------
 
 For this, we will assume that you are using the supported image, available via `python:2.7` imagestream tag in Openshift.
-Building a simple [python-sample-app](https://github.com/sclorg/s2i-python-container/tree/master/2.7/test/setup-test-app) application
+Building a simple [python-sample-app](https://github.com/sclorg/django-ex.git) application
 in Openshift can be achieved with the following step:
 
     ```
-    oc new-app python:2.7~https://github.com/sclorg/s2i-python-container.git --context-dir=2.7/test/setup-test-app/
+    oc new-app python:2.7~https://github.com/sclorg/dancer-ex.git
     ```
-
-The same application can also be built using the standalone [S2I](https://github.com/openshift/source-to-image) application on systems that have it available:
-
-    ```
-    $ s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=2.7/test/setup-test-app/ <image_name> python-sample-app
-    ```
-
-Where `<image_name>` is the s2i-python image you [downloaded from RHEL, Centos or Fedora registry](../README.md#Download) or [built](../README.md#Build) from these sources. For example ubi8/python-36, centos/python-36-centos7 or f31/python3.
 
 **Accessing the application:**
 ```
-$ curl 127.0.0.1:8080
+$ oc get pods
+$ oc exec <pod> -- curl 127.0.0.1:8080
+```
+
+Source-to-Image framework and scripts
+-------------------------------------
+This image supports the [Source-to-Image](https://docs.openshift.com/container-platform/3.11/creating_images/s2i.html)
+(S2I) strategy in OpenShift. The Source-to-Image is an OpenShift framework
+which makes it easy to write images that take application source code as
+an input, use a builder image like this Node.js container image, and produce
+a new image that runs the assembled application as an output.
+
+To support the Source-to-Image framework, important scripts are included in the builder image:
+
+* The `/usr/libexec/s2i/assemble` script inside the image is run to produce a new image with the application artifacts. The script takes sources of a given application and places them into appropriate directories inside the image. It utilizes some common patterns in Perl application development (see the **Environment variables** section below).
+* The `/usr/libexec/s2i/run` script is set as the default command in the resulting container image (the new image with the application artifacts). It runs `django` server.
+
+Building an application using a Dockerfile
+------------------------------------------
+Compared to the Source-to-Image strategy, using a Dockerfile is a more
+flexible way to build a Node.js container image with an application.
+Use a Dockerfile when Source-to-Image is not sufficiently flexible for you or
+when you build the image outside of the OpenShift environment.
+
+To use the Python image in a Dockerfile, follow these steps:
+#### 1. Pull a base builder image to build on
+```
+podman pull ubi7/python-27
+```
+
+An ubi7 image `ubi7/python-27` is used in this example.
+
+#### 2. Pull and application code
+
+ An example application available at https://github.com/sclorg/django-ex.git is used here. Feel free to clone the repository for further experiments.
+
+```
+git clone https://github.com/sclorg/django-ex.git app-src
+```
+
+#### 3. Prepare an application inside a container
+
+This step usually consists of at least these parts:
+
+* putting the application source into the container
+* installing the dependencies
+* setting the default command in the resulting image
+
+For all these three parts, users can either setup all manually and use commands `python` and `pip` explicitly in the Dockerfile ([3.1.](#31-to-use-your-own-setup-create-a-dockerfile-with-this-content)), or users can use the Source-to-Image scripts inside the image ([3.2.](#32-to-use-the-source-to-image-scripts-and-build-an-image-using-a-dockerfile-create-a-dockerfile-with-this-content); see more about these scripts in the section "Source-to-Image framework and scripts" above), that already know how to set-up and run some common Python applications.
+
+#### 3.1 To use your own setup, create a Dockerfile with this content:
+```
+FROM ubi7/python-27
+# Add application sources
+USER 0
+ADD app-src .
+# Install the dependencies
+RUN export PATH=$PATH:/opt/rh/python27/root/usr/bin/ && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rh/python27/root/usr/lib64/ && pip install -U "pip==19.3.1" && \
+        pip install -r requirements.txt && \
+        python manage.py collectstatic --noinput && \
+        python manage.py migrate
+
+# Run the application
+CMD python manage.py runserver 0.0.0.0:8080
+```
+
+##### 3.2 To use the Source-to-Image scripts and build an image using a Dockerfile, create a Dockerfile with this content:
+```
+FROM ubi7/python-27
+# Add application sources to a directory that the assemble scriptexpects them
+# and set permissions so that the container runs without root access
+USER 0
+ADD app-src /tmp/src
+RUN chown -R 1001:0 /tmp/src
+USER 1001
+# Install the dependencies
+RUN /usr/libexec/s2i/assemble
+# Set the default command for the resulting image
+CMD /usr/libexec/s2i/run
+```
+#### 4. Build a new image from a Dockerfile prepared in the previous step
+
+```
+podman build -t python-app .
+```
+
+#### 5. Run the resulting image with final application
+```
+podman run -d python-app
 ```
 
 Environment variables
 ---------------------
-
 To set these environment variables, you can place them as a key value pair into a `.s2i/environment`
 file inside your source code repository.
 
