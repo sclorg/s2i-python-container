@@ -12,8 +12,6 @@ declare -a WEB_APPS=({standalone,setup,setup-requirements,django,numpy,app-home,
 test_dir="$(readlink -zf $(dirname "${BASH_SOURCE[0]}"))"
 image_dir=$(readlink -zf ${test_dir}/..)
 
-VERSION=27
-
 if [[ -z $VERSION ]]; then
     echo "ERROR: The VERSION variable must be set."
     exit 1
