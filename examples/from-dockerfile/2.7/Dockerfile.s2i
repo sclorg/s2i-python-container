@@ -1,4 +1,4 @@
-FROM ubi8/python-27
+FROM ubi7/python-27
 
 # Add application sources to a directory that the assemble script expects them
 # and set permissions so that the container runs without root access

@@ -1,4 +1,4 @@
-FROM python-37
+FROM ubi8/python-37
 
 USER 0
 ADD app-src ./
