@@ -98,6 +98,7 @@ specs:
       scl: "rh-python39"
       module_stream: "python39:3.9"
       pkg_prefix: "python39"
+      main_image_full: "registry.fedoraproject.org/f33/python3"
 
     "3.8":
       version: "3.8"
@@ -107,6 +108,7 @@ specs:
       scl: "rh-python38"
       module_stream: "python38:3.8"
       pkg_prefix: "python38"
+      main_image: "registry.access.redhat.com/ubi8/python-38"
 
     "3.7":
       version: "3.7"
@@ -115,6 +117,7 @@ specs:
       python_img_version: "1"
       scl: "rh-python37"
       pkg_prefix: "python3"
+      main_image: "registry.fedoraproject.org/f31/python3"
 
     "3.6":
       version: "3.6"
@@ -124,6 +127,7 @@ specs:
       scl: "rh-python36"
       module_stream: "python36:3.6"
       pkg_prefix: "python3"
+      main_image: "registry.access.redhat.com/ubi8/python-36"
 
     "2.7":
       version: "2.7"
@@ -131,6 +135,7 @@ specs:
       scl: "python27"
       module_stream: "python27:2.7"
       pkg_prefix: "python2"
+      main_image: "registry.access.redhat.com/ubi8/python-27"
 
 matrix:
   exclude:
