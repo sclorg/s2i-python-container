@@ -60,7 +60,7 @@ To download one of the base Python images, follow the instructions you find in r
 For example, Centos image can be downloaded via:
 
 ```
-$ podman pull centos/python-36-centos7
+$ podman pull centos/python-38-centos7
 ```
 
 Build
@@ -70,7 +70,7 @@ To build a Python image from scratch run:
 ```
 $ git clone https://github.com/sclorg/s2i-python-container.git
 $ cd s2i-python-container
-$ make build TARGET=centos7 VERSIONS=3.6
+$ make build TARGET=centos7 VERSIONS=3.8
 ```
 
 Where `TARGET` might be one of the supported platforms mentioned above.
@@ -89,7 +89,7 @@ which launches tests to check functionality of simple Python applications built 
 
 ```
 $ cd s2i-python-container
-$ make test TARGET=centos7 VERSIONS=3.6
+$ make test TARGET=centos7 VERSIONS=3.8
 ```
 
 Where `TARGET` might be one of the supported platforms mentioned above.

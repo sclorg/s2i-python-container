@@ -36,7 +36,7 @@ specs:
       base_pkgs: ['nss_wrapper', 'httpd24', 'httpd24-httpd-devel', 'httpd24-mod_ssl',
                   'httpd24-mod_auth_kerb', 'httpd24-mod_ldap', 'httpd24-mod_session',
                   'atlas-devel', 'gcc-gfortran', 'libffi-devel', 'libtool-ltdl enchant']
-      ubi_versions: ['2.7', '3.6', '3.8']
+      ubi_versions: ['2.7', '3.8']
 
     rhel8:
       distros:
@@ -148,6 +148,8 @@ matrix:
         - fedora-31-x86_64
         - fedora-32-x86_64
         - fedora-33-x86_64
+        - centos-7-x86_64
+        - rhel-7-x86_64
       version: "3.6"
     - distros:
         - centos-7-x86_64
