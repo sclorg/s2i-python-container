@@ -247,6 +247,20 @@ for app in ${@:-${WEB_APPS[@]}}; do
   cleanup ${app}
 done
 
+if [ "$OS" == "rhel7" ] || [ "$OS" == "centos7" ]; then
+   # autocleanup only enabled here as only the following tests so far use it
+   CID_FILE_DIR=$(mktemp -d)
+   ct_enable_cleanup
+
+   info "Testing variable presence during \`docker exec\`"
+   ct_check_exec_env_vars
+   check_result $?
+
+   info "Checking if all scl variables are defined in Dockerfile"
+   ct_check_scl_enable_vars
+   check_result $?
+fi
+
 test_from_dockerfile
 
 info "All tests finished successfully."
