@@ -5,7 +5,16 @@ FROM rhscl/s2i-base-rhel7:1
 EXPOSE 8080
 
 ENV PYTHON_VERSION=3.8 \
-    PATH=$HOME/.local/bin/:$PATH \
+    PYTHON_SCL_VERSION=38 \
+    PATH=$PATH:/opt/rh/rh-python38/root/usr/bin:$HOME/.local/bin/:/opt/rh/$NODEJS_SCL/root/usr/bin:/opt/rh/httpd24/root/usr/bin:/opt/rh/python38/root/usr/bin:/opt/rh/httpd24/root/usr/sbin:/opt/rh/rh-python38/root/usr/local/bin \
+    LD_LIBRARY_PATH=/opt/rh/rh-python38/root/usr/lib64:/opt/rh/$NODEJS_SCL/root/usr/lib64:/opt/rh/httpd24/root/usr/lib64:/opt/rh/python38/root/usr/lib64 \
+    LIBRARY_PATH=/opt/rh/httpd24/root/usr/lib64 \
+    X_SCLS=rh-python38 \
+    MANPATH=/opt/rh/rh-python38/root/usr/share/man:/opt/rh/python38/root/usr/share/man:/opt/rh/httpd24/root/usr/share/man:/opt/rh/rh-nodejs10/root/usr/share/man \
+    VIRTUAL_ENV=/opt/app-root \
+    PYTHONPATH=/opt/rh/$NODEJS_SCL/root/usr/lib/python2.7/site-packages \
+    XDG_DATA_DIRS=/opt/rh/python38/root/usr/share:/opt/rh/rh-python38/root/usr/share:/usr/local/share:/usr/share \
+    PKG_CONFIG_PATH=/opt/rh/python38/root/usr/lib64/pkgconfig:/opt/rh/httpd24/root/usr/lib64/pkgconfig:/opt/rh/rh-python38/root/usr/lib64/pkgconfig \
     PYTHONUNBUFFERED=1 \
     PYTHONIOENCODING=UTF-8 \
     LC_ALL=en_US.UTF-8 \
