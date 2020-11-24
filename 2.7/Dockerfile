@@ -1,6 +1,6 @@
 # This image provides a Python 2.7 environment you can use to run your Python
 # applications.
-FROM centos/s2i-base-centos7
+FROM quay.io/centos7/s2i-base-centos7
 
 EXPOSE 8080
 
@@ -38,9 +38,9 @@ LABEL summary="$SUMMARY" \
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,python,python27,python-27,rh-python27" \
       com.redhat.component="python27-container" \
-      name="centos/python-27-centos7" \
+      name="centos7/python-27-centos7" \
       version="2.7" \
-      usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=2.7/test/setup-test-app/ centos/python-27-centos7 python-sample-app" \
+      usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=2.7/test/setup-test-app/ centos7/python-27-centos7 python-sample-app" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 RUN INSTALL_PKGS="libjpeg-turbo libjpeg-turbo-devel python27 python27-python-devel python27-python-setuptools \

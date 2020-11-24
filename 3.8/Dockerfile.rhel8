@@ -12,7 +12,7 @@ ENV PYTHON_VERSION=3.8 \
     LANG=en_US.UTF-8 \
     PIP_NO_CACHE_DIR=off
 
-# RHEL7 base images atomatically set these envvars to run scl_enable. RHEl8
+# RHEL7 base images automatically set these envvars to run scl_enable. RHEl8
 # images, however, don't as most images don't need SCLs any more. But we want
 # to run it even on RHEL8, because we set the virtualenv environment as part of
 # that script

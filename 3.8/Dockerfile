@@ -1,6 +1,6 @@
 # This image provides a Python 3.8 environment you can use to run your Python
 # applications.
-FROM centos/s2i-base-centos7
+FROM quay.io/centos7/s2i-base-centos7
 
 EXPOSE 8080
 
@@ -38,9 +38,9 @@ LABEL summary="$SUMMARY" \
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,python,python38,python-38,rh-python38" \
       com.redhat.component="python38-container" \
-      name="centos/python-38-centos7" \
+      name="centos7/python-38-centos7" \
       version="1" \
-      usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.8/test/setup-test-app/ centos/python-38-centos7 python-sample-app" \
+      usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.8/test/setup-test-app/ centos7/python-38-centos7 python-sample-app" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 RUN INSTALL_PKGS="rh-python38 rh-python38-python-devel rh-python38-python-setuptools rh-python38-python-pip nss_wrapper \
