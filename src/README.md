@@ -1,10 +1,10 @@
 Python {{ spec.version }} container image
-===================
+=========================
 
 This container image includes Python {{ spec.version }} as a [S2I](https://github.com/openshift/source-to-image) base image for your Python {{ spec.version }} applications.
 Users can choose between RHEL and CentOS based builder images.
 The RHEL images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/),
-the CentOS images are available on [Docker Hub](https://hub.docker.com/r/centos/),
+the CentOS images are available on [Quay.io](https://quay.io/organization/centos7),
 and the Fedora images are available in [Fedora Registry](https://registry.fedoraproject.org/).
 The resulting image can be run using [podman](https://github.com/containers/libpod) or
 [docker](http://docker.io).
@@ -30,7 +30,7 @@ version, that is included in the image; those versions can be changed anytime an
 the nodejs itself is included just to make the npm work.
 
 Usage in Openshift
----------------------
+------------------
 
 For this, we will assume that you are using the supported image, available via `python:{{ spec.version }}` imagestream tag in Openshift.
 Building a simple [python-sample-app](https://github.com/sclorg/django-ex.git) application
@@ -324,7 +324,7 @@ following ways, in precedence order:
   application.
 
 Hot deploy
----------------------
+----------
 
 If you are using Django, hot deploy will work out of the box.
 
