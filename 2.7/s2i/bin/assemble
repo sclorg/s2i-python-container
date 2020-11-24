@@ -58,16 +58,6 @@ mv /tmp/src/* "$HOME"
 # set permissions for any installed artifacts
 fix-permissions /opt/app-root -P
 
-# We have to first upgrade pip to at least 19.3 because:
-# * pip < 9 does not support different packages' versions for Python 2/3
-# * pip < 19.3 does not support manylinux2014 wheels. Only manylinux2014 wheels
-#   support platforms like ppc64le, aarch64 or armv7
-echo "---> Upgrading pip to version 19.3.1 ..."
-if ! pip install -U "pip==19.3.1"; then
-  echo "WARNING: Installation of 'pip==19.3.1' failed, trying again from official PyPI with pip --isolated install"
-  pip install --isolated -U "pip==19.3.1"
-fi
-
 if [[ ! -z "$UPGRADE_PIP_TO_LATEST" || ! -z "$ENABLE_PIPENV" ]]; then
   echo "---> Upgrading pip to latest version ..."
   if ! pip install -U pip setuptools wheel; then
