@@ -7,7 +7,7 @@
 {% endif %}
 # This image provides a Python {{ spec.version }} environment you can use to run your Python
 # applications.
-FROM {{ spec.s2i_base}}{% if img_tag %}:{{ img_tag }}{% endif %}
+FROM {{ spec.s2i_base }}{% if img_tag %}:{{ img_tag }}{% endif %}
 
 
 EXPOSE 8080
@@ -34,7 +34,7 @@ ENV PYTHON_VERSION={{ spec.version }} \
     PIP_NO_CACHE_DIR=off
 
 {% if spec.el_version == '8' %}
-# RHEL7 base images atomatically set these envvars to run scl_enable. RHEl8
+# RHEL7 base images automatically set these envvars to run scl_enable. RHEl8
 # images, however, don't as most images don't need SCLs any more. But we want
 # to run it even on RHEL8, because we set the virtualenv environment as part of
 # that script
