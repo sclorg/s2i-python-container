@@ -118,6 +118,9 @@ COPY_RULES="
     src=src/root/opt/app-root/etc/generate_container_user
     dest=root/opt/app-root/etc/generate_container_user;
 
+    src=src/root/opt/wheels/pip-20.2.2-py2.py3-none-any.whl
+    dest=root/opt/wheels/pip-20.2.2-py2.py3-none-any.whl;
+
     src=src/s2i/bin/run
     dest=s2i/bin/run
     mode=0755;
