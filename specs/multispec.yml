@@ -6,8 +6,8 @@ specs:
       distros:
         - centos-7-x86_64
       el_version: "7"
-      s2i_base: centos/s2i-base-centos7
-      org: "centos"
+      s2i_base: quay.io/centos7/s2i-base-centos7
+      org: "centos7"
       prod: "centos7"
       logos: "centos-logos"
       enablerepo: "--enablerepo=centosplus"
