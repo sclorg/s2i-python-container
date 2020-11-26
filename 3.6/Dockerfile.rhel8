@@ -54,10 +54,12 @@ RUN INSTALL_PKGS="python36 python36-devel python3-virtualenv python3-setuptools 
     yum -y clean all --enablerepo='*'
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH.
-COPY ./s2i/bin/ $STI_SCRIPTS_PATH
+COPY 3.6/s2i/bin/ $STI_SCRIPTS_PATH
 
 # Copy extra files to the image.
-COPY ./root/ /
+COPY 3.6/root/ /
+
+COPY 3.6/root/opt/wheels /opt/wheels
 
 # - Create a Python virtual environment for use by any application to avoid
 #   potential conflicts with Python packages preinstalled in the main Python

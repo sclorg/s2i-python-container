@@ -111,15 +111,15 @@ SYMLINK_RULES="
 
     link_target=../../common/check_imagestreams.py
     link_name=test/check_imagestreams.py;
+
+    link_target=../../../src/root/opt/wheels/
+    link_name=root/opt/wheels;
 "
 
 # Files to copy
 COPY_RULES="
     src=src/root/opt/app-root/etc/generate_container_user
     dest=root/opt/app-root/etc/generate_container_user;
-
-    src=src/root/opt/wheels/pip-20.2.2-py2.py3-none-any.whl
-    dest=root/opt/wheels/pip-20.2.2-py2.py3-none-any.whl;
 
     src=src/s2i/bin/run
     dest=s2i/bin/run

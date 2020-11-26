@@ -45,10 +45,12 @@ RUN INSTALL_PKGS="rh-python38 rh-python38-python-devel rh-python38-python-setupt
     yum -y clean all --enablerepo='*'
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH.
-COPY ./s2i/bin/ $STI_SCRIPTS_PATH
+COPY 3.8/s2i/bin/ $STI_SCRIPTS_PATH
 
 # Copy extra files to the image.
-COPY ./root/ /
+COPY 3.8/root/ /
+
+COPY 3.8/root/opt/wheels /opt/wheels
 
 # - Create a Python virtual environment for use by any application to avoid
 #   potential conflicts with Python packages preinstalled in the main Python

@@ -2,6 +2,7 @@
 BASE_IMAGE_NAME = python
 VERSIONS = 2.7 3.6 3.7 3.8 3.9
 OPENSHIFT_NAMESPACES = 
+DOCKER_BUILD_CONTEXT = ..
 
 # HACK:  Ensure that 'git pull' for old clones doesn't cause confusion.
 # New clones should use '--recursive'.
