@@ -1,8 +1,7 @@
 Python container images
 =======================
-s2i-python-container 2.7 Quay.io status: [![Docker Repository on Quay](https://quay.io/repository/centos7/python-27-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/python-27-centos7)
-
-s2i-python-container 3.8 Quay.io status: [![Docker Repository on Quay](https://quay.io/repository/centos7/python-38-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/python-38-centos7)
+s2i-python-container 2.7: [![Docker Repository on Quay](https://quay.io/repository/centos7/python-27-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/python-27-centos7),
+s2i-python-container 3.8: [![Docker Repository on Quay](https://quay.io/repository/centos7/python-38-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/python-38-centos7)
 
 This repository contains the source for building various versions of
 the Python application as a reproducible container image using
