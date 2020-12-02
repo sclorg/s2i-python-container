@@ -6,13 +6,13 @@ NAMESPACE=centos
 
 cat <<EOF
 This is a S2I python-2.7 ${DISTRO} base image:
-To use it, install S2I: https://github.com/openshift/source-to-image
+There are multiple ways how to run the image, see documentation at:
+https://github.com/sclorg/s2i-python-container/blob/master/2.7/README.md
 
-Sample invocation:
-
-s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=2.7/test/setup-test-app/ ${NAMESPACE}/python-27-${DISTRO}7 python-sample-app
-
+To use it in Openshift, run:
+oc new-app python:2.7~https://github.com/sclorg/s2i-python-container.git --context-dir=2.7/test/setup-test-app/
 
 You can then run the resulting image via:
-podman run -p 8080:8080 python-sample-app
+oc get pods
+oc exec <pod> -- curl 127.0.0.1:8080
 EOF
