@@ -1,6 +1,6 @@
 # Variables are documented in common/build.sh.
 BASE_IMAGE_NAME = python
-VERSIONS = 2.7 3.6 3.7 3.8 3.9
+VERSIONS = 2.7 3.6 3.8 3.9
 OPENSHIFT_NAMESPACES = 
 
 # HACK:  Ensure that 'git pull' for old clones doesn't cause confusion.

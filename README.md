@@ -30,7 +30,7 @@ A typical way how to contribute is:
 1. Commit the changes.
 1. Regenerate all files via `make generate-all`.
 1. Commit generated files.
-1. Test changes via `make test TARGET=fedora VERSIONS=3.7` which will `build`, `tag` and `test` an image in one step.
+1. Test changes via `make test TARGET=fedora VERSIONS=3.9` which will `build`, `tag` and `test` an image in one step.
 1. Open a pull request!
 
 For more information about contributing, see
@@ -41,7 +41,6 @@ Versions
 Python versions currently provided are:
 * [python-2.7](2.7)
 * [python-3.6](3.6)
-* [python-3.7](3.7)
 * [python-3.8](3.8)
 * [python-3.9](3.9)
 
@@ -53,7 +52,6 @@ CentOS versions currently supported are:
 * CentOS 7 ([hub.docker.com](https://hub.docker.com/r/centos/))
 
 Fedora versions currently supported are:
-* Fedora 31 ([registry.fedoraproject.org](https://registry.fedoraproject.org/repo/f31/python3/tags/))
 * Fedora 32 ([registry.fedoraproject.org](https://registry.fedoraproject.org/repo/f32/python3/tags/))
 * Fedora 33 ([registry.fedoraproject.org](https://registry.fedoraproject.org/repo/f33/python3/tags/))
 
