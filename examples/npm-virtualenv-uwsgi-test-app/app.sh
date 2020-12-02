@@ -13,7 +13,7 @@ packages=("pip" "setuptools" "wheel")
 for pkg in ${packages[@]}; do
   # grep returns exit code 1 if the output contains only one line starting
   # with "Requirement already …" which means that the package is updated
-  python -m pip install -U --no-deps --no-python-version-warning $pkg 2>&1 | grep -v "^Requirement already up-to-date: "
+  python -m pip install -U --no-deps --no-python-version-warning $pkg 2>&1 | grep -Ev "^Requirement already (up-to-date|satisfied): "
   if [ $? -eq 0 ]; then
     echo "ERROR: Failed to upgrade '$pkg' to the latest version."
     exit 1
