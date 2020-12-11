@@ -192,6 +192,11 @@ test_from_dockerfile(){
   sed "s@#IMAGE_NAME#@${IMAGE_NAME}@" $test_dir/from-dockerfile/Dockerfile.tpl > $test_dir/from-dockerfile/Dockerfile
   ct_test_app_dockerfile $test_dir/from-dockerfile/Dockerfile 'https://github.com/sclorg/django-ex.git' 'Welcome to your Django application on OpenShift' app-src
   check_result $?
+
+  info "Test from Dockerfile with no s2i scripts used"
+  sed "s@#IMAGE_NAME#@${IMAGE_NAME}@" $test_dir/from-dockerfile/Dockerfile_no_s2i.tpl > $test_dir/from-dockerfile/Dockerfile
+  ct_test_app_dockerfile $test_dir/from-dockerfile/Dockerfile 'https://github.com/sclorg/django-ex.git' 'Welcome to your Django application on OpenShift' app-src
+  check_result $?
 }
 
 # Since we built the candidate image locally, we don't want S2I attempt to pull
