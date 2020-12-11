@@ -74,7 +74,7 @@ To use the Python image in a Dockerfile, follow these steps:
 #### 1. Pull a base builder image to build on
 
 ```
-podman pull 
+podman pull registry.fedoraproject.org/f33/python3
 ```
 
 #### 2. Pull and application code
@@ -105,18 +105,44 @@ prepared for a future flawless switch to a newer or different platform.
 To use the Source-to-Image scripts and build an image using a Dockerfile, create a Dockerfile with this content:
 
 ```
-FROM 
+FROM registry.fedoraproject.org/f33/python3
+
 # Add application sources to a directory that the assemble script expects them
 # and set permissions so that the container runs without root access
 USER 0
 ADD app-src /tmp/src
-RUN chown -R 1001:0 /tmp/src
+RUN /usr/bin/fix-permissions /tmp/src
 USER 1001
+
 # Install the dependencies
 RUN /usr/libexec/s2i/assemble
+
 # Set the default command for the resulting image
 CMD /usr/libexec/s2i/run
 ```
+
+If you decide not to use the Source-to-Image scripts, you will need to manually tailor the Dockerfile to your application and its needs.
+Example Dockerfile for a simple Django application:
+
+```
+FROM registry.fedoraproject.org/f33/python3
+
+# Add application sources with correct permissions for OpenShift
+USER 0
+ADD app-src .
+RUN chown -R 1001:0 ./
+USER 1001
+
+# Install the dependencies
+RUN pip install -U "pip>=19.3.1" && \
+    pip install -r requirements.txt && \
+    python manage.py collectstatic --noinput && \
+    python manage.py migrate
+
+# Run the application
+CMD python manage.py runserver 0.0.0.0:8080
+```
+
 #### 4. Build a new image from a Dockerfile prepared in the previous step
 
 ```
