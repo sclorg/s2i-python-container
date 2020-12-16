@@ -88,7 +88,7 @@ specs:
       scl: "rh-python39"
       module_stream: "python39:3.9"
       pkg_prefix: "python39"
-      main_image_full: "registry.fedoraproject.org/f33/python3"
+      main_image: "registry.fedoraproject.org/f33/python3"
 
     "3.8":
       version: "3.8"
