@@ -12,6 +12,18 @@ declare -a WEB_APPS=({standalone,setup,setup-requirements,django,numpy,app-home,
 test_dir="$(readlink -zf $(dirname "${BASH_SOURCE[0]}"))"
 image_dir=$(readlink -zf ${test_dir}/..)
 
+test_short_summary=''
+TESTSUITE_RESULT=0
+
+TEST_LIST="\
+test_s2i_usage
+test_docker_run_usage
+test_application
+test_application_with_user
+test_scl_variables_in_dockerfile
+test_from_dockerfile
+"
+
 if [[ -z $VERSION ]]; then
     echo "ERROR: The VERSION variable must be set."
     exit 1
@@ -82,7 +94,7 @@ cleanup() {
   rm -rf ${test_dir}/${1}/.git
 }
 
-check_result() {
+check_type() {
   # positive test & non-zero exit status = ERROR
   # negative test & zero exit status = ERROR
   local result="$1"
@@ -90,12 +102,22 @@ check_result() {
   if [[ "$type" == "positive" && "$result" != "0" ]]; then
     info "TEST FAILED (${type}), EXPECTED:0 GOT:${result}"
     cleanup
-    exit $result
+    return 1
   elif [[ "$type" == "negative" && "$result" == "0" ]]; then
     info "TEST FAILED (${type}), EXPECTED: non-zero GOT:${result}"
     cleanup
-    exit 1
+    return 1
   fi
+
+}
+check_result() {
+  # positive test & non-zero exit status = ERROR
+  # negative test & zero exit status = ERROR
+  local result="$1"
+  if [[ "$result" != "0" ]]; then
+    TESTCASE_RESULT=1
+  fi
+  return $result
 }
 
 wait_for_cid() {
@@ -199,60 +221,104 @@ test_from_dockerfile(){
   check_result $?
 }
 
-# Since we built the candidate image locally, we don't want S2I attempt to pull
-# it from Docker hub
-s2i_args="--pull-policy=never"
+test_application_with_user() {
+  # test application with random user
+  CONTAINER_ARGS="--user 12345" test_application
 
-# Verify the 'usage' script is working properly when running the base image with 's2i usage ...'
-test_s2i_usage
-check_result $?
+}
 
-# Verify the 'usage' script is working properly when running the base image with 'docker run ...'
-test_docker_run_usage
-check_result $?
+test_application_enable_init_wrapper() {
+  # test application with init wrapper
+  CONTAINER_ARGS="-e ENABLE_INIT_WRAPPER=true" test_application
+}
 
+test_scl_variables_in_dockerfile() {
+  if [ "$OS" == "rhel7" ] || [ "$OS" == "centos7" ]; then
+     # autocleanup only enabled here as only the following tests so far use it
+     CID_FILE_DIR=$(mktemp -d)
+     ct_enable_cleanup
+
+     info "Testing variable presence during \`docker exec\`"
+     ct_check_exec_env_vars
+     check_result $?
+
+     info "Checking if all scl variables are defined in Dockerfile"
+     ct_check_scl_enable_vars
+     check_result $?
+  fi
+}
+
+function run_all_tests() {
+  local APP_NAME="$1"
+  for test_case in $TEST_SET; do
+    info "Running test $test_case ... "
+    TESTCASE_RESULT=0
+    $test_case
+    local test_msg
+    if [ $TESTCASE_RESULT -eq 0 ]; then
+      test_msg="[PASSED]"
+    else
+      test_msg="[FAILED]"
+      TESTSUITE_RESULT=1
+    fi
+    printf -v test_short_summary "%s %s for '%s' %s\n" "${test_short_summary}" "${test_msg}" "${APP_NAME}" "$test_case"
+    [ -n "${FAIL_QUICKLY:-}" ] && {
+      cleanup "${APP_NAME}"
+      return 1
+    }
+  done;
+}
+
+function test_run_s2i_build() {
+  local test_msg
+  local result="$1"
+  local app="$2"
+  if [[ "$app" == *"-should-fail-"* ]]; then
+    # Tests with '-should-fail-' in their name should fail during a build, expecting non-zero exit status
+    check_type $RESULT "negative"
+    if [ "$?" != "0" ]; then
+      test_msg="[PASSED]"
+    else
+      test_msg="[FAILED]"
+    fi
+    printf -v test_short_summary "%s %s for '%s' %s\n" "${test_short_summary}" "$test_msg" "${app}" "run_s2i_build"
+    return 1
+  else
+    check_type $RESULT
+    if [ "$?" != "0" ]; then
+      test_msg="[FAILED]"
+    else
+      test_msg="[PASSED]"
+    fi
+    printf -v test_short_summary "%s %s for '%s' %s\n" "${test_short_summary}" "$test_msg" "${app}" "run_s2i_build"
+  fi
+
+}
 # For debugging purposes, this script can be run with one or more arguments
 # those arguments list is a sub-set of values in the WEB_APPS array defined above
 # Example: ./run app-home-test-app pipenv-test-app
 for app in ${@:-${WEB_APPS[@]}}; do
+  # Since we built the candidate image locally, we don't want S2I attempt to pull
+  # it from Docker hub
+  s2i_args="--pull-policy=never"
+
   prepare ${app}
   run_s2i_build ${app}
   RESULT=$?
-  if [[ "$app" == *"-should-fail-"* ]]; then
-    # Tests with '-should-fail-' in their name should fail during a build, expecting non-zero exit status
-    check_result $RESULT "negative"
-    continue
-  else
-    check_result $RESULT
-  fi
+  test_run_s2i_build "$?" "$app"
+  test [[ $? -eq "1" ]] && continue
 
-  # test application with default user
-  test_application
+  TEST_SET=${TESTS:-$TEST_LIST} run_all_tests "${app}"
 
-  # test application with random user
-  CONTAINER_ARGS="--user 12345" test_application
-
-  # test application with init wrapper
-  CONTAINER_ARGS="-e ENABLE_INIT_WRAPPER=true" test_application
-
-  info "All tests for the ${app} finished successfully."
   cleanup ${app}
 done
 
-if [ "$OS" == "rhel7" ] || [ "$OS" == "centos7" ]; then
-   # autocleanup only enabled here as only the following tests so far use it
-   CID_FILE_DIR=$(mktemp -d)
-   ct_enable_cleanup
+echo "$test_short_summary"
 
-   info "Testing variable presence during \`docker exec\`"
-   ct_check_exec_env_vars
-   check_result $?
-
-   info "Checking if all scl variables are defined in Dockerfile"
-   ct_check_scl_enable_vars
-   check_result $?
+if [ $TESTSUITE_RESULT -eq 0 ] ; then
+  echo "Tests for ${IMAGE_NAME} succeeded."
+else
+  echo "Tests for ${IMAGE_NAME} failed."
 fi
 
-test_from_dockerfile
-
-info "All tests finished successfully."
+exit $TESTSUITE_RESULT
