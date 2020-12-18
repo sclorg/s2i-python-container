@@ -20,6 +20,10 @@ test_s2i_usage
 test_docker_run_usage
 test_application
 test_application_with_user
+test_application_enable_init_wrapper
+"
+
+TEST_VAR_DOCKER="\
 test_scl_variables_in_dockerfile
 test_from_dockerfile
 "
@@ -102,7 +106,7 @@ check_type() {
   if [[ "$type" == "positive" && "$result" != "0" ]]; then
     info "TEST FAILED (${type}), EXPECTED:0 GOT:${result}"
     cleanup
-    return 1
+    return $result
   elif [[ "$type" == "negative" && "$result" == "0" ]]; then
     info "TEST FAILED (${type}), EXPECTED: non-zero GOT:${result}"
     cleanup
@@ -111,8 +115,8 @@ check_type() {
 
 }
 check_result() {
-  # positive test & non-zero exit status = ERROR
-  # negative test & zero exit status = ERROR
+  # Function sets if test suite failed or not
+  # If return value is not 0 then mark test case as TESTCASE_RESULT=1
   local result="$1"
   if [[ "$result" != "0" ]]; then
     TESTCASE_RESULT=1
@@ -234,6 +238,7 @@ test_application_enable_init_wrapper() {
 
 test_scl_variables_in_dockerfile() {
   if [ "$OS" == "rhel7" ] || [ "$OS" == "centos7" ]; then
+     TESTCASE_RESULT=0
      # autocleanup only enabled here as only the following tests so far use it
      CID_FILE_DIR=$(mktemp -d)
      ct_enable_cleanup
@@ -249,7 +254,7 @@ test_scl_variables_in_dockerfile() {
 }
 
 function run_all_tests() {
-  local APP_NAME="$1"
+  local APP_NAME=${1:-undefined}
   for test_case in $TEST_SET; do
     info "Running test $test_case ... "
     TESTCASE_RESULT=0
@@ -261,7 +266,8 @@ function run_all_tests() {
       test_msg="[FAILED]"
       TESTSUITE_RESULT=1
     fi
-    printf -v test_short_summary "%s %s for '%s' %s\n" "${test_short_summary}" "${test_msg}" "${APP_NAME}" "$test_case"
+    test "$APP_NAME" == "undefined" && msg_app="" || msg_app="'$APP_NAME'"
+    printf -v test_short_summary "%s %s for %s %s\n" "${test_short_summary}" "${test_msg}" "${msg_app}" "$test_case"
     [ -n "${FAIL_QUICKLY:-}" ] && {
       cleanup "${APP_NAME}"
       return 1
@@ -269,31 +275,6 @@ function run_all_tests() {
   done;
 }
 
-function test_run_s2i_build() {
-  local test_msg
-  local result="$1"
-  local app="$2"
-  if [[ "$app" == *"-should-fail-"* ]]; then
-    # Tests with '-should-fail-' in their name should fail during a build, expecting non-zero exit status
-    check_type $RESULT "negative"
-    if [ "$?" != "0" ]; then
-      test_msg="[PASSED]"
-    else
-      test_msg="[FAILED]"
-    fi
-    printf -v test_short_summary "%s %s for '%s' %s\n" "${test_short_summary}" "$test_msg" "${app}" "run_s2i_build"
-    return 1
-  else
-    check_type $RESULT
-    if [ "$?" != "0" ]; then
-      test_msg="[FAILED]"
-    else
-      test_msg="[PASSED]"
-    fi
-    printf -v test_short_summary "%s %s for '%s' %s\n" "${test_short_summary}" "$test_msg" "${app}" "run_s2i_build"
-  fi
-
-}
 # For debugging purposes, this script can be run with one or more arguments
 # those arguments list is a sub-set of values in the WEB_APPS array defined above
 # Example: ./run app-home-test-app pipenv-test-app
@@ -305,13 +286,25 @@ for app in ${@:-${WEB_APPS[@]}}; do
   prepare ${app}
   run_s2i_build ${app}
   RESULT=$?
-  test_run_s2i_build "$?" "$app"
-  test [[ $? -eq "1" ]] && continue
-
+  msg_run_s2i_build="'${app}' run_s2i_build"
+  if [[ "$app" == *"-should-fail-"* ]]; then
+    # Tests with '-should-fail-' in their name should fail during a build, expecting non-zero exit status
+    check_type $RESULT "negative"
+    test "$?" == "0" && test_msg="[PASSED]" || test_msg="[FAILED]"
+    printf -v test_short_summary "%s %s for %s\n" "${test_short_summary}" "$test_msg" "$msg_run_s2i_build"
+    continue
+  else
+    check_type $RESULT
+    test "$?" != "0"  && test_msg="[FAILED]" || test_msg="[PASSED]"
+    printf -v test_short_summary "%s %s for %s\n" "${test_short_summary}" "$test_msg" "$msg_run_s2i_build"
+  fi
+  echo ""
   TEST_SET=${TESTS:-$TEST_LIST} run_all_tests "${app}"
 
   cleanup ${app}
 done
+
+TEST_SET=${TESTS:-$TEST_VAR_DOCKER} run_all_tests
 
 echo "$test_short_summary"
 
