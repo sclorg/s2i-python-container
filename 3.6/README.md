@@ -108,10 +108,13 @@ To use the Source-to-Image scripts and build an image using a Dockerfile, create
 FROM registry.access.redhat.com/ubi8/python-36
 # Add application sources to a directory that the assemble script expects them
 # and set permissions so that the container runs without root access
-USER 0
-ADD app-src /tmp/src
-RUN chown -R 1001:0 /tmp/src
-USER 1001
+# With older docker that does not support --chown option for ADD statement,
+# use these statements instead:
+#  USER 0
+#  ADD app-src /tmp/src
+#  RUN chown -R 1001:0 /tmp/src
+#  USER 1001
+ADD --chown 1001:0 app-src /tmp/src
 # Install the dependencies
 RUN /usr/libexec/s2i/assemble
 # Set the default command for the resulting image
