@@ -111,7 +111,7 @@ FROM {{ spec.main_image }}
 # and set permissions so that the container runs without root access
 USER 0
 ADD app-src /tmp/src
-RUN chown -R 1001:0 /tmp/src
+RUN /usr/bin/fix-permissions /tmp/src
 USER 1001
 
 # Install the dependencies
