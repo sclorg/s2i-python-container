@@ -215,13 +215,23 @@ test_application() {
 
 test_from_dockerfile(){
   info "Test from Dockerfile"
+  # The latest LTS release of Django does not work on RHEL 7 (due to an old version of SQLite),
+  # and no longer supports Python 2. So on all CentOS/RHEL 7 images and all Python 2 images,
+  # we're using the old Django LTS version 1.11.x from the main git branch of the django-ex project.
+  # In all other cases we're using the newer Django LTS version 2.2.x from the corresponding git branch.
+  if [[ ${VERSION} == "2.7" ]] || [[ ${IMAGE_NAME} =~ "centos7" ]] || [[ ${IMAGE_NAME} =~ "rhel7" ]] || [[ ${IMAGE_NAME} =~ "ubi7" ]]; then
+    django_example_repo_url="https://github.com/sclorg/django-ex.git"
+  else
+    django_example_repo_url="https://github.com/sclorg/django-ex.git@2.2.x"
+  fi
+
   sed "s@#IMAGE_NAME#@${IMAGE_NAME}@" $test_dir/from-dockerfile/Dockerfile.tpl > $test_dir/from-dockerfile/Dockerfile
-  ct_test_app_dockerfile $test_dir/from-dockerfile/Dockerfile 'https://github.com/sclorg/django-ex.git' 'Welcome to your Django application on OpenShift' app-src
+  ct_test_app_dockerfile $test_dir/from-dockerfile/Dockerfile $django_example_repo_url 'Welcome to your Django application on OpenShift' app-src
   check_result $?
 
   info "Test from Dockerfile with no s2i scripts used"
   sed "s@#IMAGE_NAME#@${IMAGE_NAME}@" $test_dir/from-dockerfile/Dockerfile_no_s2i.tpl > $test_dir/from-dockerfile/Dockerfile
-  ct_test_app_dockerfile $test_dir/from-dockerfile/Dockerfile 'https://github.com/sclorg/django-ex.git' 'Welcome to your Django application on OpenShift' app-src
+  ct_test_app_dockerfile $test_dir/from-dockerfile/Dockerfile $django_example_repo_url 'Welcome to your Django application on OpenShift' app-src
   check_result $?
 }
 
