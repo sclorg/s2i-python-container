@@ -57,7 +57,7 @@ specs:
                     '{{ spec.pkg_prefix }}-virtualenv']
         "3.6": ['python36', 'python36-devel', '{{ spec.pkg_prefix }}-virtualenv']
         "default": ['{{ spec.pkg_prefix }}', '{{ spec.pkg_prefix }}-devel']
-      ubi_versions: ['2.7', '3.6', '3.8']
+      ubi_versions: ['2.7', '3.6', '3.8', '3.9']
 
     fedora32:
       distros:
@@ -88,7 +88,7 @@ specs:
       scl: "rh-python39"
       module_stream: "python39:3.9"
       pkg_prefix: "python39"
-      main_image: "registry.fedoraproject.org/f33/python3"
+      main_image: "registry.access.redhat.com/ubi8/python-39"
 
     "3.8":
       version: "3.8"
@@ -144,5 +144,4 @@ matrix:
         - centos-7-x86_64
         - fedora-32-x86_64
         - rhel-7-x86_64
-        - rhel-8-x86_64
       version: "3.9"
