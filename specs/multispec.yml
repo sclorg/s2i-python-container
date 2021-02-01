@@ -56,7 +56,7 @@ specs:
         "2.7": ['{{ spec.pkg_prefix }}', '{{ spec.pkg_prefix }}-devel', 'glibc-langpack-en',
                     '{{ spec.pkg_prefix }}-virtualenv']
         "3.6": ['python36', 'python36-devel', '{{ spec.pkg_prefix }}-virtualenv']
-        "3.8": ['{{ spec.pkg_prefix }}', '{{ spec.pkg_prefix }}-devel']
+        "default": ['{{ spec.pkg_prefix }}', '{{ spec.pkg_prefix }}-devel']
       ubi_versions: ['2.7', '3.6', '3.8']
 
     fedora32:

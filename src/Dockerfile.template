@@ -60,7 +60,14 @@ LABEL summary="$SUMMARY" \
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,python,python{{ spec.short_ver }},python-{{ spec.short_ver }},rh-python{{ spec.short_ver }}" \
 {{ macros.labels(spec) }}
-{% set extra_pkgs = spec.extra_pkgs[spec.version] if spec.extra_pkgs and spec.extra_pkgs[spec.version] else [] %}
+{# Use extra_pkgs for specific Python version or the default or empty list #}
+{% if spec.extra_pkgs and spec.version in spec.extra_pkgs %}
+    {% set extra_pkgs = spec.extra_pkgs[spec.version] %}
+{% elif spec.extra_pkgs and "default" in spec.extra_pkgs %}
+    {% set extra_pkgs = spec.extra_pkgs["default"] %}
+{% else %}
+    {% set extra_pkgs = [] %}
+{% endif %}
 RUN INSTALL_PKGS="{{ common.list_pkgs(extra_pkgs + spec.python_pkgs + spec.base_pkgs) -}}
     {% if spec.preinstall_cmd %}
 {{ common.preinstall_cmd(spec) -}}
