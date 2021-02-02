@@ -1,0 +1,1 @@
+../../../src/test/from-dockerfile/Dockerfile.tpl
