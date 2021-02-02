@@ -35,6 +35,9 @@ DISTGEN_RULES="
 
     src=src/test/pipenv-test-app/Pipfile.lock
     dest=test/micropipenv-test-app/Pipfile.lock;
+
+    src=src/test/from-dockerfile/Dockerfile_no_s2i.tpl
+    dest=test/from-dockerfile/Dockerfile_no_s2i.tpl;
 "
 
 # Files containing distgen directives, which are used for each
@@ -91,8 +94,8 @@ SYMLINK_RULES="
     link_target=../../src/test/pipenv-and-micropipenv-should-fail-test-app
     link_name=test/pipenv-and-micropipenv-should-fail-test-app;
 
-    link_target=../../src/test/from-dockerfile
-    link_name=test/from-dockerfile;
+    link_target=../../../src/test/from-dockerfile/Dockerfile.tpl
+    link_name=test/from-dockerfile/Dockerfile.tpl;
 
     link_target=../../test/run-openshift
     link_name=test/run-openshift;
