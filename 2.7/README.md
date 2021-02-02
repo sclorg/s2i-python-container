@@ -134,7 +134,7 @@ RUN chown -R 1001:0 ./
 USER 1001
 
 # Install the dependencies
-RUN pip install -U "pip>=19.3.1" && \
+RUN pip install -U "pip>=19.3.1,<21.0" && \
     pip install -r requirements.txt && \
     python manage.py collectstatic --noinput && \
     python manage.py migrate
