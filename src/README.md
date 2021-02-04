@@ -266,10 +266,17 @@ file inside your source code repository.
 
 * **UPGRADE_PIP_TO_LATEST**
 
+    {% if spec.version == "2.7" %}
+    Python 2 images are using the latest compatible pip release (<21.0) so this
+    option controls update of setuptools and wheel packages only. Set this variable
+    to a non-empty value to have the packages be upgraded to the most recent version
+    before any Python packages are installed.
+    {% else %}
     Set this variable to a non-empty value to have the 'pip' program and related
     python packages (setuptools and wheel) be upgraded to the most recent version
-    before any Python packages are installed. If not set it will use whatever
-    the default version is included by the platform for the Python version being used.
+    before any Python packages are installed. If not set, the container will use
+    the stable pip version this container was built with, taken from a recent Fedora release.
+    {% endif %}
 
 * **WEB_CONCURRENCY**
 
