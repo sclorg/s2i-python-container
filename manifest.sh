@@ -114,6 +114,9 @@ SYMLINK_RULES="
 
     link_target=../../common/check_imagestreams.py
     link_name=test/check_imagestreams.py;
+
+    link_target=../../../src/root/opt/wheels/
+    link_name=root/opt/wheels;
 "
 
 # Files to copy
