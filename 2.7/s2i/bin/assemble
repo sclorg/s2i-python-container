@@ -58,20 +58,21 @@ mv /tmp/src/* "$HOME"
 # set permissions for any installed artifacts
 fix-permissions /opt/app-root -P
 
+# Python 2 only code, Python 3 uses bundled wheel from Fedora
 # We have to first upgrade pip to at least 19.3 because:
 # * pip < 9 does not support different packages' versions for Python 2/3
-# * pip < 19.3 does not support manylinux2014 wheels. Only manylinux2014 wheels
+# * pip < 19.3 does not support manylinux2014 wheels. Only manylinux2014 (and later) wheels
 #   support platforms like ppc64le, aarch64 or armv7
-echo "---> Upgrading pip to version 19.3.1 ..."
-if ! pip install -U "pip==19.3.1"; then
-  echo "WARNING: Installation of 'pip==19.3.1' failed, trying again from official PyPI with pip --isolated install"
-  pip install --isolated -U "pip==19.3.1"
+echo "---> Upgrading pip to version <21.0 (The last Python 2 compatible version) ..."
+if ! pip install -U "pip<21.0"; then
+  echo "WARNING: Installation of 'pip<21.0' failed, trying again from official PyPI with pip --isolated install"
+  pip install --isolated -U "pip<21.0"
 fi
 
-if [[ ! -z "$UPGRADE_PIP_TO_LATEST" || ! -z "$ENABLE_PIPENV" ]]; then
-  echo "---> Upgrading pip to latest version ..."
+if [[ ! -z "$UPGRADE_PIP_TO_LATEST" ]]; then
+  echo "---> Upgrading pip, setuptools and wheel to latest version ..."
   if ! pip install -U pip setuptools wheel; then
-    echo "WARNING: Installation of the latest pip,setuptools and wheel failed, trying again from official PyPI with pip --isolated install"
+    echo "WARNING: Installation of the latest pip, setuptools and wheel failed, trying again from official PyPI with pip --isolated install"
     pip install --isolated -U pip setuptools wheel
   fi
 fi
