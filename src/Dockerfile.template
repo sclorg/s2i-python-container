@@ -86,13 +86,21 @@ COPY {{ spec.version }}/s2i/bin/ $STI_SCRIPTS_PATH
 # Copy extra files to the image.
 COPY {{ spec.version }}/root/ /
 
+{% if spec.version != "2.7" %}
+# Python 3 only
+# Yes, the directory below is already copied by the previous command.
+# The problem here is that the wheels directory is copied as a symlink.
+# Only if you specify symlink directly as a source, COPY copies all the
+# files from the symlink destination.
+COPY {{ spec.version }}/root/opt/wheels /opt/wheels
+{% endif %}
 # - Create a Python virtual environment for use by any application to avoid
 #   potential conflicts with Python packages preinstalled in the main Python
 #   installation.
 # - In order to drop the root user, we have to make some directories world
 #   writable as OpenShift default security model is to run the container
 #   under random UID.
-{{ macros.permissions_setup(spec) }}
+{{ macros.venv_setup(spec) }}
 USER 1001
 
 # Set the default CMD to print the usage of the language image.
