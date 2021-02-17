@@ -87,13 +87,52 @@ COPY {{ spec.version }}/root/ /
 # files from the symlink destination.
 COPY {{ spec.version }}/root/opt/wheels /opt/wheels
 {% endif %}
+
+# - On RHEL7: Enable SCL
 # - Create a Python virtual environment for use by any application to avoid
 #   potential conflicts with Python packages preinstalled in the main Python
 #   installation.
-# - In order to drop the root user, we have to make some directories world
-#   writable as OpenShift default security model is to run the container
-#   under random UID.
-{{ macros.venv_setup(spec) }}
+# - For Python 3 versions: Install pip from wheel and remove the wheel
+# - Fix permissions: In order to drop the root user, we have to make some
+#   directories world writable as OpenShift default security model is to run
+#   the container under random UID.
+{# Enable SCL only for RHEL 7 #}
+{% if spec.el_version == '7' %}
+RUN source scl_source enable {{ spec.scl }} && \
+{% else %}
+RUN \
+{% endif %}
+{# Use different virtualenv command of venv module based on Python and platform version #}
+{% if spec.fedora_version or spec.version not in ["2.7", "3.6"] %}
+    python{{ spec.version }} -m venv ${APP_ROOT} && \
+{% elif spec.el_version == '7' %}
+    virtualenv ${APP_ROOT} && \
+{% else %}
+    virtualenv-$PYTHON_VERSION ${APP_ROOT} && \
+{% endif %}
+{% if spec.version != "2.7" %}
+    # Python 3 only code, Python 2 installs pip from PyPI in the assemble script. \
+    # We have to upgrade pip to a newer verison because: \
+    # * pip < 9 does not support different packages' versions for Python 2/3 \
+    # * pip < 19.3 does not support manylinux2014 wheels. Only manylinux2014 (and later) wheels \
+    #   support platforms like ppc64le, aarch64 or armv7 \
+    # We are newly using wheel from one of the latest stable Fedora releases (from RPM python-pip-wheel) \
+    # because it's tested better then whatever version from PyPI and contains useful patches. \
+    ${APP_ROOT}/bin/pip install /opt/wheels/pip-* && \
+{% endif %}
+    rm -r /opt/wheels && \
+    chown -R 1001:0 ${APP_ROOT} && \
+    fix-permissions ${APP_ROOT} -P && \
+    rpm-file-permissions
+
+{% if spec.fedora_version %}
+# For Fedora scl_enable isn't sourced automatically in s2i-core
+# so virtualenv needs to be activated this way
+ENV BASH_ENV="${APP_ROOT}/bin/activate" \
+    ENV="${APP_ROOT}/bin/activate" \
+    PROMPT_COMMAND=". ${APP_ROOT}/bin/activate"
+{% endif %}
+
 USER 1001
 
 # Set the default CMD to print the usage of the language image.
