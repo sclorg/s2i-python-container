@@ -60,18 +60,22 @@ COPY 2.7/s2i/bin/ $STI_SCRIPTS_PATH
 # Copy extra files to the image.
 COPY 2.7/root/ /
 
+
+# - On RHEL7: Enable SCL
 # - Create a Python virtual environment for use by any application to avoid
 #   potential conflicts with Python packages preinstalled in the main Python
 #   installation.
-# - In order to drop the root user, we have to make some directories world
-#   writable as OpenShift default security model is to run the container
-#   under random UID.
+# - For Python 3 versions: Install pip from wheel and remove the wheel
+# - Fix permissions: In order to drop the root user, we have to make some
+#   directories world writable as OpenShift default security model is to run
+#   the container under random UID.
 RUN source scl_source enable python27 && \
     virtualenv ${APP_ROOT} && \
     rm -r /opt/wheels && \
     chown -R 1001:0 ${APP_ROOT} && \
     fix-permissions ${APP_ROOT} -P && \
     rpm-file-permissions
+
 
 USER 1001
 

@@ -65,12 +65,15 @@ COPY 3.8/root/ /
 # Only if you specify symlink directly as a source, COPY copies all the
 # files from the symlink destination.
 COPY 3.8/root/opt/wheels /opt/wheels
+
+# - On RHEL7: Enable SCL
 # - Create a Python virtual environment for use by any application to avoid
 #   potential conflicts with Python packages preinstalled in the main Python
 #   installation.
-# - In order to drop the root user, we have to make some directories world
-#   writable as OpenShift default security model is to run the container
-#   under random UID.
+# - For Python 3 versions: Install pip from wheel and remove the wheel
+# - Fix permissions: In order to drop the root user, we have to make some
+#   directories world writable as OpenShift default security model is to run
+#   the container under random UID.
 RUN source scl_source enable rh-python38 && \
     python3.8 -m venv ${APP_ROOT} && \
     # Python 3 only code, Python 2 installs pip from PyPI in the assemble script. \
@@ -80,13 +83,12 @@ RUN source scl_source enable rh-python38 && \
     #   support platforms like ppc64le, aarch64 or armv7 \
     # We are newly using wheel from one of the latest stable Fedora releases (from RPM python-pip-wheel) \
     # because it's tested better then whatever version from PyPI and contains useful patches. \
-    # We have to do it here (in the macro) so the permissions are correctly fixed and pip is able \
-    # to reinstall itself in the next build phases in the assemble script if user wants the latest version \
     ${APP_ROOT}/bin/pip install /opt/wheels/pip-* && \
     rm -r /opt/wheels && \
     chown -R 1001:0 ${APP_ROOT} && \
     fix-permissions ${APP_ROOT} -P && \
     rpm-file-permissions
+
 
 USER 1001
 
