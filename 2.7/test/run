@@ -219,7 +219,8 @@ test_from_dockerfile(){
   # and no longer supports Python 2. So on all CentOS/RHEL 7 images and all Python 2 images,
   # we're using the old Django LTS version 1.11.x from the main git branch of the django-ex project.
   # In all other cases we're using the newer Django LTS version 2.2.x from the corresponding git branch.
-  if [[ ${VERSION} == "2.7" ]] || [[ ${IMAGE_NAME} =~ "centos7" ]] || [[ ${IMAGE_NAME} =~ "rhel7" ]] || [[ ${IMAGE_NAME} =~ "ubi7" ]]; then
+
+  if [[ ${VERSION} == "2.7" ]] || docker inspect ${IMAGE_NAME} --format "{{.Config.Env}}" | tr " " "\n" | grep -q "^PLATFORM=el7"; then
     django_example_repo_url="https://github.com/sclorg/django-ex.git"
   else
     django_example_repo_url="https://github.com/sclorg/django-ex.git@2.2.x"
