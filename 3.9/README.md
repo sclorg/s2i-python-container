@@ -264,8 +264,8 @@ file inside your source code repository.
 
     Set this variable to a non-empty value to have the 'pip' program and related
     python packages (setuptools and wheel) be upgraded to the most recent version
-    before any Python packages are installed. If not set it will use whatever
-    the default version is included by the platform for the Python version being used.
+    before any Python packages are installed. If not set, the container will use
+    the stable pip version this container was built with, taken from a recent Fedora release.
 
 * **WEB_CONCURRENCY**
 
