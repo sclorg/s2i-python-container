@@ -61,6 +61,9 @@ SYMLINK_RULES="
     link_target=../../examples/app-home-test-app
     link_name=test/app-home-test-app;
 
+    link_target=../../examples/app-module-test-app
+    link_name=test/app-module-test-app;
+
     link_target=../../examples/django-test-app
     link_name=test/django-test-app;
 
