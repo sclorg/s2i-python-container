@@ -48,25 +48,36 @@ APP_HOME=$(readlink -f "${APP_HOME:-.}")
 PYTHONPATH="$(pwd)${PYTHONPATH:+:$PYTHONPATH}"
 cd "$APP_HOME"
 
-app_script_check="${APP_SCRIPT-}"
-APP_SCRIPT="${APP_SCRIPT-app.sh}"
-if [[ -f "$APP_SCRIPT" ]]; then
-  echo "---> Running application from script ($APP_SCRIPT) ..."
-  if [[ "$APP_SCRIPT" != /* ]]; then
-    APP_SCRIPT="./$APP_SCRIPT"
-  fi
-  maybe_run_in_init_wrapper "$APP_SCRIPT"
-else
-  test -n "$app_script_check" && (>&2 echo "ERROR: file '$app_script_check' not found.") && exit 1
+if [ -z "$APP_SCRIPT" ] && [ -z "$APP_FILE" ] && [ -z "$APP_MODULE" ]; then
+  # Set default values for APP_SCRIPT and APP_FILE only when all three APP_
+  # variables are not defined by user. This prevents a situation when
+  # APP_MODULE is defined to app:application but the app.py file is found as the
+  # APP_FILE and then executed by Python instead of gunicorn.
+  APP_SCRIPT="app.sh"
+  APP_SCRIPT_DEFAULT=1
+  APP_FILE="app.py"
+  APP_FILE_DEFAULT=1
 fi
 
-app_file_check="${APP_FILE-}"
-APP_FILE="${APP_FILE-app.py}"
-if [[ -f "$APP_FILE" ]]; then
-  echo "---> Running application from Python script ($APP_FILE) ..."
-  maybe_run_in_init_wrapper python "$APP_FILE"
-else
-  test -n "$app_file_check" && (>&2 echo "ERROR: file '$app_file_check' not found.") && exit 1
+if [ ! -z "$APP_SCRIPT" ]; then
+  if [[ -f "$APP_SCRIPT" ]]; then
+    echo "---> Running application from script ($APP_SCRIPT) ..."
+    if [[ "$APP_SCRIPT" != /* ]]; then
+      APP_SCRIPT="./$APP_SCRIPT"
+    fi
+    maybe_run_in_init_wrapper "$APP_SCRIPT"
+  elif [[ -z "$APP_SCRIPT_DEFAULT" ]]; then
+    echo "ERROR: file '$APP_SCRIPT' not found." && exit 1
+  fi
+fi
+
+if [ ! -z "$APP_FILE" ]; then
+  if [[ -f "$APP_FILE" ]]; then
+    echo "---> Running application from Python script ($APP_FILE) ..."
+    maybe_run_in_init_wrapper python "$APP_FILE"
+  elif [[ -z "$APP_FILE_DEFAULT" ]]; then
+    echo "ERROR: file '$APP_FILE' not found." && exit 1
+  fi
 fi
 
 # Look for 'manage.py' in the current directory
