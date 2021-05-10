@@ -1,6 +1,6 @@
 # This image provides a Python 3.9 environment you can use to run your Python
 # applications.
-FROM registry.fedoraproject.org/f33/s2i-base:latest
+FROM registry.fedoraproject.org/f34/s2i-base:latest
 
 EXPOSE 8080
 
