@@ -69,11 +69,11 @@ specs:
       base_pkgs: ['nss_wrapper', 'httpd', 'httpd-devel', 'atlas-devel', 'gcc-gfortran',
                   'libffi-devel', 'libtool-ltdl enchant', 'redhat-rpm-config']
 
-    fedora33:
+    fedora34:
       distros:
-        - fedora-33-x86_64
-      fedora_version: "33"
-      s2i_base: registry.fedoraproject.org/f33/s2i-base
+        - fedora-34-x86_64
+      fedora_version: "34"
+      s2i_base: registry.fedoraproject.org/f34/s2i-base
       img_tag: "latest"
       python_pkgs: ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip']
       base_pkgs: ['nss_wrapper', 'httpd', 'httpd-devel', 'atlas-devel', 'gcc-gfortran',
@@ -122,23 +122,23 @@ matrix:
   exclude:
     - distros:
       - fedora-32-x86_64
-      - fedora-33-x86_64
+      - fedora-34-x86_64
       version: "2.7"
     - distros:
         - fedora-32-x86_64
-        - fedora-33-x86_64
+        - fedora-34-x86_64
         - centos-7-x86_64
         - rhel-7-x86_64
       version: "3.6"
     - distros:
         - centos-7-x86_64
         - fedora-32-x86_64
-        - fedora-33-x86_64
+        - fedora-34-x86_64
         - rhel-7-x86_64
         - rhel-8-x86_64
       version: "3.7"
     - distros:
-        - fedora-33-x86_64
+        - fedora-34-x86_64
       version: "3.8"
     - distros:
         - centos-7-x86_64
