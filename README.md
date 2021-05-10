@@ -53,7 +53,7 @@ CentOS versions currently supported are:
 
 Fedora versions currently supported are:
 * Fedora 32 ([registry.fedoraproject.org](https://registry.fedoraproject.org/repo/f32/python3/tags/))
-* Fedora 33 ([registry.fedoraproject.org](https://registry.fedoraproject.org/repo/f33/python3/tags/))
+* Fedora 34 ([registry.fedoraproject.org](https://registry.fedoraproject.org/repo/f34/python3/tags/))
 
 Download
 --------
