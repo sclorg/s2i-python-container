@@ -100,11 +100,17 @@ SYMLINK_RULES="
     link_target=../../test/run-openshift
     link_name=test/run-openshift;
 
+    link_target=../../test/run-openshift-remote-cluster
+    link_name=test/run-openshift-remote-cluster;
+
     link_target=../../common/test-lib.sh
     link_name=test/test-lib.sh;
 
     link_target=../../common/test-lib-openshift.sh
     link_name=test/test-lib-openshift.sh;
+
+    link_target=../../common/test-lib-remote-openshift.sh
+    link_name=test/test-lib-remote-openshift.sh;
 
     link_target=../../test/test-lib-python.sh
     link_name=test/test-lib-python.sh;
