@@ -24,7 +24,7 @@ function test_python_imagestream() {
                                      'python' \
                                      'Welcome to your Django application on OpenShift' \
                                      8080 http 200 "-p SOURCE_REPOSITORY_REF=master -p PYTHON_VERSION=${VERSION} -p POSTGRESQL_VERSION=10 -p NAME=python-testing" \
-                                     "quay.io/centos7/postgresql-10-centos7|postgresql:10"
+                                     "rhscl/postgresql-10-rhel7|postgresql:10"
 }
 
 # vim: set tabstop=2:shiftwidth=2:expandtab:
