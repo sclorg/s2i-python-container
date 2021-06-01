@@ -93,6 +93,11 @@ if should_migrate; then
   fi
 fi
 
+# If not set, use 8080 as the default port
+if [ -z "$PORT" ]; then
+  PORT=8080
+fi
+
 if is_gunicorn_installed; then
   setup_py=$(find "$HOME" -maxdepth 2 -type f -name 'setup.py' -print -quit)
   # Look for wsgi module in the current directory
@@ -105,17 +110,27 @@ if is_gunicorn_installed; then
   if [[ "$APP_MODULE" ]]; then
     export WEB_CONCURRENCY=${WEB_CONCURRENCY:-$(get_default_web_concurrency)}
 
-    echo "---> Serving application with gunicorn ($APP_MODULE) ..."
-    exec gunicorn "$APP_MODULE" --bind=0.0.0.0:8080 --access-logfile=- --config "$APP_CONFIG"
+    # Default settings for gunicorn if none of the custom are set
+    if [ -z "$APP_CONFIG" ] && [ -z "$GUNICORN_CMD_ARGS" ]; then
+      GUNICORN_CMD_ARGS="--bind=0.0.0.0:$PORT --access-logfile=-"
+      gunicorn_settings_source="default"
+    else
+      gunicorn_settings_source="custom"
+    fi
+
+    # Gunicorn can read GUNICORN_CMD_ARGS as an env variable but because this is not
+    # supported in Gunicorn < 20 we still need for Python 2, we are using arguments directly.
+    echo "---> Serving application with gunicorn ($APP_MODULE) with $gunicorn_settings_source settings ..."
+    exec gunicorn "$APP_MODULE" $GUNICORN_CMD_ARGS --config "$APP_CONFIG"
   fi
 fi
 
 if is_django_installed; then
   if [[ -f "$manage_file" ]]; then
-    echo "---> Serving application with 'manage.py runserver' ..."
+    echo "---> Serving application with 'manage.py runserver 0.0.0.0:$PORT' ..."
     echo "WARNING: this is NOT a recommended way to run you application in production!"
     echo "Consider using gunicorn or some other production web server."
-    maybe_run_in_init_wrapper python "$manage_file" runserver 0.0.0.0:8080
+    maybe_run_in_init_wrapper python "$manage_file" runserver 0.0.0.0:$PORT
   else
     echo "WARNING: seems that you're using Django, but we could not find a 'manage.py' file."
     echo "Skipped 'python manage.py runserver'."
