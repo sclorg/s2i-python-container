@@ -10,7 +10,11 @@ ENV PYTHON_VERSION=3.9 \
     PYTHONIOENCODING=UTF-8 \
     LC_ALL=en_US.UTF-8 \
     LANG=en_US.UTF-8 \
-    PIP_NO_CACHE_DIR=off
+    PIP_NO_CACHE_DIR=off \
+    CNB_STACK_ID=com.redhat.stacks.ubi8-python-39 \
+    CNB_USER_ID=1001 \
+    CNB_GROUP_ID=0
+
 
 # RHEL7 base images automatically set these envvars to run scl_enable. RHEl8
 # images, however, don't as most images don't need SCLs any more. But we want
@@ -35,6 +39,7 @@ LABEL summary="$SUMMARY" \
       io.k8s.display-name="Python 3.9" \
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,python,python39,python-39,rh-python39" \
+      io.buildpacks.stack.id="com.redhat.stacks.ubi8-python-39" \
       com.redhat.component="python-39-container" \
       name="ubi8/python-39" \
       version="1" \
