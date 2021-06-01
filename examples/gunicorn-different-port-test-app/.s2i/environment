@@ -1,0 +1,2 @@
+APP_MODULE=app:application
+PORT=8085
