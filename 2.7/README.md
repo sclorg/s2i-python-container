@@ -255,6 +255,12 @@ file inside your source code repository.
     the custom index, the container will try to install/update them from
     upstream PyPI afterwards.
 
+* **PORT**
+
+    HTTP(S) port your application should listen on. The default is 8080.
+    `PORT` is used only for Django development server and for Gunicorn
+    with the default configutation (no `APP_CONFIG` or `GUNICORN_CMD_ARGS` specified).
+
 * **UPGRADE_PIP_TO_LATEST**
 
     Python 2 images are using the latest compatible pip release (<21.0) so this
@@ -317,6 +323,9 @@ following ways, in precedence order:
 
   If you have both Django and Gunicorn in your requirements, your Django project
   will automatically be served using Gunicorn.
+
+  The default setting for Gunicorn (`--bind=0.0.0.0:$PORT --access-logfile=-`) is applied
+  only if both `$APP_CONFIG` and `$GUNICORN_CMD_ARGS` are not defined.
 
 * **Django development server**
 

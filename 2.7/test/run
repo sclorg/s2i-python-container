@@ -6,7 +6,7 @@
 # IMAGE_NAME specifies a name of the candidate image used for testing.
 # The image has to be available before this script is executed.
 #
-declare -a WEB_APPS=({standalone,setup,setup-requirements,django,numpy,app-home,npm-virtualenv-uwsgi,locale,mod-wsgi,pipenv,pipenv-and-micropipenv-should-fail,pin-pipenv-version,app-module}-test-app)
+declare -a WEB_APPS=({gunicorn-config-different-port,gunicorn-different-port,django-different-port,standalone,setup,setup-requirements,django,numpy,app-home,npm-virtualenv-uwsgi,locale,mod-wsgi,pipenv,pipenv-and-micropipenv-should-fail,pin-pipenv-version,app-module}-test-app)
 
 # TODO: Make command compatible for Mac users
 test_dir="$(readlink -zf $(dirname "${BASH_SOURCE[0]}"))"
@@ -36,9 +36,6 @@ fi
 IMAGE_NAME=${IMAGE_NAME:-centos/python-${VERSION//./}-centos7}
 
 . test/test-lib.sh
-
-# TODO: This should be part of the image metadata
-test_port=8080
 
 info() {
   echo -e "\n\e[1m[INFO] $@\e[0m\n"
@@ -293,6 +290,13 @@ for app in ${@:-${WEB_APPS[@]}}; do
   # Since we built the candidate image locally, we don't want S2I attempt to pull
   # it from Docker hub
   s2i_args="--pull-policy=never"
+
+  # Example apps with "-different-port-" in their name don't use the default port 8080
+  if [[ "$app" == *"-different-port-"* ]]; then
+    test_port=8085
+  else
+    test_port=8080
+  fi
 
   prepare ${app}
   run_s2i_build ${app}
