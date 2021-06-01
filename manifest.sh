@@ -67,6 +67,15 @@ SYMLINK_RULES="
     link_target=../../examples/django-test-app
     link_name=test/django-test-app;
 
+    link_target=../../examples/django-different-port-test-app
+    link_name=test/django-different-port-test-app;
+
+    link_target=../../examples/gunicorn-different-port-test-app
+    link_name=test/gunicorn-different-port-test-app;
+
+    link_target=../../examples/gunicorn-config-different-port-test-app
+    link_name=test/gunicorn-config-different-port-test-app;
+
     link_target=../../examples/locale-test-app
     link_name=test/locale-test-app;
 
