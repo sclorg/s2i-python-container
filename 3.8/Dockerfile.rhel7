@@ -19,6 +19,9 @@ ENV PYTHON_VERSION=3.8 \
     PYTHONIOENCODING=UTF-8 \
     LC_ALL=en_US.UTF-8 \
     LANG=en_US.UTF-8 \
+    CNB_STACK_ID=com.redhat.stacks.ubi7-python-38 \
+    CNB_USER_ID=1001 \
+    CNB_GROUP_ID=0 \
     PIP_NO_CACHE_DIR=off
 
 
@@ -42,6 +45,7 @@ LABEL summary="$SUMMARY" \
       version="1" \
       usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.8/test/setup-test-app/ rhscl/python-38-rhel7 python-sample-app" \
       com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI" \
+      io.buildpacks.stack.id="com.redhat.stacks.ubi7-python-38" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 RUN INSTALL_PKGS="rh-python38 rh-python38-python-devel rh-python38-python-setuptools rh-python38-python-pip nss_wrapper \
