@@ -31,6 +31,11 @@ ENV PYTHON_VERSION={{ spec.version }} \
     PYTHONIOENCODING=UTF-8 \
     LC_ALL=en_US.UTF-8 \
     LANG=en_US.UTF-8 \
+{% if spec.version in spec.ubi_versions %}
+    CNB_STACK_ID=com.redhat.stacks.ubi{{ spec.el_version }}-python-{{ spec.short_ver }} \
+    CNB_USER_ID=1001 \
+    CNB_GROUP_ID=0 \
+{% endif %}
     PIP_NO_CACHE_DIR=off
 
 {% if spec.el_version == '8' %}
