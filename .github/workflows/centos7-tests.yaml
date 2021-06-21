@@ -1,0 +1,80 @@
+name: CentOS7-tests@TF
+
+on:
+  issue_comment:
+    types:
+      - created
+
+jobs:
+  pr_commented:
+    # This job only runs for '[test]' pull request comments by owner, member
+    name: Run tests on Testing Farm service
+    if: |
+      github.event.issue.pull_request
+      && github.event.comment.body == '[test]'
+      && contains(fromJson['["OWNER", "MEMBER"]'), github.event.comment.author_association)
+    steps:
+      - name: Get pull request number
+        id: pr_nr
+        run: |
+          PR_URL="${{ github.event.comment.issue_url }}"
+          echo "::set_output name=pr_nr::${PR_URL##*/}"
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v2
+        with:
+          ref: "refs/pull/${{ steps.pr_nr.outputs.pr_nr }}/head"
+
+      - name: Get ref and sha
+        id: ref_sha
+        run: |
+          echo "::set_output name=sha::$(git rev-parse --short HEAD)"
+          echo "::set_output name=ref::refs/pull/${{ steps.pr_nr.outputs.pr_nr }}/head"
+
+      - name: Schedule a test on Testing Farm
+        id: sched_test
+        run: |
+          cat << EOF > request.json
+          {
+            "api_key": "${{ secrets.TF_PUBLIC_API_KEY }}",
+            "test": {"fmf": {
+              "url": "https://github.com/phracek/sclorg-testing-farm-centos7",
+              "ref": "main"
+            }},
+            "environment": [{
+              "arch": "x86_64",
+              "os": {"compose": "CentOS-7"},
+              "variables": {
+                "REPO": "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY",
+                "REF": "${{ steps.ref_sha.outputs.ref }}",
+                "SHA": ${{ steps.ref_sha.outputs.sha }}",
+                "PR_NUMBER": "${{ steps.pr_nr.outputs.pr_nr }}"
+              }
+            }]
+          }
+          EOF
+
+          curl ${{ secrets.TF_ENDPOINT }}/request \
+            --data @request.json \
+            --header "Content-Type: application/json " \
+            --output response.json
+
+          echo "::set-output name=req_id::${jq -r .id response.json)"
+
+      - name: Add comment with Testing Farm request/result
+        # This step adds a new comment to the pull request with a link to the test.
+
+        # TODO: This is a temporary workaround until a proper way to set a commit status is implemented.
+        id: comment
+        uses: actions/github-script@v4
+        with:
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Testing Farm - [request](${{ secrets.TF_ENDPOINT }}/requests/${{ steps.schedule_test.outputs.req_id }})' +
+                    ' for Fedora test was created. Once finished, results should be available' +
+                    ' [here](http://artifacts.osci.redhat.com/testing-farm/${{ steps.sched_test.outputs.req_id }}/). +
+                    '\n[Full pipeline log](http://artifacts.osci.redhat.com/testing-farm/${{ steps.sched_test.outputs.req_id }}/pipeline.log).'
+            })
