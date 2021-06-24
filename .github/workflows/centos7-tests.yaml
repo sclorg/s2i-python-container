@@ -38,17 +38,19 @@ jobs:
           {
             "api_key": "${{ secrets.TF_PUBLIC_API_KEY }}",
             "test": {"fmf": {
-              "url": "https://github.com/phracek/sclorg-testing-farm-centos7",
+              "url": "https://github.com/phracek/sclorg-testing-farm",
               "ref": "main"
             }},
             "environment": [{
               "arch": "x86_64",
               "os": {"compose": "CentOS-7"},
               "variables": {
-                "REPO": "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY",
+                "REPO_URL": "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY",
+                "REPO_NAME": "$GITHUB_REPOSITORY",
                 "REF": "${{ steps.ref_sha.outputs.ref }}",
                 "SHA": ${{ steps.ref_sha.outputs.sha }}",
-                "PR_NUMBER": "${{ steps.pr_nr.outputs.pr_nr }}"
+                "PR_NUMBER": "${{ steps.pr_nr.outputs.pr_nr }}",
+                "OS": "centos7"
               }
             }]
           }
@@ -73,8 +75,8 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'Testing Farm - [request](${{ secrets.TF_ENDPOINT }}/requests/${{ steps.schedule_test.outputs.req_id }})' +
-                    ' for Fedora test was created. Once finished, results should be available' +
+              body: 'Testing Farm - CentOS 7 [request](${{ secrets.TF_ENDPOINT }}/requests/${{ steps.schedule_test.outputs.req_id }})' +
+                    ' for CentOS 7 test was created. Once finished, results should be available' +
                     ' [here](http://artifacts.osci.redhat.com/testing-farm/${{ steps.sched_test.outputs.req_id }}/). +
                     '\n[Full pipeline log](http://artifacts.osci.redhat.com/testing-farm/${{ steps.sched_test.outputs.req_id }}/pipeline.log).'
             })
