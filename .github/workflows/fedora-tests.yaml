@@ -9,6 +9,7 @@ jobs:
   pr_commented:
     # This job only runs for '[test]' pull request comments by owner, member
     name: Run tests on Testing Farm service
+    runs-on: ubuntu-20.04
     if: |
       github.event.issue.pull_request
       && github.event.comment.body == '[test]'
