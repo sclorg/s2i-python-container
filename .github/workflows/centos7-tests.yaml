@@ -19,18 +19,11 @@ jobs:
         id: pr_nr
         run: |
           PR_URL="${{ github.event.comment.issue_url }}"
-          echo "::set_output name=pr_nr::${PR_URL##*/}"
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v2
-        with:
-          ref: "refs/pull/${{ steps.pr_nr.outputs.pr_nr }}/head"
+          echo "::set-output name=PR_NR::${PR_URL##*/}"
 
-      - name: Get ref and sha
-        id: ref_sha
-        run: |
-          echo "::set_output name=sha::$(git rev-parse --short HEAD)"
-          echo "::set_output name=ref::refs/pull/${{ steps.pr_nr.outputs.pr_nr }}/head"
+      - name: Get sha
+        id: sha
+        run: echo "::set_output name=SHA::$(git rev-parse --short HEAD)"
 
       - name: Schedule a test on Testing Farm
         id: sched_test
@@ -48,9 +41,8 @@ jobs:
               "variables": {
                 "REPO_URL": "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY",
                 "REPO_NAME": "$GITHUB_REPOSITORY",
-                "REF": "${{ steps.ref_sha.outputs.ref }}",
-                "SHA": ${{ steps.ref_sha.outputs.sha }}",
-                "PR_NUMBER": "${{ steps.pr_nr.outputs.pr_nr }}",
+                "SHA": ${{ steps.sha.outputs.SHA }}",
+                "PR_NUMBER": "${{ steps.pr_nr.outputs.PR_NR }}",
                 "OS": "centos7"
               }
             }]
