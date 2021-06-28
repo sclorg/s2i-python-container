@@ -21,13 +21,10 @@ jobs:
           PR_URL="${{ github.event.comment.issue_url }}"
           echo "::set-output name=PR_NR::${PR_URL##*/}"
 
-      - name: Get sha
-        id: sha
-        run: echo "::set_output name=SHA::$(git rev-parse --short HEAD)"
-
       - name: Schedule a test on Testing Farm
         id: sched_test
         run: |
+          apt update && apt -y install curl jq
           cat << EOF > request.json
           {
             "api_key": "${{ secrets.TF_PUBLIC_API_KEY }}",
@@ -35,13 +32,12 @@ jobs:
               "url": "https://github.com/phracek/sclorg-testing-farm",
               "ref": "main"
             }},
-            "environment": [{
+            "environments": [{
               "arch": "x86_64",
               "os": {"compose": "CentOS-7"},
               "variables": {
                 "REPO_URL": "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY",
                 "REPO_NAME": "$GITHUB_REPOSITORY",
-                "SHA": ${{ steps.sha.outputs.SHA }}",
                 "PR_NUMBER": "${{ steps.pr_nr.outputs.PR_NR }}",
                 "OS": "centos7"
               }
@@ -49,12 +45,8 @@ jobs:
           }
           EOF
 
-          curl ${{ secrets.TF_ENDPOINT }}/request \
-            --data @request.json \
-            --header "Content-Type: application/json " \
-            --output response.json
-
-          echo "::set-output name=req_id::${jq -r .id response.json)"
+          curl ${{ secrets.TF_ENDPOINT }}requests --data @request.json --header "Content-Type: application/json" --output response.json
+          echo "::set-output name=req_id::$(jq -r .id response.json)"
 
       - name: Add comment with Testing Farm request/result
         # This step adds a new comment to the pull request with a link to the test.
