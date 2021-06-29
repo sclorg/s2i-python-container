@@ -33,11 +33,6 @@ jobs:
         run: |
           echo "::set-output name=SHA::$(git rev-parse HEAD)"
 
-      - name: Checkout PR
-        uses: dawidd6/action-checkout-pr@v1
-        with:
-          pr: ${{ steps.pr_nr.outputs.PR_NR }}
-
       - name: Create status check to pending
         id: pending
         env:
