@@ -4,22 +4,58 @@ on:
   issue_comment:
     types:
       - created
-
 jobs:
-  pr_commented:
+  build:
     # This job only runs for '[test]' pull request comments by owner, member
-    name: Run tests on Testing Farm service
+    name: Schedule test on Testing Farm service for CentOS7
     runs-on: ubuntu-20.04
     if: |
       github.event.issue.pull_request
       && github.event.comment.body == '[test]'
       && contains(fromJson('["OWNER", "MEMBER"]'), github.event.comment.author_association)
+    outputs:
+      REQ_ID: ${{steps.sched_test.outputs.REQ_ID}}
+      SHA: ${{steps.sha.outputs.SHA}}
     steps:
       - name: Get pull request number
         id: pr_nr
         run: |
           PR_URL="${{ github.event.comment.issue_url }}"
           echo "::set-output name=PR_NR::${PR_URL##*/}"
+
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          ref: "refs/pull/${{ steps.pr_nr.outputs.PR_NR }}/head"
+
+      - name: Get sha
+        id: sha
+        run: |
+          echo "::set-output name=SHA::$(git rev-parse HEAD)"
+
+      - name: Checkout PR
+        uses: dawidd6/action-checkout-pr@v1
+        with:
+          pr: ${{ steps.pr_nr.outputs.PR_NR }}
+
+      - name: Create status check to pending
+        id: pending
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cat << EOF > pending.json
+          {
+            "sha": "${{steps.sha.outputs.SHA}}",
+            "state": "pending",
+            "context": "Testing Farm - CentOS7",
+            "target_url": "http://artifacts.dev.testing-farm.io/${{ steps.sched_test.outputs.req_id }}/pipeline.log"
+          }
+          EOF
+          echo "https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/${{steps.sha.outputs.SHA}}"
+          curl -X POST -H "Authorization: Bearer $GITHUB_TOKEN" -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/${{steps.sha.outputs.SHA}} \
+            --data @pending.json
+          echo "::set-output name=GITHUB_REPOSITORY::$GITHUB_REPOSITORY"
 
       - name: Schedule a test on Testing Farm
         id: sched_test
@@ -44,24 +80,101 @@ jobs:
             }]
           }
           EOF
+          curl ${{ secrets.TF_ENDPOINT }}/requests --data @request.json --header "Content-Type: application/json" --output response.json
+          echo "::set-output name=REQ_ID::$(jq -r .id response.json)"
 
-          curl ${{ secrets.TF_ENDPOINT }}requests --data @request.json --header "Content-Type: application/json" --output response.json
-          echo "::set-output name=req_id::$(jq -r .id response.json)"
+#      - name: Add comment with Testing Farm request/result
+#        # This step adds a new comment to the pull request with a link to the test.
+#        # TODO: This is a temporary workaround until a proper way to set a commit status is implemented.
+#        id: comment
+#        uses: peter-evans/create-or-update-comment@v1
+#        if: always()
+#        with:
+#          issue-number: ${{ steps.pr_nr.outputs.PR_NR }}
+#          body: |
+#            Testing Farm - CentOS 7 [request](${{ secrets.TF_ENDPOINT }}/requests/${{ steps.sched_test.outputs.req_id }})
+#            for CentOS 7 test was created. Once finished, results should be available [here](http://artifacts.dev.testing-farm.io/${{ steps.sched_test.outputs.req_id }}/)
+#            [Full pipeline log](http://artifacts.dev.testing-farm.io/${{ steps.sched_test.outputs.req_id }}/pipeline.log)
 
-      - name: Add comment with Testing Farm request/result
-        # This step adds a new comment to the pull request with a link to the test.
+  running:
+    needs: build
+    name: Check running tests on Testing Farm service
+    runs-on: ubuntu-20.04
+    outputs:
+      REQ_ID: ${{steps.req_sha.outputs.REQ_ID}}
+      SHA: ${{steps.req_sha.outputs.SHA}}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Check if REQ_ID and SHA exists
+        id: req_sha
+        run: |
+          apt update && apt -y install curl jq
+          echo "::set-output name=REQ_ID::${{needs.build.outputs.REQ_ID}}"
+          echo "::set-output name=SHA::${{needs.build.outputs.SHA}}"
 
-        # TODO: This is a temporary workaround until a proper way to set a commit status is implemented.
-        id: comment
-        uses: actions/github-script@v4
-        with:
-          script: |
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: 'Testing Farm - CentOS 7 [request](${{ secrets.TF_ENDPOINT }}/requests/${{ steps.schedule_test.outputs.req_id }})' +
-                    ' for CentOS 7 test was created. Once finished, results should be available' +
-                    ' [here](http://artifacts.osci.redhat.com/testing-farm/${{ steps.sched_test.outputs.req_id }}/). +
-                    '\n[Full pipeline log](http://artifacts.osci.redhat.com/testing-farm/${{ steps.sched_test.outputs.req_id }}/pipeline.log).'
-            })
+      - name: Switch to running state of Testing Farm request
+        id: running
+        run: |
+          cat << EOF > running.json
+          {
+            "sha": "${{needs.build.outputs.SHA}}",
+            "state": "pending",
+            "context": "Testing Farm - CentOS7",
+            "description": "Build started",
+            "target_url": "http://artifacts.dev.testing-farm.io/${{ needs.build.outputs.REQ_ID }}/pipeline.log"
+          }
+          EOF
+          curl -X POST -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/${{needs.build.outputs.SHA}} \
+            --data @running.json
+
+      - name: Check test is still running
+        id: still_running
+        run: |
+          CMD=${{ secrets.TF_ENDPOINT }}/requests/${{needs.build.outputs.REQ_ID}}
+          curl $CMD > job.json
+          state=$(jq -r .state job.json)
+          while [ "$state" == "running" ] || [ "$state" == "new" ] || [ "$state" == "pending" ] || [ "$state" == "queued" ]; do
+            sleep 30
+            curl $CMD > job.json
+            state=$(jq -r .state job.json)
+          done
+
+  finish:
+    needs: running
+    name: Tests are finished - switching to proper state
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Check if REQ_ID exists
+        run: echo "${{ needs.running.outputs.REQ_ID }}"
+
+      - name: Check if SHA exists
+        run: echo "${{ needs.running.outputs.SHA }}"
+
+      - name: Get final state of Testing Farm request
+        id: final_state
+        run: |
+          apt update && apt -y install curl jq
+          curl ${{ secrets.TF_ENDPOINT }}/requests/${{needs.running.outputs.REQ_ID}} > job.json
+          state=$(jq -r .state job.json)
+          if [ "$state" == "complete" ]; then
+            new_state="success"
+          else
+            new_state="failure"
+          fi
+          echo "::set-output name=FINAL_STATE::$new_state"
+
+      - name: Switch to final state of Testing Farm request
+        run: |
+          cat << EOF > running.json
+          {
+            "sha": "${{needs.running.outputs.SHA}}",
+            "state": "${{steps.final_state.outputs.FINAL_STATE}}",
+            "context": "Testing Farm curl - CentOS7",
+            "description": "Build finished",
+            "target_url": "http://artifacts.dev.testing-farm.io/${{ needs.running.outputs.REQ_ID }}/pipeline.log"
+          }
+          EOF
+          curl -X POST -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/${{needs.running.outputs.SHA}} \
+            --data @running.json
