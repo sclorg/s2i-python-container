@@ -59,7 +59,7 @@ jobs:
           {
             "api_key": "${{ secrets.TF_PUBLIC_API_KEY }}",
             "test": {"fmf": {
-              "url": "https://github.com/phracek/sclorg-testing-farm",
+              "url": "https://github.com/sclorg/sclorg-testing-farm",
               "ref": "main"
             }},
             "environments": [{
@@ -69,7 +69,8 @@ jobs:
                 "REPO_URL": "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY",
                 "REPO_NAME": "$GITHUB_REPOSITORY",
                 "PR_NUMBER": "${{ steps.pr_nr.outputs.PR_NR }}",
-                "OS": "fedora"
+                "OS": "fedora",
+                "TEST_NAME": "test"
               }
             }]
           }
