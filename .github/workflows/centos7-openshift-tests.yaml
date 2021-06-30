@@ -1,4 +1,4 @@
-name: CentOS7-tests@TF
+name: CentOS7-openshift-tests@TF
 
 on:
   issue_comment:
@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     # This job only runs for '[test]' pull request comments by owner, member
-    name: Schedule test on Testing Farm service for CentOS7
+    name: Schedule test on Testing Farm service for CentOS7 - Openshift
     runs-on: ubuntu-20.04
     if: |
       github.event.issue.pull_request
@@ -42,7 +42,7 @@ jobs:
           {
             "sha": "${{steps.sha.outputs.SHA}}",
             "state": "pending",
-            "context": "Testing Farm - CentOS7",
+            "context": "Testing Farm - CentOS7 - OpenShift 3",
             "target_url": "http://artifacts.dev.testing-farm.io/${{ steps.sched_test.outputs.req_id }}/pipeline.log"
           }
           EOF
@@ -52,7 +52,7 @@ jobs:
             --data @pending.json
           echo "::set-output name=GITHUB_REPOSITORY::$GITHUB_REPOSITORY"
 
-      - name: Schedule a test on Testing Farm
+      - name: Schedule a test on Testing Farm forn CentOS7 - OpenShift 3
         id: sched_test
         run: |
           apt update && apt -y install curl jq
@@ -71,7 +71,7 @@ jobs:
                 "REPO_NAME": "$GITHUB_REPOSITORY",
                 "PR_NUMBER": "${{ steps.pr_nr.outputs.PR_NR }}",
                 "OS": "centos7",
-                "TEST_NAME": "test"
+                "TEST_NAME": "test-openshift"
               }
             }]
           }
@@ -115,7 +115,7 @@ jobs:
           {
             "sha": "${{needs.build.outputs.SHA}}",
             "state": "pending",
-            "context": "Testing Farm - CentOS7",
+            "context": "Testing Farm - CentOS7 - OpenShift 3",
             "description": "Build started",
             "target_url": "http://artifacts.dev.testing-farm.io/${{ needs.build.outputs.REQ_ID }}/"
           }
@@ -177,7 +177,7 @@ jobs:
           {
             "sha": "${{needs.running.outputs.SHA}}",
             "state": "${{steps.final_state.outputs.FINAL_STATE}}",
-            "context": "Testing Farm - CentOS7",
+            "context": "Testing Farm - CentOS7 - OpenShift 3",
             "description": "Build finished${{steps.final_state.outputs.INFRA_STATE}}",
             "target_url": "http://artifacts.dev.testing-farm.io/${{ needs.running.outputs.REQ_ID }}/"
           }

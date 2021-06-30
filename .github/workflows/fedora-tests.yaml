@@ -156,23 +156,25 @@ jobs:
           cat job.json
           state=$(jq -r .state job.json)
           result=$(jq -r .result.overall job.json)
+          new_state="success"
+          infra_error=" "
+          echo "State is $state and result is: $result"
           if [ "$state" == "complete" ]; then
-            if [ "$result" == "passed" ]; then
-              new_state="success"
-            else
+            if [ "$result" != "passed" ]; then
               new_state="failure"
             fi
-            infra_error=""
           else
             infra_error=" - Infra problems"
             new_state="failure"
           fi
+          echo "New State is: $new_state"
+          echo "Infra state is: $infra_error"
           echo "::set-output name=FINAL_STATE::$new_state"
           echo "::set-output name=INFRA_STATE::$infra_error"
 
       - name: Switch to final state of Testing Farm request
         run: |
-          cat << EOF > running.json
+          cat << EOF > final.json
           {
             "sha": "${{needs.running.outputs.SHA}}",
             "state": "${{steps.final_state.outputs.FINAL_STATE}}",
@@ -181,6 +183,7 @@ jobs:
             "target_url": "http://artifacts.dev.testing-farm.io/${{ needs.running.outputs.REQ_ID }}/"
           }
           EOF
+          cat final.json
           curl -X POST -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/${{needs.running.outputs.SHA}} \
-            --data @running.json
+            --data @final.json
