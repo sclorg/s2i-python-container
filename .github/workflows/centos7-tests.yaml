@@ -165,7 +165,7 @@ jobs:
           {
             "sha": "${{needs.running.outputs.SHA}}",
             "state": "${{steps.final_state.outputs.FINAL_STATE}}",
-            "context": "Testing Farm curl - CentOS7",
+            "context": "Testing Farm - CentOS7",
             "description": "Build finished",
             "target_url": "http://artifacts.dev.testing-farm.io/${{ needs.running.outputs.REQ_ID }}/pipeline.log"
           }
