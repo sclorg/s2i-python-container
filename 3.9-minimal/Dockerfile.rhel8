@@ -1,11 +1,12 @@
-# This image provides a Python 3.9 environment you can use to run your Python
-# applications.
-FROM ubi8/s2i-base:1
+FROM ubi8/ubi-minimal:latest
 
 EXPOSE 8080
 
 ENV PYTHON_VERSION=3.9 \
-    PATH=$HOME/.local/bin/:$PATH \
+    # /opt/app-root/bin - the main venv \
+    # /opt/app-root/src/bin - app-specific binaries \
+    # /opt/app-root/src/.local/bin - tools like pipenv \
+    PATH=/opt/app-root/bin:/opt/app-root/src/bin:/opt/app-root/src/.local/bin:$PATH \
     PYTHONUNBUFFERED=1 \
     PYTHONIOENCODING=UTF-8 \
     LC_ALL=en_US.UTF-8 \
@@ -13,7 +14,12 @@ ENV PYTHON_VERSION=3.9 \
     CNB_STACK_ID=com.redhat.stacks.ubi8-python-39 \
     CNB_USER_ID=1001 \
     CNB_GROUP_ID=0 \
-    PIP_NO_CACHE_DIR=off
+    PIP_NO_CACHE_DIR=off \
+    # The following variables are usually available from parent s2i images \
+    STI_SCRIPTS_PATH=/usr/libexec/s2i \
+    APP_ROOT=/opt/app-root \
+    HOME=/opt/app-root/src \
+    PLATFORM="el8"
 
 # RHEL7 base images automatically set these envvars to run scl_enable. RHEl8
 # images, however, don't as most images don't need SCLs any more. But we want
@@ -23,7 +29,7 @@ ENV BASH_ENV=${APP_ROOT}/etc/scl_enable \
     ENV=${APP_ROOT}/etc/scl_enable \
     PROMPT_COMMAND=". ${APP_ROOT}/etc/scl_enable"
 
-ENV SUMMARY="Platform for building and running Python $PYTHON_VERSION applications" \
+ENV SUMMARY="Minimal platform for building and running Python $PYTHON_VERSION applications" \
     DESCRIPTION="Python $PYTHON_VERSION available as container is a base platform for \
 building and running various Python $PYTHON_VERSION applications and frameworks. \
 Python is an easy to learn, powerful programming language. It has efficient high-level \
@@ -41,26 +47,26 @@ LABEL summary="$SUMMARY" \
       com.redhat.component="python-39-container" \
       name="ubi8/python-39" \
       version="1" \
-      usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.9/test/setup-test-app/ ubi8/python-39 python-sample-app" \
+      usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.9/test/setup-test-app/ ubi8/python-39-minimal python-sample-app" \
       com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI" \
-      io.buildpacks.stack.id="com.redhat.stacks.ubi8-python-39" \
+      io.buildpacks.stack.id="com.redhat.stacks.ubi8-python-39-minimal" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
-RUN INSTALL_PKGS="python39 python39-devel python39-setuptools python39-pip nss_wrapper \
-        httpd httpd-devel mod_ssl mod_auth_gssapi mod_ldap \
-        mod_session atlas-devel gcc-gfortran libffi-devel libtool-ltdl enchant" && \
-    yum -y module enable python39:3.9 httpd:2.4 && \
-    yum -y --setopt=tsflags=nodocs install $INSTALL_PKGS && \
+# Very minimal set of packages
+# Python is obvious in the Python container :)
+# glibc-langpack-en is needed to set locale to en_US and disable warning about it
+# findutils - find command is needed for fix-permissions script
+# nss_wrapper - used in generate_container_user script
+RUN INSTALL_PKGS="python39 glibc-langpack-en findutils nss_wrapper" && \
+    microdnf -y --setopt=tsflags=nodocs --setopt=install_weak_deps=0 install $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
-    # Remove redhat-logos-httpd (httpd dependency) to keep image size smaller.
-    rpm -e --nodeps redhat-logos-httpd && \
-    yum -y clean all --enablerepo='*'
+    microdnf -y clean all --enablerepo='*'
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH.
-COPY 3.9/s2i/bin/ $STI_SCRIPTS_PATH
+COPY 3.9-minimal/s2i/bin/ $STI_SCRIPTS_PATH
 
 # Copy extra files to the image.
-COPY 3.9/root/ /
+COPY 3.9-minimal/root/ /
 
 # Python 3 only
 # Yes, the directory below is already copied by the previous command.
@@ -68,6 +74,11 @@ COPY 3.9/root/ /
 # Only if you specify symlink directly as a source, COPY copies all the
 # files from the symlink destination.
 COPY 3.9/root/opt/wheels /opt/wheels
+
+# Also creates the directory - it has to be done here so the latter
+# fix-permissions fixes this directory as well.
+WORKDIR ${HOME}
+
 # - Create a Python virtual environment for use by any application to avoid
 #   potential conflicts with Python packages preinstalled in the main Python
 #   installation.
