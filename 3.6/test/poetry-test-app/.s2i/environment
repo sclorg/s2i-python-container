@@ -1,0 +1,3 @@
+APP_MODULE=testapp:application
+ENABLE_POETRY=true
+DISABLE_SETUP_PY_PROCESSING=true

@@ -173,4 +173,13 @@ COPY_RULES="
 
     src=examples/micropipenv-test-app/.gitignore
     dest=test/micropipenv-test-app/.gitignore;
+
+    src=examples/poetry-test-app/.s2i/environment
+    dest=test/poetry-test-app/.s2i/environment;
+
+    src=examples/poetry-test-app/testapp.py
+    dest=test/poetry-test-app/testapp.py;
+
+    src=examples/poetry-test-app/pyproject.toml
+    dest=test/poetry-test-app/pyproject.toml;
 "

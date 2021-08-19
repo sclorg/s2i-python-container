@@ -242,6 +242,11 @@ file inside your source code repository.
     files or converting them to pip-tools compatible output. Designed for containerized Python applications.
     Available only for Python 3 images.
 
+* **ENABLE_POETRY**
+
+    Set this variable to use [poetry](https://github.com/python-poetry/poetry).
+
+
 * **ENABLE_INIT_WRAPPER**
 
     Set this variable to a non-empty value to make use of an init wrapper.

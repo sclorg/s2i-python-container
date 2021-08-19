@@ -244,6 +244,11 @@ file inside your source code repository.
     a lightweight wrapper for pip to support requirements.txt, Pipenv and Poetry lock
     files or converting them to pip-tools compatible output. Designed for containerized Python applications.
     Available only for Python 3 images.
+
+* **ENABLE_POETRY**
+
+    Set this variable to use [poetry](https://github.com/python-poetry/poetry).
+
 {% endif %}
 
 * **ENABLE_INIT_WRAPPER**

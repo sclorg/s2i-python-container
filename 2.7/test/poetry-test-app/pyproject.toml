@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "test-app"
+version = "0.1"
+description = "Test app"
+authors = ["test author"]
+license = "GPL-2.0-or-later"
+
+[tool.poetry.dependencies]
+python = "3.9"
+requests = "==2.20.0"
+gunicorn = "^20.1.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
