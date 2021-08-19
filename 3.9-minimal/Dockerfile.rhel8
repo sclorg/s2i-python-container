@@ -75,7 +75,8 @@ COPY 3.9-minimal/root/ /
 # files from the symlink destination.
 COPY 3.9/root/opt/wheels /opt/wheels
 
-# Also creates the directory - it has to be done here so the latter
+# This command sets (and also creates if necessary)
+# the home directory - it has to be done here so the latter
 # fix-permissions fixes this directory as well.
 WORKDIR ${HOME}
 
