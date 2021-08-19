@@ -199,7 +199,12 @@ test_application() {
   # that the container starts at all
   check_result $?
 
-  test_scl_usage "python --version" "Python $VERSION." "${cid_file}"
+  # Instead of relying on VERSION variable coming from Makefile
+  # set the expected string based on the PYTHON_VERSION defined
+  # inside the running container.
+  python_version=$(docker run --rm $IMAGE_NAME /bin/bash -c "echo \$PYTHON_VERSION" 2>&1)
+
+  test_scl_usage "python --version" "Python $python_version." "${cid_file}"
   check_result $?
   test_connection
   check_result $?
