@@ -225,13 +225,11 @@ test_from_dockerfile(){
     django_example_repo_url="https://github.com/sclorg/django-ex.git@2.2.x"
   fi
 
-  sed "s@#IMAGE_NAME#@${IMAGE_NAME}@" $test_dir/from-dockerfile/Dockerfile.tpl > $test_dir/from-dockerfile/Dockerfile
-  ct_test_app_dockerfile $test_dir/from-dockerfile/Dockerfile $django_example_repo_url 'Welcome to your Django application on OpenShift' app-src
+  ct_test_app_dockerfile $test_dir/from-dockerfile/Dockerfile.tpl $django_example_repo_url 'Welcome to your Django application on OpenShift' app-src
   check_result $?
 
   info "Test from Dockerfile with no s2i scripts used"
-  sed "s@#IMAGE_NAME#@${IMAGE_NAME}@" $test_dir/from-dockerfile/Dockerfile_no_s2i.tpl > $test_dir/from-dockerfile/Dockerfile
-  ct_test_app_dockerfile $test_dir/from-dockerfile/Dockerfile $django_example_repo_url 'Welcome to your Django application on OpenShift' app-src
+  ct_test_app_dockerfile $test_dir/from-dockerfile/Dockerfile_no_s2i.tpl $django_example_repo_url 'Welcome to your Django application on OpenShift' app-src
   check_result $?
 }
 
