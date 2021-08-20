@@ -1,4 +1,4 @@
-FROM #IMAGE_NAME# # Replaced by sed in tests, see test_from_dockerfile in test/run
+FROM #IMAGE_NAME# # Replaced by sed in ct_test_app_dockerfile
 
 # Add application sources with correct permissions for OpenShift
 USER 0
