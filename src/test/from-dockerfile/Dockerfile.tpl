@@ -1,4 +1,4 @@
-FROM #IMAGE_NAME# # Replaced by sed in tests, see test_from_dockerfile in test/run
+FROM #IMAGE_NAME# # Replaced by sed in ct_test_app_dockerfile
 
 # Add application sources to a directory that the assemble script expects them
 # and set permissions so that the container runs without root access
