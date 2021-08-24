@@ -3,10 +3,6 @@ FROM ubi8/ubi-minimal:latest
 EXPOSE 8080
 
 ENV PYTHON_VERSION=3.9 \
-    # /opt/app-root/bin - the main venv \
-    # /opt/app-root/src/bin - app-specific binaries \
-    # /opt/app-root/src/.local/bin - tools like pipenv \
-    PATH=/opt/app-root/bin:/opt/app-root/src/bin:/opt/app-root/src/.local/bin:$PATH \
     PYTHONUNBUFFERED=1 \
     PYTHONIOENCODING=UTF-8 \
     LC_ALL=en_US.UTF-8 \
@@ -20,6 +16,11 @@ ENV PYTHON_VERSION=3.9 \
     APP_ROOT=/opt/app-root \
     HOME=/opt/app-root/src \
     PLATFORM="el8"
+
+# /opt/app-root/bin - the main venv
+# /opt/app-root/src/bin - app-specific binaries
+# /opt/app-root/src/.local/bin - tools like pipenv
+ENV PATH=$APP_ROOT/bin:$HOME/bin:$HOME/.local/bin:$PATH
 
 # RHEL7 base images automatically set these envvars to run scl_enable. RHEl8
 # images, however, don't as most images don't need SCLs any more. But we want
