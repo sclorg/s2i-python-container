@@ -60,7 +60,8 @@ jobs:
             "api_key": "${{ secrets.TF_PUBLIC_API_KEY }}",
             "test": {"fmf": {
               "url": "https://github.com/sclorg/sclorg-testing-farm",
-              "ref": "main"
+              "ref": "main",
+              "name": "fedora"
             }},
             "environments": [{
               "arch": "x86_64",
