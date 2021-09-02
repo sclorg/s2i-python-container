@@ -1,0 +1,78 @@
+name: Build and push images
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  setup-matrix:
+    runs-on: ubuntu-latest
+    # We need to store values for job build-and-push
+    outputs:
+      versions_matrix: ${{ steps.setup-job.outputs.versions_matrix }}
+      image_name: ${{ steps.setup-job.outputs.image_name }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Get all matrix versions and base image name
+        id: setup-job
+        run: |
+          # This command returns row with VERSIONS
+          versions_row=$(grep "VERSIONS" Makefile)
+          # Return only version string, spaces are separated by dash
+          versions_row=${versions_row/VERSIONS = /}
+          versions_row=$(echo $versions_row | tr " " "\n")
+          VERSIONS_MATRIX=""
+          for row in $versions_row; do
+            if [[ $row =~ "minimal" ]]; then
+              continue
+            fi
+            VERSIONS_MATRIX="$VERSIONS_MATRIX$row,"
+          done
+          # Remove last dash from string which now looks like X,Y,Z,
+          VERSIONS_MATRIX=${VERSIONS_MATRIX::-1}
+          # Create a string like [X,Y,Z] which is the matrix
+          VERSIONS_MATRIX="[$VERSIONS_MATRIX]"
+          # This command returns row with BASE_IMAGE_NAME
+          row=$(grep "BASE_IMAGE_NAME" Makefile)
+          # Return only base image name
+          BASE_IMAGE_ROW=${row/BASE_IMAGE_NAME = /}
+
+          echo ::set-output name=image_name::$BASE_IMAGE_ROW
+          echo ::set-output name=versions_matrix::$VERSIONS_MATRIX
+
+  build-and-push:
+    runs-on: ubuntu-latest
+    needs: setup-matrix
+    strategy:
+      matrix: ${{ needs.setup-matrix.outputs.versions_matrix }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Get short version
+        id: short_version
+        run: |
+          ver="{{ matrix.version }}"
+          echo "::set-output name=SHORT_VER::${ver//./}"
+      - name: Build Image
+        id: build-image
+        # https://github.com/marketplace/actions/buildah-build
+        uses: redhat-actions/buildah-build@v2
+        with:
+          dockerfiles: Dockerfile
+          image: quay.io/centos7/{{ needs.setup-matrix.outputs.image_name}}-{{ steps.short_version.outputs.SHORT_VER }}-centos7
+          context: ${{ matrix.version }}
+          tags: latest, 1, ${{ github.sha }}
+
+      - name: Push To quay.io
+        id: push-to-quay
+        uses: redhat-actions/push-to-registry@v2
+        with:
+          image: ${{ steps.build-image.outputs.image }}
+          tags: ${{ steps.build-image.outputs.tags }}
+          registry: quay.io/centos7
+          username: ${{ secrets.QUAY_IMAGE_BUILDER_USERNAME }}
+          password: ${{ secrets.QUAY_IMAGE_BUILDER_TOKEN }}
+
+      - name: Print image url
+        run: echo "Image pushed to ${{ steps.push-to-quay.outputs.registry-paths }}"
