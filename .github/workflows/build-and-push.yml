@@ -1,4 +1,4 @@
-name: Build and push images
+name: Build and push CentOS7 images to Quay.io registry
 on:
   push:
     branches:
@@ -19,17 +19,19 @@ jobs:
         run: |
           # This command returns row with VERSIONS
           versions_row=$(grep "VERSIONS" Makefile)
-          # Return only version string, spaces are separated by dash
+          # Return only version string
           versions_row=${versions_row/VERSIONS = /}
+          # Return versions, each on new row
           versions_row=$(echo $versions_row | tr " " "\n")
           VERSIONS_MATRIX=""
+          # Result of this cycle will be VERSIONS_MATRIX=X,Y,Z,
           for row in $versions_row; do
             if [[ $row =~ "minimal" ]]; then
               continue
             fi
             VERSIONS_MATRIX="$VERSIONS_MATRIX$row,"
           done
-          # Remove last comma from string which now looks like X,Y,Z,
+          # Remove last comma from VERSIONS_MATRIX
           VERSIONS_MATRIX=${VERSIONS_MATRIX::-1}
           # Create a string like [X,Y,Z] which is the matrix
           VERSIONS_MATRIX="[$VERSIONS_MATRIX]"
@@ -54,7 +56,7 @@ jobs:
         run: |
           ver="{{ matrix.version }}"
           echo "::set-output name=SHORT_VER::${ver//./}"
-      - name: Build Image
+      - name: Build CentOS7 image
         id: build-image
         # https://github.com/marketplace/actions/buildah-build
         uses: redhat-actions/buildah-build@v2
@@ -64,7 +66,7 @@ jobs:
           context: ${{ matrix.version }}
           tags: latest, 1, ${{ github.sha }}
 
-      - name: Push To quay.io
+      - name: Push CentOS7 image to Quay.io
         id: push-to-quay
         uses: redhat-actions/push-to-registry@v2
         with:
