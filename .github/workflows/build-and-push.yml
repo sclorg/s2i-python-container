@@ -29,7 +29,7 @@ jobs:
             fi
             VERSIONS_MATRIX="$VERSIONS_MATRIX$row,"
           done
-          # Remove last dash from string which now looks like X,Y,Z,
+          # Remove last comma from string which now looks like X,Y,Z,
           VERSIONS_MATRIX=${VERSIONS_MATRIX::-1}
           # Create a string like [X,Y,Z] which is the matrix
           VERSIONS_MATRIX="[$VERSIONS_MATRIX]"
