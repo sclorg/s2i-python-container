@@ -5,70 +5,51 @@ on:
       - master
 
 jobs:
-  setup-matrix:
+  build-and-push:
     runs-on: ubuntu-latest
-    # We need to store values for job build-and-push
-    outputs:
-      versions_matrix: ${{ steps.setup-job.outputs.versions_matrix }}
-      image_name: ${{ steps.setup-job.outputs.image_name }}
+    strategy:
+      matrix:
+        version: [2.7, 3.8]
     steps:
       - uses: actions/checkout@v2
 
-      - name: Get all matrix versions and base image name
-        id: setup-job
+      - name: Get base image name
+        id: base-image-name
         run: |
-          # This command returns row with VERSIONS
-          versions_row=$(grep "VERSIONS" Makefile)
-          # Return only version string
-          versions_row=${versions_row/VERSIONS = /}
-          # Return versions, each on new row
-          versions_row=$(echo $versions_row | tr " " "\n")
-          VERSIONS_MATRIX=""
-          # Result of this cycle will be VERSIONS_MATRIX=X,Y,Z,
-          for row in $versions_row; do
-            if [[ $row =~ "minimal" ]]; then
-              continue
-            fi
-            VERSIONS_MATRIX="$VERSIONS_MATRIX$row,"
-          done
-          # Remove last comma from VERSIONS_MATRIX
-          VERSIONS_MATRIX=${VERSIONS_MATRIX::-1}
-          # Create a string like [X,Y,Z] which is the matrix
-          VERSIONS_MATRIX="[$VERSIONS_MATRIX]"
           # This command returns row with BASE_IMAGE_NAME
           row=$(grep "BASE_IMAGE_NAME" Makefile)
           # Return only base image name
           BASE_IMAGE_ROW=${row/BASE_IMAGE_NAME = /}
-
           echo ::set-output name=image_name::$BASE_IMAGE_ROW
-          echo ::set-output name=versions_matrix::$VERSIONS_MATRIX
-
-  build-and-push:
-    runs-on: ubuntu-latest
-    needs: setup-matrix
-    strategy:
-      matrix: ${{ needs.setup-matrix.outputs.versions_matrix }}
-    steps:
-      - uses: actions/checkout@v2
 
       - name: Get short version
         id: short_version
         run: |
-          ver="{{ matrix.version }}"
+          ver="${{ matrix.version }}"
           echo "::set-output name=SHORT_VER::${ver//./}"
+
+      - name: Check if .exclude-centos7 is present in version directory
+        id: check_exclude_centos7_file
+        # https://github.com/marketplace/actions/file-existence
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "${{ matrix.version }}/.exclude-centos7"
+
       - name: Build CentOS7 image
+        if: steps.check_exclude_centos7_file.outputs.files_exists == 'false'
         id: build-image
         # https://github.com/marketplace/actions/buildah-build
         uses: redhat-actions/buildah-build@v2
         with:
-          dockerfiles: Dockerfile
-          image: quay.io/centos7/{{ needs.setup-matrix.outputs.image_name}}-{{ steps.short_version.outputs.SHORT_VER }}-centos7
+          dockerfiles: ${{ matrix.version }}/Dockerfile
+          image: ${{ steps.base-image-name.outputs.image_name}}-${{ steps.short_version.outputs.SHORT_VER }}-centos7
           context: ${{ matrix.version }}
-          tags: latest, 1, ${{ github.sha }}
+          tags: latest 1 ${{ github.sha }}
 
       - name: Push CentOS7 image to Quay.io
+        if: steps.check_exclude_centos7_file.outputs.files_exists == 'false'
         id: push-to-quay
-        uses: redhat-actions/push-to-registry@v2
+        uses: redhat-actions/push-to-registry@v2.2
         with:
           image: ${{ steps.build-image.outputs.image }}
           tags: ${{ steps.build-image.outputs.tags }}
