@@ -9,9 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: [2.7, 3.8]
+        version: [2.7, 3.8, 3.9]
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Get base image name
         id: base-image-name
@@ -22,11 +24,22 @@ jobs:
           BASE_IMAGE_ROW=${row/BASE_IMAGE_NAME = /}
           echo ::set-output name=image_name::$BASE_IMAGE_ROW
 
+      - name: Checkout into generated section
+        run: |
+          git checkout --progress --force -B generated refs/remotes/origin/generated
+
       - name: Get short version
         id: short_version
         run: |
           ver="${{ matrix.version }}"
           echo "::set-output name=SHORT_VER::${ver//./}"
+
+      - name: Check if Dockerfile is present in version directory
+        id: check_dockerfile_file
+        # https://github.com/marketplace/actions/file-existence
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "${{ matrix.version }}/Dockerfile"
 
       - name: Check if .exclude-centos7 is present in version directory
         id: check_exclude_centos7_file
@@ -36,18 +49,17 @@ jobs:
           files: "${{ matrix.version }}/.exclude-centos7"
 
       - name: Build CentOS7 image
-        if: steps.check_exclude_centos7_file.outputs.files_exists == 'false'
+        if: steps.check_exclude_centos7_file.outputs.files_exists == 'false' && steps.check_dockerfile_file.outputs.files_exists == 'true'
         id: build-image
         # https://github.com/marketplace/actions/buildah-build
         uses: redhat-actions/buildah-build@v2
         with:
           dockerfiles: ${{ matrix.version }}/Dockerfile
           image: ${{ steps.base-image-name.outputs.image_name}}-${{ steps.short_version.outputs.SHORT_VER }}-centos7
-          context: ${{ matrix.version }}
           tags: latest 1 ${{ github.sha }}
 
       - name: Push CentOS7 image to Quay.io
-        if: steps.check_exclude_centos7_file.outputs.files_exists == 'false'
+        if: steps.check_exclude_centos7_file.outputs.files_exists == 'false' && steps.check_dockerfile_file.outputs.files_exists == 'true'
         id: push-to-quay
         uses: redhat-actions/push-to-registry@v2.2
         with:
