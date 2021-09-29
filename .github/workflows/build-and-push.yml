@@ -6,7 +6,7 @@ on:
 
 jobs:
   build-and-push:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         version: [2.7, 3.8, 3.9]
@@ -24,15 +24,25 @@ jobs:
           BASE_IMAGE_ROW=${row/BASE_IMAGE_NAME = /}
           echo ::set-output name=image_name::$BASE_IMAGE_ROW
 
-      - name: Checkout into generated section
+      - name: Install python3 packages needed by distgen
         run: |
-          git checkout --progress --force -B generated refs/remotes/origin/generated
+          sudo apt-get update -y && sudo apt-get install -y python3 python3-pip python3-jinja2 python3-yaml python3-distro
+
+      - name: Install dist-gen package from PyPi
+        id: dist-gen-install
+        run: |
+          pip3 -v install distgen
 
       - name: Get short version
         id: short_version
         run: |
           ver="${{ matrix.version }}"
           echo "::set-output name=SHORT_VER::${ver//./}"
+
+      - name: Generate source by dist-gen
+        id: generate
+        run: |
+          DG=/usr/local/bin/dg make generate-all
 
       - name: Check if Dockerfile is present in version directory
         id: check_dockerfile_file
