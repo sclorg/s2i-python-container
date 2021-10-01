@@ -43,6 +43,8 @@ jobs:
       - name: Generate source by dist-gen
         id: generate
         run: |
+          pwd
+          ls -la /usr/local/bin
           DG=/usr/local/bin/dg make generate-all
 
       - name: Check if Dockerfile is present in version directory
