@@ -11,7 +11,7 @@ The resulting image can be run using [podman](https://github.com/containers/libp
 [docker](http://docker.io).
 
 For more information about using these images with OpenShift, please see the
-official [OpenShift Documentation](https://docs.okd.io/latest/using_images/s2i_images/python.html).
+official [OpenShift Documentation](https://docs.okd.io/latest/openshift_images/using_images/using-s21-images.html).
 
 For more information about concepts used in these container images, see the
 [Landing page](https://github.com/sclorg/welcome).
