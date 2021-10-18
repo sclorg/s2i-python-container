@@ -100,6 +100,9 @@ SYMLINK_RULES="
     link_target=../../examples/setup-test-app
     link_name=test/setup-test-app;
 
+    link_target=../../examples/setup-cfg-test-app
+    link_name=test/setup-cfg-test-app;
+
     link_target=../../examples/standalone-test-app
     link_name=test/standalone-test-app;
 
