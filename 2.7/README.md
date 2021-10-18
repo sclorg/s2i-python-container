@@ -3,7 +3,7 @@ Python 2.7 container image
 
 This container image includes Python 2.7 as a [S2I](https://github.com/openshift/source-to-image) base image for your Python 2.7 applications.
 Users can choose between RHEL and CentOS based builder images.
-The RHEL images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/),
+The RHEL images are available in the [Red Hat Container Catalog](https://catalog.redhat.com/software/containers/explore),
 the CentOS images are available on [Quay.io](https://quay.io/organization/centos7),
 and the Fedora images are available in [Fedora Registry](https://registry.fedoraproject.org/).
 The resulting image can be run using [podman](https://github.com/containers/libpod) or
@@ -299,7 +299,7 @@ However, if these files exist they will affect the behavior of the build process
 
   Configures various aspects of the project, including installation of
   dependencies, as documented
-  [here](https://packaging.python.org/en/latest/distributing.html#setup-py).
+  [here](https://packaging.python.org/guides/distributing-packages-using-setuptools/?highlight=distributing#setup-py).
   For most projects, it is sufficient to simply use `requirements.txt` or
   `Pipfile`. Set `DISABLE_SETUP_PY_PROCESSING` environment variable to true
   in order to skip processing of this file.
@@ -361,7 +361,7 @@ option set to `true`. Make sure to specify your config via the `APP_CONFIG`
 environment variable.
 
 To change your source code in running container, use podman's (or docker's)
-[exec](https://github.com/containers/libpod/blob/master/docs/podman-exec.1.md) command:
+[exec](https://github.com/containers/podman/blob/main/docs/source/markdown/podman-exec.1.md) command:
 
 ```
 podman exec -it <CONTAINER_ID> /bin/bash
