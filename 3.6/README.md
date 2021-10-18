@@ -219,7 +219,7 @@ file inside your source code repository.
 
 * **DISABLE_SETUP_PY_PROCESSING**
 
-    Set this to a non-empty value to skip processing of setup.py script if you
+    Set this to a non-empty value to skip processing of setup.{py,cfg} script if you
     use `-e .` in requirements.txt to trigger its processing or you don't want
     your application to be installed into site-packages directory.
 
