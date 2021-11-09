@@ -1,4 +1,4 @@
-name: RHEL8-tests@TF
+name: docker-tests at Testing Farm
 
 on:
   issue_comment:
@@ -7,15 +7,40 @@ on:
 jobs:
   build:
     # This job only runs for '[test]' pull request comments by owner, member
-    name: Schedule test on Testing Farm service for RHEL8
+    name: Docker tests on Testing Farm service
     runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - tmt_plan: "fedora"
+            os_test: "fedora"
+            context: "Fedora"
+            compose: "CentOS-7"
+            tmt_url: "http://artifacts.dev.testing-farm.io/"
+            tmt_repo: "https://github.com/sclorg/sclorg-testing-farm"
+          - tmt_plan: "centos7"
+            os_test: "centos7"
+            context: "CentOS7"
+            compose: "CentOS-7"
+            tmt_url: "http://artifacts.dev.testing-farm.io/"
+            tmt_repo: "https://github.com/sclorg/sclorg-testing-farm"
+          - tmt_plan: "rhel7-docker"
+            os_test: "rhel7"
+            context: "RHEL7"
+            compose: "RHEL-7.9-Released"
+            tmt_url: "http://artifacts.osci.redhat.com/testing-farm/"
+            tmt_repo: "https://gitlab.cee.redhat.com/platform-eng-core-services/sclorg-tmt-plans"
+          - tmt_plan: "rhel8-docker"
+            os_test: "rhel8"
+            context: "RHEL8"
+            compose: "RHEL-8.3.1-Released"
+            tmt_url: "http://artifacts.osci.redhat.com/testing-farm/"
+            tmt_repo: "https://gitlab.cee.redhat.com/platform-eng-core-services/sclorg-tmt-plans"
     if: |
       github.event.issue.pull_request
-      && contains(github.event.comment.body, '[test]')
+      && (contains(github.event.comment.body, '[test]') || contains(github.event.comment.body, '[test-all]'))
       && contains(fromJson('["OWNER", "MEMBER"]'), github.event.comment.author_association)
-    outputs:
-      REQ_ID: ${{steps.sched_test.outputs.REQ_ID}}
-      SHA: ${{steps.sha.outputs.SHA}}
     steps:
       - name: Get pull request number
         id: pr_nr
@@ -28,10 +53,9 @@ jobs:
         with:
           ref: "refs/pull/${{ steps.pr_nr.outputs.PR_NR }}/head"
 
-      - name: Get sha
-        id: sha
+      - name: SHA value
+        id: sha_value
         run: |
-          # Store SHA into outputs
           echo "::set-output name=SHA::$(git rev-parse HEAD)"
 
       - name: Create status check to pending
@@ -42,92 +66,84 @@ jobs:
           # Create a JSON file for Testing Farm in order to schedule a CI testing job
           cat << EOF > pending.json
           {
-            "sha": "${{steps.sha.outputs.SHA}}",
+            "sha": "${{ steps.sha_value.outputs.SHA }}",
             "state": "pending",
-            "context": "Testing Farm - RHEL8",
-            "target_url": "http://artifacts.osci.redhat.com/testing-farm/${{ steps.sched_test.outputs.req_id }}"
+            "context": "Testing Farm - ${{ matrix.context }}",
+            "target_url": "${{ matrix.tmt_url }}"
           }
           EOF
-          echo "https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/${{steps.sha.outputs.SHA}}"
+          echo "https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/${{ steps.sha_value.outputs.SHA }}"
           # GITHUB_TOKEN is used for updating pull request status.
           # It is provided by GitHub https://docs.github.com/en/actions/reference/authentication-in-a-workflow#about-the-github_token-secret
           curl -X POST -H "Authorization: Bearer $GITHUB_TOKEN" -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/${{steps.sha.outputs.SHA}} \
+            https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/${{ steps.sha_value.outputs.SHA }} \
             --data @pending.json
           echo "::set-output name=GITHUB_REPOSITORY::$GITHUB_REPOSITORY"
 
-      - name: Schedule a test on Testing Farm for RHEL 8
+      - name: Schedule a test on Testing Farm
         id: sched_test
         run: |
           # Update ubuntu-20.04 in order to install curl and jq
-          apt update && apt -y install curl jq
+          sudo apt update && sudo apt -y install curl jq
+          if [ "${{ matrix.tmt_plan }}" == "fedora" ] || [ "${{ matrix.tmt_plan }}" == "centos7" ]; then
+            api_key="${{ secrets.TF_PUBLIC_API_KEY }}"
+            branch_name="main"
+          else
+            api_key="${{ secrets.TF_INTERNAL_API_KEY }}"
+            branch_name="master"
+          fi
           cat << EOF > request.json
           {
-            "api_key": "${{ secrets.TF_INTERNAL_API_KEY }}",
+            "api_key": "$api_key",
             "test": {"fmf": {
-              "url": "https://gitlab.cee.redhat.com/platform-eng-core-services/sclorg-tmt-plans",
-              "ref": "master",
-              "name": "rhel8-docker"
+              "url": "${{ matrix.tmt_repo }}",
+              "ref": "$branch_name",
+              "name": "${{ matrix.tmt_plan }}"
             }},
             "environments": [{
               "arch": "x86_64",
-              "os": {"compose": "RHEL-8.3.1-Released"},
+              "os": {"compose": "${{ matrix.compose }}"},
               "variables": {
                 "REPO_URL": "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY",
                 "REPO_NAME": "$GITHUB_REPOSITORY",
                 "PR_NUMBER": "${{ steps.pr_nr.outputs.PR_NR }}",
-                "OS": "rhel8",
+                "OS": "${{ matrix.os_test }}",
                 "TEST_NAME": "test"
               }
             }]
           }
           EOF
           curl ${{ secrets.TF_ENDPOINT }}/requests --data @request.json --header "Content-Type: application/json" --output response.json
+          cat response.json
+          
           # Store REQ_ID into outputs for later on usage
-          echo "::set-output name=REQ_ID::$(jq -r .id response.json)"
+          req_id=$(jq -r .id response.json)
+          echo "REQ_ID=$req_id" >> $GITHUB_ENV
 
-  running:
-    needs: build
-    name: Check running tests on Testing Farm service on RHEL8
-    runs-on: ubuntu-20.04
-    outputs:
-      REQ_ID: ${{steps.req_sha.outputs.REQ_ID}}
-      SHA: ${{steps.req_sha.outputs.SHA}}
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    steps:
-      - name: Check if REQ_ID and SHA exists
-        id: req_sha
-        run: |
-          # Update ubuntu-20.04 in order to install curl and jq
-          # each job is separate machine
-          apt update && apt -y install curl jq
-          # Propagate REQ_ID and SHA into the finish section
-          echo "::set-output name=REQ_ID::${{needs.build.outputs.REQ_ID}}"
-          echo "::set-output name=SHA::${{needs.build.outputs.SHA}}"
-
-      - name: Switch to running state of Testing Farm request for RHEL8
+      - name: Switch to running state of Testing Farm request
         id: running
         run: |
           # Create running.json file for query, whether job is finished or not.
           cat << EOF > running.json
           {
-            "sha": "${{needs.build.outputs.SHA}}",
+            "sha": "${{ steps.sha_value.outputs.SHA }}",
             "state": "pending",
-            "context": "Testing Farm - RHEL8",
+            "context": "Testing Farm - ${{ matrix.context }}",
             "description": "Build started",
-            "target_url": "http://artifacts.osci.redhat.com/testing-farm/${{ needs.build.outputs.REQ_ID }}"
+            "target_url": "${{ matrix.tmt_url }}/${{ env.REQ_ID }}"
           }
           EOF
           # Update GitHub status description to 'Build started'
-          curl -X POST -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/${{needs.build.outputs.SHA}} \
+          curl -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/${{ steps.sha_value.outputs.SHA }} \
             --data @running.json
 
-      - name: Check test is still running for RHEL8
+      - name: Check test is still running
         id: still_running
         run: |
-          CMD=${{ secrets.TF_ENDPOINT }}/requests/${{needs.build.outputs.REQ_ID}}
+          CMD=${{ secrets.TF_ENDPOINT }}/requests/${{ env.REQ_ID }}
           curl $CMD > job.json
+          cat job.json
           state=$(jq -r .state job.json)
           # Wait till job is not finished. As soon as state is complete or failure then go to the finish action
           while [ "$state" == "running" ] || [ "$state" == "new" ] || [ "$state" == "pending" ] || [ "$state" == "queued" ]; do
@@ -137,24 +153,10 @@ jobs:
             state=$(jq -r .state job.json)
           done
 
-  finish:
-    needs: running
-    name: Tests are finished - switching to proper state for RHEL8
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Check if REQ_ID exists
-        run: echo "${{ needs.running.outputs.REQ_ID }}"
-
-      - name: Check if SHA exists
-        run: echo "${{ needs.running.outputs.SHA }}"
-
       - name: Get final state of Testing Farm request
         id: final_state
         run: |
-          # Update ubuntu-20.04 in order to install curl and jq
-          # each job is separate machine
-          apt update && apt -y install curl jq
-          curl ${{ secrets.TF_ENDPOINT }}/requests/${{needs.running.outputs.REQ_ID}} > job.json
+          curl ${{ secrets.TF_ENDPOINT }}/requests/${{ env.REQ_ID }} > job.json
           cat job.json
           state=$(jq -r .state job.json)
           result=$(jq -r .result.overall job.json)
@@ -175,19 +177,19 @@ jobs:
           echo "::set-output name=FINAL_STATE::$new_state"
           echo "::set-output name=INFRA_STATE::$infra_error"
 
-      - name: Switch to final state of Testing Farm request for RHEL8
+      - name: Switch to final state of Testing Farm request
         run: |
           cat << EOF > final.json
           {
-            "sha": "${{needs.running.outputs.SHA}}",
-            "state": "${{steps.final_state.outputs.FINAL_STATE}}",
-            "context": "Testing Farm - RHEL8",
-            "description": "Build finished${{steps.final_state.outputs.INFRA_STATE}}",
-            "target_url": "http://artifacts.osci.redhat.com/testing-farm/${{ needs.running.outputs.REQ_ID }}"
+            "sha": "${{ steps.sha_value.outputs.SHA }}",
+            "state": "${{ steps.final_state.outputs.FINAL_STATE }}",
+            "context": "Testing Farm - ${{ matrix.context }}",
+            "description": "Build finished${{ steps.final_state.outputs.INFRA_STATE }}",
+            "target_url": "${{ matrix.tmt_url }}/${{ env.REQ_ID }}"
           }
           EOF
           cat final.json
           # Switch Github status to proper state
-          curl -X POST -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/${{needs.running.outputs.SHA}} \
+          curl -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/${{ steps.sha_value.outputs.SHA }} \
             --data @final.json
