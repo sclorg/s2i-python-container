@@ -63,7 +63,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Create a JSON file for Testing Farm in order to schedule a CI testing job
+          # Create a JSON data structure for GitHub API to display the test status in the PR
           cat << EOF > pending.json
           {
             "sha": "${{ steps.sha_value.outputs.SHA }}",
