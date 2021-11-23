@@ -1,4 +1,4 @@
-name: docker-tests at Testing Farm
+name: container-tests at Testing Farm
 
 on:
   issue_comment:
