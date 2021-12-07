@@ -67,7 +67,7 @@ jobs:
         with:
           dockerfiles: ${{ matrix.version }}/Dockerfile.rhel8
           image: ${{ steps.base-image-name.outputs.image_name}}-${{ steps.short_version.outputs.SHORT_VER }}
-          tags: latest 1 ${{ github.sha }}
+          tags: el8
 
       - name: Push RHEL8 image to Quay.io
         if: steps.check_exclude_rhel8_file.outputs.files_exists == 'false' && steps.check_dockerfile_rhel8_file.outputs.files_exists == 'true'
