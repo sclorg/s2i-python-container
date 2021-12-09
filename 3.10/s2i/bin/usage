@@ -1,0 +1,18 @@
+#!/bin/sh
+
+DISTRO=`cat /etc/*-release | grep ^ID= | grep -Po '".*?"' | tr -d '"'`
+NAMESPACE=centos
+[[ $DISTRO =~ rhel* ]] && NAMESPACE=rhscl
+
+cat <<EOF
+This is a S2I python-3.10 ${DISTRO} base image:
+There are multiple ways how to run the image, see documentation at:
+https://github.com/sclorg/s2i-python-container/blob/master/3.10/README.md
+
+To use it in Openshift, run:
+oc new-app python:3.10~https://github.com/sclorg/s2i-python-container.git --context-dir=3.10/test/setup-test-app/
+
+You can then run the resulting image via:
+oc get pods
+oc exec <pod> -- curl 127.0.0.1:8080
+EOF
