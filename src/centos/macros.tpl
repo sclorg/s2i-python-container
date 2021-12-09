@@ -20,7 +20,7 @@ python
       name="{{ _image_name(spec) }}" \
       version="{{ _version_selector(spec) }}" \
       usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir={{spec.version }}/test/setup-test-app/ {{ _image_name(spec) }} python-sample-app" \
-      {% if spec.version in spec.ubi_versions %}
+      {% if spec.version in spec.get("ubi_versions", []) %}
       com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI" \
       io.buildpacks.stack.id="com.redhat.stacks.ubi{{ spec.el_version }}-python-{{ spec.short_ver }}" \
       {% endif %}
