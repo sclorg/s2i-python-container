@@ -1,0 +1,90 @@
+# This image provides a Python 3.10 environment you can use to run your Python
+# applications.
+FROM registry.fedoraproject.org/f35/s2i-base:latest
+
+EXPOSE 8080
+
+ENV PYTHON_VERSION=3.10 \
+    PATH=$HOME/.local/bin/:$PATH \
+    PYTHONUNBUFFERED=1 \
+    PYTHONIOENCODING=UTF-8 \
+    LC_ALL=en_US.UTF-8 \
+    LANG=en_US.UTF-8 \
+    PIP_NO_CACHE_DIR=off
+
+
+ENV NAME=python3 \
+    VERSION=0 \
+    ARCH=x86_64
+
+ENV SUMMARY="Platform for building and running Python $PYTHON_VERSION applications" \
+    DESCRIPTION="Python $PYTHON_VERSION available as container is a base platform for \
+building and running various Python $PYTHON_VERSION applications and frameworks. \
+Python is an easy to learn, powerful programming language. It has efficient high-level \
+data structures and a simple but effective approach to object-oriented programming. \
+Python's elegant syntax and dynamic typing, together with its interpreted nature, \
+make it an ideal language for scripting and rapid application development in many areas \
+on most platforms."
+
+LABEL summary="$SUMMARY" \
+      description="$DESCRIPTION" \
+      io.k8s.description="$DESCRIPTION" \
+      io.k8s.display-name="Python 3.10" \
+      io.openshift.expose-services="8080:http" \
+      io.openshift.tags="builder,python,python310,python-310,rh-python310" \
+      com.redhat.component="$NAME" \
+      name="$FGC/$NAME" \
+      version="$VERSION" \
+      usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.10/test/setup-test-app/ $FGC/$NAME python-sample-app" \
+      maintainer="SoftwareCollections.org <sclorg@redhat.com>"
+
+RUN INSTALL_PKGS="python3 python3-devel python3-setuptools python3-pip nss_wrapper \
+        httpd httpd-devel atlas-devel gcc-gfortran libffi-devel \
+        libtool-ltdl enchant redhat-rpm-config" && \
+    dnf -y --setopt=tsflags=nodocs install $INSTALL_PKGS && \
+    rpm -V $INSTALL_PKGS && \
+    dnf -y clean all --enablerepo='*'
+
+# Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH.
+COPY 3.10/s2i/bin/ $STI_SCRIPTS_PATH
+
+# Copy extra files to the image.
+COPY 3.10/root/ /
+
+# Python 3 only
+# Yes, the directory below is already copied by the previous command.
+# The problem here is that the wheels directory is copied as a symlink.
+# Only if you specify symlink directly as a source, COPY copies all the
+# files from the symlink destination.
+COPY 3.10/root/opt/wheels /opt/wheels
+# - Create a Python virtual environment for use by any application to avoid
+#   potential conflicts with Python packages preinstalled in the main Python
+#   installation.
+# - In order to drop the root user, we have to make some directories world
+#   writable as OpenShift default security model is to run the container
+#   under random UID.
+RUN python3.10 -m venv ${APP_ROOT} && \
+# Python 3 only code, Python 2 installs pip from PyPI in the assemble script. \
+# We have to upgrade pip to a newer verison because: \
+# * pip < 9 does not support different packages' versions for Python 2/3 \
+# * pip < 19.3 does not support manylinux2014 wheels. Only manylinux2014 (and later) wheels \
+#   support platforms like ppc64le, aarch64 or armv7 \
+# We are newly using wheel from one of the latest stable Fedora releases (from RPM python-pip-wheel) \
+# because it's tested better then whatever version from PyPI and contains useful patches. \
+# We have to do it here (in the macro) so the permissions are correctly fixed and pip is able \
+# to reinstall itself in the next build phases in the assemble script if user wants the latest version \
+${APP_ROOT}/bin/pip install /opt/wheels/pip-* && \
+rm -r /opt/wheels && \
+chown -R 1001:0 ${APP_ROOT} && \
+fix-permissions ${APP_ROOT} -P
+
+# For Fedora scl_enable isn't sourced automatically in s2i-core
+# so virtualenv needs to be activated this way
+ENV BASH_ENV="${APP_ROOT}/bin/activate" \
+    ENV="${APP_ROOT}/bin/activate" \
+    PROMPT_COMMAND=". ${APP_ROOT}/bin/activate"
+
+USER 1001
+
+# Set the default CMD to print the usage of the language image.
+CMD $STI_SCRIPTS_PATH/usage

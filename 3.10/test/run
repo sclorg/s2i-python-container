@@ -1,0 +1,330 @@
+#!/bin/bash
+#
+# The 'run' performs a simple test that verifies that S2I image.
+# The main focus here is to excersise the S2I scripts.
+#
+# IMAGE_NAME specifies a name of the candidate image used for testing.
+# The image has to be available before this script is executed.
+#
+declare -a WEB_APPS=({gunicorn-config-different-port,gunicorn-different-port,django-different-port,standalone,setup,setup-cfg,setup-requirements,django,numpy,app-home,npm-virtualenv-uwsgi,locale,mod-wsgi,pipenv,pipenv-and-micropipenv-should-fail,pin-pipenv-version,app-module,micropipenv,micropipenv-requirements}-test-app)
+
+# TODO: Make command compatible for Mac users
+test_dir="$(readlink -zf $(dirname "${BASH_SOURCE[0]}"))"
+image_dir=$(readlink -zf ${test_dir}/..)
+
+test_short_summary=''
+TESTSUITE_RESULT=0
+
+TEST_LIST="\
+test_s2i_usage
+test_docker_run_usage
+test_application
+test_application_with_user
+test_application_enable_init_wrapper
+"
+
+TEST_VAR_DOCKER="\
+test_scl_variables_in_dockerfile
+test_from_dockerfile
+"
+
+if [[ -z $VERSION ]]; then
+    echo "ERROR: The VERSION variable must be set."
+    exit 1
+fi
+
+IMAGE_NAME=${IMAGE_NAME:-centos/python-${VERSION//./}-centos7}
+
+. test/test-lib.sh
+
+info() {
+  echo -e "\n\e[1m[INFO] $@\e[0m\n"
+}
+
+image_exists() {
+  docker inspect $1 &>/dev/null
+}
+
+container_exists() {
+  image_exists $(cat $cid_file)
+}
+
+
+container_ip() {
+  docker inspect --format="{{ .NetworkSettings.IPAddress }}" $(cat $cid_file)
+}
+
+run_s2i_build() {
+  info "Building the ${1} application image ..."
+  ct_s2i_build_as_df file://${test_dir}/${1} ${IMAGE_NAME} ${IMAGE_NAME}-testapp ${s2i_args}
+}
+
+prepare() {
+  if ! image_exists ${IMAGE_NAME}; then
+    echo "ERROR: The image ${IMAGE_NAME} must exist before this script is executed."
+    exit 1
+  fi
+  # TODO: S2I build require the application is a valid 'GIT' repository, we
+  # should remove this restriction in the future when a file:// is used.
+  info "Preparing to test ${1} ..."
+  pushd ${test_dir}/${1} >/dev/null
+  git init
+  git config user.email "build@localhost" && git config user.name "builder"
+  git add -A && git commit -m "Sample commit"
+  popd >/dev/null
+}
+
+run_test_application() {
+  docker run --user=100001 ${CONTAINER_ARGS} --rm --cidfile=${cid_file} ${IMAGE_NAME}-testapp
+}
+
+cleanup_app() {
+  info "Cleaning up app container ..."
+  if [ -f $cid_file ]; then
+    if container_exists; then
+      docker stop $(cat $cid_file)
+    fi
+  fi
+}
+
+cleanup() {
+  info "Cleaning up the test application image"
+  if image_exists ${IMAGE_NAME}-testapp; then
+    docker rmi -f ${IMAGE_NAME}-testapp
+  fi
+  rm -rf ${test_dir}/${1}/.git
+}
+
+check_type() {
+  # positive test & non-zero exit status = ERROR
+  # negative test & zero exit status = ERROR
+  local result="$1"
+  local type=${2:-positive}  # if not defined, we expect possitive test type (zero exit code)
+  if [[ "$type" == "positive" && "$result" != "0" ]]; then
+    info "TEST FAILED (${type}), EXPECTED:0 GOT:${result}"
+    cleanup
+    return $result
+  elif [[ "$type" == "negative" && "$result" == "0" ]]; then
+    info "TEST FAILED (${type}), EXPECTED: non-zero GOT:${result}"
+    cleanup
+    return 1
+  fi
+
+}
+check_result() {
+  # Function sets if test suite failed or not
+  # If return value is not 0 then mark test case as TESTCASE_RESULT=1
+  local result="$1"
+  if [[ "$result" != "0" ]]; then
+    TESTCASE_RESULT=1
+  fi
+  return $result
+}
+
+wait_for_cid() {
+  local max_attempts=10
+  local sleep_time=1
+  local attempt=1
+  info "Waiting for application container to start $CONTAINER_ARGS ..."
+  while [ $attempt -le $max_attempts ]; do
+    [ -f $cid_file ] && [ -s $cid_file ] && return 0
+    attempt=$(( $attempt + 1 ))
+    sleep $sleep_time
+  done
+  return 1
+}
+
+test_s2i_usage() {
+  info "Testing 's2i usage' ..."
+  ct_s2i_usage ${IMAGE_NAME} ${s2i_args} 1>/dev/null
+}
+
+test_docker_run_usage() {
+  info "Testing 'docker run' usage ..."
+  docker run ${IMAGE_NAME} &>/dev/null
+}
+
+test_scl_usage() {
+  local run_cmd="$1"
+  local expected="$2"
+  local cid_file="$3"
+
+  info "Testing the image SCL enable"
+  out=$(docker run --rm ${IMAGE_NAME} /bin/bash -c "${run_cmd}" 2>&1)
+  if ! echo "${out}" | grep -q "${expected}"; then
+    echo "ERROR[/bin/bash -c "${run_cmd}"] Expected '${expected}', got '${out}'"
+    return 1
+  fi
+  out=$(docker exec $(cat ${cid_file}) /bin/bash -c "${run_cmd}" 2>&1)
+  if ! echo "${out}" | grep -q "${expected}"; then
+    echo "ERROR[exec /bin/bash -c "${run_cmd}"] Expected '${expected}', got '${out}'"
+    return 1
+  fi
+  out=$(docker exec $(cat ${cid_file}) /bin/sh -ic "${run_cmd}" 2>&1)
+  if ! echo "${out}" | grep -q "${expected}"; then
+    echo "ERROR[exec /bin/sh -ic "${run_cmd}"] Expected '${expected}', got '${out}'"
+    return 1
+  fi
+}
+
+test_connection() {
+  info "Testing the HTTP connection (http://$(container_ip):${test_port}) ${CONTAINER_ARGS} ..."
+  local max_attempts=30
+  local sleep_time=1
+  local attempt=1
+  local result=1
+  while [ $attempt -le $max_attempts ]; do
+    response_code=$(curl -s -w %{http_code} -o /dev/null http://$(container_ip):${test_port}/)
+    status=$?
+    if [ $status -eq 0 ]; then
+      if [ $response_code -eq 200 ]; then
+        result=0
+      fi
+      break
+    fi
+    attempt=$(( $attempt + 1 ))
+    sleep $sleep_time
+  done
+  return $result
+}
+
+test_application() {
+  local cid_file=$(mktemp -u --suffix=.cid)
+  # Verify that the HTTP connection can be established to test application container
+  run_test_application &
+
+  # Wait for the container to write it's CID file
+  wait_for_cid
+  # Some test apps have tests in their startup code so we have to check
+  # that the container starts at all
+  check_result $?
+
+  test_scl_usage "python --version" "Python $VERSION." "${cid_file}"
+  check_result $?
+  test_scl_usage "node --version" "^v[0-9]*\.[0-9]*\.[0-9]*" "${cid_file}"
+  check_result $?
+  test_scl_usage "npm --version" "^[0-9]*\.[0-9]*\.[0-9]*" "${cid_file}"
+  check_result $?
+  test_connection
+  check_result $?
+  cleanup_app
+}
+
+test_from_dockerfile(){
+  info "Test from Dockerfile"
+  # The latest LTS release of Django does not work on RHEL 7 (due to an old version of SQLite),
+  # and no longer supports Python 2. So on all CentOS/RHEL 7 images and all Python 2 images,
+  # we're using the old Django LTS version 1.11.x from the main git branch of the django-ex project.
+  # In all other cases we're using the newer Django LTS version 2.2.x from the corresponding git branch.
+
+  if [[ ${VERSION} == "2.7" ]] || docker inspect ${IMAGE_NAME} --format "{{.Config.Env}}" | tr " " "\n" | grep -q "^PLATFORM=el7"; then
+    django_example_repo_url="https://github.com/sclorg/django-ex.git"
+  else
+    django_example_repo_url="https://github.com/sclorg/django-ex.git@2.2.x"
+  fi
+
+  ct_test_app_dockerfile $test_dir/from-dockerfile/Dockerfile.tpl $django_example_repo_url 'Welcome to your Django application on OpenShift' app-src
+  check_result $?
+
+  info "Test from Dockerfile with no s2i scripts used"
+  ct_test_app_dockerfile $test_dir/from-dockerfile/Dockerfile_no_s2i.tpl $django_example_repo_url 'Welcome to your Django application on OpenShift' app-src
+  check_result $?
+}
+
+test_application_with_user() {
+  # test application with random user
+  CONTAINER_ARGS="--user 12345" test_application
+
+}
+
+test_application_enable_init_wrapper() {
+  # test application with init wrapper
+  CONTAINER_ARGS="-e ENABLE_INIT_WRAPPER=true" test_application
+}
+
+test_scl_variables_in_dockerfile() {
+  if [ "$OS" == "rhel7" ] || [ "$OS" == "centos7" ]; then
+     TESTCASE_RESULT=0
+     # autocleanup only enabled here as only the following tests so far use it
+     CID_FILE_DIR=$(mktemp -d)
+     ct_enable_cleanup
+
+     info "Testing variable presence during \`docker exec\`"
+     ct_check_exec_env_vars
+     check_result $?
+
+     info "Checking if all scl variables are defined in Dockerfile"
+     ct_check_scl_enable_vars
+     check_result $?
+  fi
+}
+
+function run_all_tests() {
+  local APP_NAME=${1:-undefined}
+  for test_case in $TEST_SET; do
+    info "Running test $test_case ... "
+    TESTCASE_RESULT=0
+    $test_case
+    local test_msg
+    if [ $TESTCASE_RESULT -eq 0 ]; then
+      test_msg="[PASSED]"
+    else
+      test_msg="[FAILED]"
+      TESTSUITE_RESULT=1
+    fi
+    test "$APP_NAME" == "undefined" && msg_app="" || msg_app="'$APP_NAME'"
+    printf -v test_short_summary "%s %s for %s %s\n" "${test_short_summary}" "${test_msg}" "${msg_app}" "$test_case"
+    [ -n "${FAIL_QUICKLY:-}" ] && {
+      cleanup "${APP_NAME}"
+      return 1
+    }
+  done;
+}
+
+# For debugging purposes, this script can be run with one or more arguments
+# those arguments list is a sub-set of values in the WEB_APPS array defined above
+# Example: ./run app-home-test-app pipenv-test-app
+for app in ${@:-${WEB_APPS[@]}}; do
+  # Since we built the candidate image locally, we don't want S2I attempt to pull
+  # it from Docker hub
+  s2i_args="--pull-policy=never"
+
+  # Example apps with "-different-port-" in their name don't use the default port 8080
+  if [[ "$app" == *"-different-port-"* ]]; then
+    test_port=8085
+  else
+    test_port=8080
+  fi
+
+  prepare ${app}
+  run_s2i_build ${app}
+  RESULT=$?
+  msg_run_s2i_build="'${app}' run_s2i_build"
+  if [[ "$app" == *"-should-fail-"* ]]; then
+    # Tests with '-should-fail-' in their name should fail during a build, expecting non-zero exit status
+    check_type $RESULT "negative"
+    test "$?" == "0" && test_msg="[PASSED]" || test_msg="[FAILED]"
+    printf -v test_short_summary "%s %s for %s\n" "${test_short_summary}" "$test_msg" "$msg_run_s2i_build"
+    continue
+  else
+    check_type $RESULT
+    test "$?" != "0"  && test_msg="[FAILED]" || test_msg="[PASSED]"
+    printf -v test_short_summary "%s %s for %s\n" "${test_short_summary}" "$test_msg" "$msg_run_s2i_build"
+  fi
+  echo ""
+  TEST_SET=${TESTS:-$TEST_LIST} run_all_tests "${app}"
+
+  cleanup ${app}
+done
+
+TEST_SET=${TESTS:-$TEST_VAR_DOCKER} run_all_tests
+
+echo "$test_short_summary"
+
+if [ $TESTSUITE_RESULT -eq 0 ] ; then
+  echo "Tests for ${IMAGE_NAME} succeeded."
+else
+  echo "Tests for ${IMAGE_NAME} failed."
+fi
+
+exit $TESTSUITE_RESULT
