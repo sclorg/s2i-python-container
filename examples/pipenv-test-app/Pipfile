@@ -11,4 +11,4 @@ requests = "==2.20.0"
 pytest = ">=2.8.0"
 
 [requires]
-python_version = "3.9"
+python_version = "3.10"
