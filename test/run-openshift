@@ -15,6 +15,10 @@ source "${THISDIR}/test-lib-python.sh"
 
 set -eo nounset
 
+# Pull images before test execution and exit if docker/podman pull operation failed
+ct_pull_image "registry.access.redhat.com/ubi7/ubi" "true"
+ct_pull_image "registry.access.redhat.com/rhscl/postgresql-10-rhel7" "true"
+
 trap ct_os_cleanup EXIT SIGINT
 
 test_latest_imagestreams() {

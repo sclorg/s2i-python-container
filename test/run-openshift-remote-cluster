@@ -14,8 +14,12 @@ source "${THISDIR}/test-lib-python.sh"
 source "${THISDIR}/test-lib-remote-openshift.sh"
 
 set -eo nounset
-ct_os_set_ocp4
 
+# Pull images before test execution and exit if docker/podman pull operation failed
+ct_pull_image "registry.access.redhat.com/ubi7/ubi" "true"
+ct_pull_image "registry.access.redhat.com/rhscl/postgresql-10-rhel7" "true"
+
+ct_os_set_ocp4
 
 trap ct_os_cleanup EXIT SIGINT
 
