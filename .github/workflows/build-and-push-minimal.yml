@@ -1,15 +1,15 @@
-name: Build and push CentOS7 images to Quay.io registry
+name: Build and push s2i-python minimal images to Quay.io registry
 on:
   push:
     branches:
       - master
 
 jobs:
-  build-and-push:
+  build-and-push-minimal:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        version: [2.7, 3.8, 3.9]
+        version: [3.9-minimal]
     steps:
       - uses: actions/checkout@v2
         with:
@@ -45,40 +45,40 @@ jobs:
         run: |
           DG=$HOME/.local/bin/dg make generate-all
 
-      - name: Check if Dockerfile is present in version directory
-        id: check_dockerfile_file
+      - name: Check if Dockerfile.rhel8 is present in version directory
+        id: check_dockerfile_rhel8_file
         # https://github.com/marketplace/actions/file-existence
         uses: andstor/file-existence-action@v1
         with:
-          files: "${{ matrix.version }}/Dockerfile"
+          files: "${{ matrix.version }}/Dockerfile.rhel8"
 
-      - name: Check if .exclude-centos7 is present in version directory
-        id: check_exclude_centos7_file
+      - name: Check if .exclude-rhel8 is present in version directory
+        id: check_exclude_rhel8_file
         # https://github.com/marketplace/actions/file-existence
         uses: andstor/file-existence-action@v1
         with:
-          files: "${{ matrix.version }}/.exclude-centos7"
+          files: "${{ matrix.version }}/.exclude-rhel8"
 
-      - name: Build CentOS7 image
-        if: steps.check_exclude_centos7_file.outputs.files_exists == 'false' && steps.check_dockerfile_file.outputs.files_exists == 'true'
+      - name: Build RHEL8 image
+        if: steps.check_exclude_rhel8_file.outputs.files_exists == 'false' && steps.check_dockerfile_rhel8_file.outputs.files_exists == 'true'
         id: build-image
         # https://github.com/marketplace/actions/buildah-build
         uses: redhat-actions/buildah-build@v2
         with:
-          dockerfiles: ${{ matrix.version }}/Dockerfile
-          image: ${{ steps.base-image-name.outputs.image_name}}-${{ steps.short_version.outputs.SHORT_VER }}-centos7
-          tags: latest 1 ${{ github.sha }}
+          dockerfiles: ${{ matrix.version }}/Dockerfile.rhel8
+          image: ${{ steps.base-image-name.outputs.image_name}}-${{ steps.short_version.outputs.SHORT_VER }}
+          tags: el8
 
-      - name: Push CentOS7 image to Quay.io
-        if: steps.check_exclude_centos7_file.outputs.files_exists == 'false' && steps.check_dockerfile_file.outputs.files_exists == 'true'
+      - name: Push RHEL8 image to Quay.io
+        if: steps.check_exclude_rhel8_file.outputs.files_exists == 'false' && steps.check_dockerfile_rhel8_file.outputs.files_exists == 'true'
         id: push-to-quay
         uses: redhat-actions/push-to-registry@v2.2
         with:
           image: ${{ steps.build-image.outputs.image }}
           tags: ${{ steps.build-image.outputs.tags }}
-          registry: quay.io/centos7
-          username: ${{ secrets.QUAY_IMAGE_BUILDER_USERNAME }}
-          password: ${{ secrets.QUAY_IMAGE_BUILDER_TOKEN }}
+          registry: quay.io/sclorg
+          username: ${{ secrets.QUAY_IMAGE_SCLORG_BUILDER_USERNAME }}
+          password: ${{ secrets.QUAY_IMAGE_SCLORG_BUILDER_TOKEN }}
 
       - name: Print image url
         run: echo "Image pushed to ${{ steps.push-to-quay.outputs.registry-paths }}"
