@@ -7,6 +7,16 @@ provided as a [S2I](https://github.com/openshift/source-to-image) base image for
 Because the minimal and full images work similarly, we document here only the differences and limitations
 of the minimal container image. For the documentation of common features see the [full container image docs](https://github.com/sclorg/s2i-python-container/tree/master/3.9).
 
+The Python 3.9 minimal container image is currently considered a tech-preview and only available in the quay.io.
+The image is built on top of [RHEL-8 UBI image](https://www.redhat.com/en/blog/introducing-red-hat-universal-base-image)
+and therefore uses the same RPM packages from RHEL, those that are used by Python 3.9 supported container image and are part of the UBI registry.
+
+To pull the Python 3.9 minimal container image to build on, run
+
+```
+podman pull quay.io/sclorg/python-39-minimal
+```
+
 Description
 -----------
 

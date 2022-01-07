@@ -43,16 +43,16 @@ Python versions currently provided are:
 * [python-3.6](3.6)
 * [python-3.8](3.8)
 * [python-3.9](3.9)
+* [python-3.9 Minimal (tech-preview)](3.9-minimal)
 
 RHEL versions currently supported are:
 * RHEL 7 ([catalog.redhat.com](https://catalog.redhat.com/software/containers/search))
 * RHEL 8 ([catalog.redhat.com](https://catalog.redhat.com/software/containers/search))
 
 CentOS versions currently supported are:
-* CentOS 7 ([hub.docker.com](https://hub.docker.com/r/centos/))
+* CentOS 7 ([quay.io/centos7](https://quay.io/organization/centos7))
 
 Fedora versions currently supported are:
-* Fedora 32 ([registry.fedoraproject.org](https://registry.fedoraproject.org/repo/f32/python3/tags/))
 * Fedora 34 ([registry.fedoraproject.org](https://registry.fedoraproject.org/repo/f34/python3/tags/))
 
 Download
@@ -62,7 +62,7 @@ To download one of the base Python images, follow the instructions you find in r
 For example, Centos image can be downloaded via:
 
 ```
-$ podman pull centos/python-38-centos7
+$ podman pull quay.io/centos7/python-38-centos7
 ```
 
 Build
