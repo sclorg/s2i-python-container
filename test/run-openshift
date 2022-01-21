@@ -24,6 +24,9 @@ test_latest_imagestreams() {
   ct_check_latest_imagestreams
   popd >/dev/null
 }
+# Pull image before going throw tests
+# Exit in case of failure
+ct_pull_image "quay.io/centos7/postgresql-10-centos7" "true"
 
 ct_os_check_compulsory_vars
 
@@ -38,7 +41,6 @@ fi
 ct_os_cluster_up
 
 ct_os_test_s2i_app "${IMAGE_NAME}" "${THISDIR}/standalone-test-app" . "Hello World from standalone WSGI application!"
-
 ct_os_test_s2i_app "${IMAGE_NAME}" "https://github.com/sclorg/django-ex.git" . 'Welcome to your Django application on OpenShift'
 
 for template in $EPHEMERAL_TEMPLATES; do
