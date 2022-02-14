@@ -78,9 +78,20 @@ if [[ ! -z "$UPGRADE_PIP_TO_LATEST" ]]; then
 fi
 
 if [[ ! -z "$ENABLE_PIPENV" ]]; then
+  # Define max version of pipenv with python 2 support
+  # See: https://github.com/sclorg/s2i-python-container/issues/497
+  PIPENV_MAX_VERSION="2021.5.29"
   if [[ ! -z "$PIN_PIPENV_VERSION" ]]; then
+    # Check if the pipenv version is too new for python 2
+    if [[ $(date -d "${PIN_PIPENV_VERSION//.//}" '+%s') -gt $(date -d "${PIPENV_MAX_VERSION//.//}" '+%s') ]]; then
+      echo "WARNING: Attempting to use pipenv $PIN_PIPENV_VERSION which is too new for python 2, will use version $PIPENV_MAX_VERSION instead"
+      PIN_PIPENV_VERSION="$PIPENV_MAX_VERSION"
+    fi
     # Add == as a prefix to pipenv version, if defined
     PIN_PIPENV_VERSION="==$PIN_PIPENV_VERSION"
+  else
+    # Set pipenv version to the latest compatible with python 2
+    PIN_PIPENV_VERSION="==$PIPENV_MAX_VERSION"
   fi
   install_tool "pipenv" "$PIN_PIPENV_VERSION"
   echo "---> Installing dependencies via pipenv ..."
