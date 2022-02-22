@@ -9,8 +9,8 @@
 declare -a WEB_APPS=({gunicorn-config-different-port,gunicorn-different-port,django-different-port,standalone,setup,setup-cfg,setup-requirements,django,numpy,app-home,npm-virtualenv-uwsgi,locale,mod-wsgi,pipenv,pipenv-and-micropipenv-should-fail,pin-pipenv-version,app-module,micropipenv,micropipenv-requirements}-test-app)
 
 # TODO: Make command compatible for Mac users
-test_dir="$(readlink -zf $(dirname "${BASH_SOURCE[0]}"))"
-image_dir=$(readlink -zf ${test_dir}/..)
+test_dir="$(readlink -f $(dirname "${BASH_SOURCE[0]}"))"
+image_dir=$(readlink -f ${test_dir}/..)
 
 test_short_summary=''
 TESTSUITE_RESULT=0
