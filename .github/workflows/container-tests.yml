@@ -50,11 +50,6 @@ jobs:
         with:
           ref: "refs/pull/${{ steps.pr_nr.outputs.PR_NR }}/head"
 
-      - name: SHA value
-        id: sha_value
-        run: |
-          echo "::set-output name=SHA::$(git rev-parse HEAD)"
-
       - name: Setup Testing Farm values
         id: tf_values
         run: |
