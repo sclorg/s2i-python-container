@@ -3,82 +3,49 @@ on:
   push:
     branches:
       - master
+  schedule:
+      - cron: '0 1 * * 3'
 
 jobs:
   build-and-push:
+    if: github.repository_owner == 'sclorg'
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        version: [2.7, 3.8, 3.9]
+        include:
+          - dockerfile_path: "2.7"
+            dockerfile: "Dockerfile"
+            registry_namespace: "centos7"
+            quayio_username: "QUAY_IMAGE_BUILDER_USERNAME"
+            quayio_token: "QUAY_IMAGE_BUILDER_TOKEN"
+            tag: "centos7"
+          - dockerfile_path: "3.8"
+            dockerfile: "Dockerfile"
+            registry_namespace: "centos7"
+            quayio_username: "QUAY_IMAGE_BUILDER_USERNAME"
+            quayio_token: "QUAY_IMAGE_BUILDER_TOKEN"
+            tag: "centos7"
+          - dockerfile_path: "3.9"
+            dockerfile: "Dockerfile"
+            registry_namespace: "centos7"
+            quayio_username: "QUAY_IMAGE_BUILDER_USERNAME"
+            quayio_token: "QUAY_IMAGE_BUILDER_TOKEN"
+            tag: "centos7"
+          - dockerfile_path: "3.9-minimal"
+            dockerfile: "Dockerfile.rhel8"
+            registry_namespace: "sclorg"
+            quayio_username: "QUAY_IMAGE_SCLORG_BUILDER_USERNAME"
+            quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
+            tag: "el8"
     steps:
-      - uses: actions/checkout@v2
+      - name: Build and push to quay.io registry
+        uses: sclorg/build-and-push-action@v1
         with:
-          fetch-depth: 0
-          submodules: true
-
-      - name: Get base image name
-        id: base-image-name
-        run: |
-          # This command returns row with BASE_IMAGE_NAME
-          row=$(grep "BASE_IMAGE_NAME" Makefile)
-          # Return only base image name
-          BASE_IMAGE_ROW=${row/BASE_IMAGE_NAME = /}
-          echo ::set-output name=image_name::$BASE_IMAGE_ROW
-
-      - name: Install python3 packages needed by distgen
-        run: |
-          sudo apt-get update -y && sudo apt-get install -y python3 python3-pip
-
-      - name: Install dist-gen package from PyPi
-        id: dist-gen-install
-        run: |
-          pip3 -v install distgen
-
-      - name: Get short version
-        id: short_version
-        run: |
-          ver="${{ matrix.version }}"
-          echo "::set-output name=SHORT_VER::${ver//./}"
-
-      - name: Generate source by dist-gen
-        id: generate
-        run: |
-          DG=$HOME/.local/bin/dg make generate-all
-
-      - name: Check if Dockerfile is present in version directory
-        id: check_dockerfile_file
-        # https://github.com/marketplace/actions/file-existence
-        uses: andstor/file-existence-action@v1
-        with:
-          files: "${{ matrix.version }}/Dockerfile"
-
-      - name: Check if .exclude-centos7 is present in version directory
-        id: check_exclude_centos7_file
-        # https://github.com/marketplace/actions/file-existence
-        uses: andstor/file-existence-action@v1
-        with:
-          files: "${{ matrix.version }}/.exclude-centos7"
-
-      - name: Build CentOS7 image
-        if: steps.check_exclude_centos7_file.outputs.files_exists == 'false' && steps.check_dockerfile_file.outputs.files_exists == 'true'
-        id: build-image
-        # https://github.com/marketplace/actions/buildah-build
-        uses: redhat-actions/buildah-build@v2
-        with:
-          dockerfiles: ${{ matrix.version }}/Dockerfile
-          image: ${{ steps.base-image-name.outputs.image_name}}-${{ steps.short_version.outputs.SHORT_VER }}-centos7
-          tags: latest 1 ${{ github.sha }}
-
-      - name: Push CentOS7 image to Quay.io
-        if: steps.check_exclude_centos7_file.outputs.files_exists == 'false' && steps.check_dockerfile_file.outputs.files_exists == 'true'
-        id: push-to-quay
-        uses: redhat-actions/push-to-registry@v2.2
-        with:
-          image: ${{ steps.build-image.outputs.image }}
-          tags: ${{ steps.build-image.outputs.tags }}
-          registry: quay.io/centos7
-          username: ${{ secrets.QUAY_IMAGE_BUILDER_USERNAME }}
-          password: ${{ secrets.QUAY_IMAGE_BUILDER_TOKEN }}
-
-      - name: Print image url
-        run: echo "Image pushed to ${{ steps.push-to-quay.outputs.registry-paths }}"
+          registry: "quay.io"
+          registry_namespace: ${{ matrix.registry_namespace }}
+          registry_username: ${{ secrets[matrix.quayio_username] }}
+          registry_token: ${{ secrets[matrix.quayio_token] }}
+          dockerfile: ${{ matrix.dockerfile }}
+          dockerfile_path: ${{ matrix.dockerfile_path }}
+          use_distgen: "true"
+          tag: ${{ matrix.tag }}
