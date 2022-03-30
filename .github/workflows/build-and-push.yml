@@ -11,6 +11,7 @@ jobs:
     if: github.repository_owner == 'sclorg'
     runs-on: ubuntu-20.04
     strategy:
+      fail-fast: false
       matrix:
         include:
           - dockerfile_path: "2.7"
@@ -31,6 +32,12 @@ jobs:
             quayio_username: "QUAY_IMAGE_BUILDER_USERNAME"
             quayio_token: "QUAY_IMAGE_BUILDER_TOKEN"
             tag: "centos7"
+          - dockerfile_path: "3.9"
+            dockerfile: "Dockerfile.c9s"
+            registry_namespace: "sclorg"
+            quayio_username: "QUAY_IMAGE_BUILDER_USERNAME"
+            quayio_token: "QUAY_IMAGE_BUILDER_TOKEN"
+            tag: "c9s"
           - dockerfile_path: "3.9-minimal"
             dockerfile: "Dockerfile.rhel8"
             registry_namespace: "sclorg"
