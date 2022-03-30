@@ -59,6 +59,19 @@ specs:
         "default": ['{{ spec.pkg_prefix }}', '{{ spec.pkg_prefix }}-devel']
       ubi_versions: ['2.7', '3.6', '3.8', '3.9']
 
+    c9s:
+      distros:
+        - centos-stream-9-x86_64
+      el_version: "9"
+      s2i_base: quay.io/sclorg/s2i-base-c9s
+      img_tag: "c9s"
+      org: "sclorg"
+      prod: "c9s"
+      python_pkgs: ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip']
+      base_pkgs: ['nss_wrapper', 'httpd', 'httpd-devel', 'mod_ssl',
+                  'mod_auth_gssapi', 'mod_ldap', 'mod_session',
+                  'atlas-devel', 'gcc-gfortran', 'libffi-devel', 'libtool-ltdl enchant']
+
     fedora34:
       distros:
         - fedora-34-x86_64
@@ -131,14 +144,16 @@ specs:
 matrix:
   exclude:
     - distros:
-      - fedora-34-x86_64
-      - fedora-35-x86_64
+        - fedora-34-x86_64
+        - fedora-35-x86_64
+        - centos-stream-9-x86_64
       version: "2.7"
     - distros:
         - fedora-34-x86_64
         - fedora-35-x86_64
         - centos-7-x86_64
         - rhel-7-x86_64
+        - centos-stream-9-x86_64
       version: "3.6"
     - distros:
         - centos-7-x86_64
@@ -146,10 +161,12 @@ matrix:
         - fedora-35-x86_64
         - rhel-7-x86_64
         - rhel-8-x86_64
+        - centos-stream-9-x86_64
       version: "3.7"
     - distros:
         - fedora-34-x86_64
         - fedora-35-x86_64
+        - centos-stream-9-x86_64
       version: "3.8"
     - distros:
         - fedora-35-x86_64
@@ -161,4 +178,5 @@ matrix:
         - centos-7-x86_64
         - rhel-7-x86_64
         - rhel-8-x86_64
+        - centos-stream-9-x86_64
       version: "3.10"
