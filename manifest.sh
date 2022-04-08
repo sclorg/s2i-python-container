@@ -54,6 +54,9 @@ DISTGEN_MULTI_RULES="
 
     src=src/Dockerfile.template
     dest=Dockerfile.fedora;
+
+    src=src/Dockerfile.template
+    dest=Dockerfile.c9s;
 "
 
 # Symbolic links
