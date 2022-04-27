@@ -24,64 +24,53 @@ jobs:
             os_test: "centos7"
             context: "CentOS7"
             compose: "CentOS-7"
+            api_key: "TF_PUBLIC_API_KEY"
+            branch: "main"
+            tmt_repo: "https://github.com/sclorg/sclorg-testing-farm"
           - tmt_plan: "rhel7-docker"
             os_test: "rhel7"
             context: "RHEL7"
             compose: "RHEL-7.9-Released"
+            api_key: "TF_INTERNAL_API_KEY"
+            branch: "master"
+            tmt_repo: "https://gitlab.cee.redhat.com/platform-eng-core-services/sclorg-tmt-plans"
+            tf_scope: "private"
           - tmt_plan: "rhel8-docker"
             os_test: "rhel8"
             context: "RHEL8"
             compose: "RHEL-8.3.1-Released"
+            api_key: "TF_INTERNAL_API_KEY"
+            branch: "master"
+            tmt_repo: "https://gitlab.cee.redhat.com/platform-eng-core-services/sclorg-tmt-plans"
+            tf_scope: "private"
           - tmt_plan: "c9s"
             os_test: "c9s"
             context: "CentOS Stream 9"
             compose: "CentOS-Stream-9"
+            api_key: "TF_PUBLIC_API_KEY"
+            branch: "main"
+            tmt_repo: "https://github.com/sclorg/sclorg-testing-farm"
 
     if: |
       github.event.issue.pull_request
       && (contains(github.event.comment.body, '[test]') || contains(github.event.comment.body, '[test-all]'))
       && contains(fromJson('["OWNER", "MEMBER"]'), github.event.comment.author_association)
     steps:
-      - name: Get pull request number
-        id: pr_nr
-        run: |
-          PR_URL="${{ github.event.comment.issue_url }}"
-          echo "::set-output name=PR_NR::${PR_URL##*/}"
-
       - name: Checkout repo
         uses: actions/checkout@v2
         with:
-          ref: "refs/pull/${{ steps.pr_nr.outputs.PR_NR }}/head"
-
-      - name: Setup Testing Farm values
-        id: tf_values
-        run: |
-          # Update ubuntu-20.04 in order to install curl and jq
-          sudo apt update && sudo apt -y install curl jq
-          branch_name="master"
-          api_key="${{ secrets.TF_INTERNAL_API_KEY }}"
-          tmt_repo="https://gitlab.cee.redhat.com/platform-eng-core-services/sclorg-tmt-plans"
-          if [ "${{ matrix.tmt_plan }}" == "fedora" ] || [ "${{ matrix.tmt_plan }}" == "centos7" ] || [ "${{ matrix.tmt_plan }}" == "c9s" ]; then
-            api_key="${{ secrets.TF_PUBLIC_API_KEY }}"
-            branch_name="main"
-            tmt_repo="https://github.com/sclorg/sclorg-testing-farm"
-          fi
-          echo "::set-output name=API_KEY::$api_key"
-          echo "::set-output name=BRANCH_NAME::$branch_name"
-          echo "::set-output name=TMT_REPO::$tmt_repo"
-        shell: bash
+          ref: "refs/pull/${{ github.event.issue.number }}/head"
 
       # https://github.com/sclorg/testing-farm-as-github-action
       - name: Schedule tests on external Testing Farm by Testing-Farm-as-github-action
         id: github_action
         uses: sclorg/testing-farm-as-github-action@v1
         with:
-          api_key: ${{ steps.tf_values.outputs.API_KEY }}
-          git_url: ${{ steps.tf_values.outputs.TMT_REPO }}
-          git_ref: ${{ steps.tf_values.outputs.BRANCH_NAME }}
+          api_key: ${{ secrets[matrix.api_key] }}
+          git_url: ${{ matrix.tmt_repo }}
+          git_ref: ${{ matrix.branch }}
+          tf_scope: ${{ matrix.tf_scope }}
           tmt_plan_regex: ${{ matrix.tmt_plan }}
           pull_request_status_name: ${{ matrix.context }}
-          variables: "REPO_URL=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY;REPO_NAME=$GITHUB_REPOSITORY;PR_NUMBER=${{ steps.pr_nr.outputs.PR_NR }};OS=${{ matrix.os_test }};TEST_NAME=test"
+          variables: "REPO_URL=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY;REPO_NAME=$GITHUB_REPOSITORY;PR_NUMBER=${{ github.event.issue.number }};OS=${{ matrix.os_test }};TEST_NAME=test"
           compose: ${{ matrix.compose }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
