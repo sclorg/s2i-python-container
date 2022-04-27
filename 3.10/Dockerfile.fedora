@@ -1,6 +1,6 @@
 # This image provides a Python 3.10 environment you can use to run your Python
 # applications.
-FROM registry.fedoraproject.org/f35/s2i-base:latest
+FROM quay.io/fedora/s2i-base:35
 
 EXPOSE 8080
 
