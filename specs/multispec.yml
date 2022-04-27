@@ -76,8 +76,8 @@ specs:
       distros:
         - fedora-34-x86_64
       fedora_version: "34"
-      s2i_base: registry.fedoraproject.org/f34/s2i-base
-      img_tag: "latest"
+      s2i_base: quay.io/fedora/s2i-base
+      img_tag: "34"
       python_pkgs: ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip']
       base_pkgs: ['nss_wrapper', 'httpd', 'httpd-devel', 'atlas-devel', 'gcc-gfortran',
                   'libffi-devel', 'libtool-ltdl enchant', 'redhat-rpm-config']
@@ -86,8 +86,8 @@ specs:
       distros:
         - fedora-35-x86_64
       fedora_version: "35"
-      s2i_base: registry.fedoraproject.org/f35/s2i-base
-      img_tag: "latest"
+      s2i_base: quay.io/fedora/s2i-base
+      img_tag: "35"
       python_pkgs: ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip']
       base_pkgs: ['nss_wrapper', 'httpd', 'httpd-devel', 'atlas-devel', 'gcc-gfortran',
                   'libffi-devel', 'libtool-ltdl enchant', 'redhat-rpm-config']
