@@ -7,10 +7,10 @@ ENV NAME=python3 \
 
 {% macro labels(spec) %}
       com.redhat.component="$NAME" \
-      name="$FGC/$NAME" \
+      name="fedora/$NAME-{{ spec.short_ver }}" \
       version="$VERSION" \
       usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir={{
-          spec.version }}/test/setup-test-app/ $FGC/$NAME python-sample-app" \
+          spec.version }}/test/setup-test-app/ quay.io/fedora/$NAME-{{ spec.short_ver }} python-sample-app" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 {% endmacro %}
 
