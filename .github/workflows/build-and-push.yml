@@ -63,7 +63,7 @@ jobs:
             tag: "310"
     steps:
       - name: Build and push to quay.io registry
-        uses: sclorg/build-and-push-action@v1
+        uses: sclorg/build-and-push-action@v2
         with:
           registry: "quay.io"
           registry_namespace: ${{ matrix.registry_namespace }}
