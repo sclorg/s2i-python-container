@@ -1,4 +1,4 @@
-name: openshift-tests at Testing Farm
+name: OpenShift tests by GitHub Action at Testing Farm
 
 on:
   issue_comment:
@@ -6,8 +6,8 @@ on:
       - created
 jobs:
   build:
-    # This job only runs for '[test]' pull request comments by owner, member
-    name: OpenShift tests on Testing Farm service
+    # This job only runs for '[test-all]' or '[test-openshift] pull request comments by owner, member
+    name: OpenShift tests by GitHub Action on Testing Farm service
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
@@ -16,184 +16,62 @@ jobs:
           - tmt_plan: "centos7"
             os_test: "centos7"
             context: "CentOS7 - OpenShift 3"
-            compose: "CentOS-7"
-            tmt_url: "http://artifacts.dev.testing-farm.io/"
+            api_key: "TF_PUBLIC_API_KEY"
+            branch: "main"
             tmt_repo: "https://github.com/sclorg/sclorg-testing-farm"
+            compose: "CentOS-7"
             test_name: "test-openshift"
           - tmt_plan: "rhel7-openshift-3"
             os_test: "rhel7"
             context: "RHEL7 - OpenShift 3"
             compose: "RHEL-7.9-Released"
+            api_key: "TF_INTERNAL_API_KEY"
+            branch: "master"
             tmt_url: "http://artifacts.osci.redhat.com/testing-farm/"
             tmt_repo: "https://gitlab.cee.redhat.com/platform-eng-core-services/sclorg-tmt-plans"
             test_name: "test-openshift"
+            tf_scope: "private"
           - tmt_plan: "rhel7-openshift-4"
             os_test: "rhel7"
             context: "RHEL7 - OpenShift 4"
             compose: "RHEL-7.9-Released"
             tmt_url: "http://artifacts.osci.redhat.com/testing-farm/"
-            tmt_repo: "https://gitlab.cee.redhat.com/platform-eng-core-services/sclorg-tmt-plans"
             test_name: "test-openshift-4"
+            api_key: "TF_INTERNAL_API_KEY"
+            branch: "master"
+            tmt_repo: "https://gitlab.cee.redhat.com/platform-eng-core-services/sclorg-tmt-plans"
+            tf_scope: "private"
           - tmt_plan: "rhel8-openshift-4"
             os_test: "rhel8"
             context: "RHEL8 - OpenShift 4"
             compose: "RHEL-8.3.1-Released"
             tmt_url: "http://artifacts.osci.redhat.com/testing-farm/"
-            tmt_repo: "https://gitlab.cee.redhat.com/platform-eng-core-services/sclorg-tmt-plans"
             test_name: "test-openshift-4"
+            api_key: "TF_INTERNAL_API_KEY"
+            branch: "master"
+            tmt_repo: "https://gitlab.cee.redhat.com/platform-eng-core-services/sclorg-tmt-plans"
+            tf_scope: "private"
+
     if: |
       github.event.issue.pull_request
       && (contains(github.event.comment.body, '[test-openshift]') || contains(github.event.comment.body, '[test-all]'))
       && contains(fromJson('["OWNER", "MEMBER"]'), github.event.comment.author_association)
     steps:
-      - name: Get pull request number
-        id: pr_nr
-        run: |
-          PR_URL="${{ github.event.comment.issue_url }}"
-          echo "::set-output name=PR_NR::${PR_URL##*/}"
-
       - name: Checkout repo
         uses: actions/checkout@v2
         with:
-          ref: "refs/pull/${{ steps.pr_nr.outputs.PR_NR }}/head"
+          ref: "refs/pull/${{ github.event.issue.number }}/head"
 
-      - name: SHA value
-        id: sha_value
-        run: |
-          echo "::set-output name=SHA::$(git rev-parse HEAD)"
-
-      - name: Create status check to pending
-        id: pending
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # Create a JSON file for Testing Farm in order to schedule a CI testing job
-          cat << EOF > pending.json
-          {
-            "sha": "${{ steps.sha_value.outputs.SHA }}",
-            "state": "pending",
-            "context": "Testing Farm - ${{ matrix.context }}",
-            "target_url": "${{ matrix.tmt_url }}"
-          }
-          EOF
-          echo "https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/${{ steps.sha_value.outputs.SHA }}"
-          # GITHUB_TOKEN is used for updating pull request status.
-          # It is provided by GitHub https://docs.github.com/en/actions/reference/authentication-in-a-workflow#about-the-github_token-secret
-          curl -X POST -H "Authorization: Bearer $GITHUB_TOKEN" -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/${{ steps.sha_value.outputs.SHA }} \
-            --data @pending.json
-          echo "::set-output name=GITHUB_REPOSITORY::$GITHUB_REPOSITORY"
-
-      - name: Schedule a test on Testing Farm
-        id: sched_test
-        run: |
-          # Update ubuntu-20.04 in order to install curl and jq
-          sudo apt update && sudo apt -y install curl jq
-          if [ "${{ matrix.tmt_plan }}" == "fedora" ] || [ "${{ matrix.tmt_plan }}" == "centos7" ]; then
-            api_key="${{ secrets.TF_PUBLIC_API_KEY }}"
-            branch_name="main"
-          else
-            api_key="${{ secrets.TF_INTERNAL_API_KEY }}"
-            branch_name="master"
-          fi
-          cat << EOF > request.json
-          {
-            "api_key": "$api_key",
-            "test": {"fmf": {
-              "url": "${{ matrix.tmt_repo }}",
-              "ref": "$branch_name",
-              "name": "${{ matrix.tmt_plan }}"
-            }},
-            "environments": [{
-              "arch": "x86_64",
-              "os": {"compose": "${{ matrix.compose }}"},
-              "variables": {
-                "REPO_URL": "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY",
-                "REPO_NAME": "$GITHUB_REPOSITORY",
-                "PR_NUMBER": "${{ steps.pr_nr.outputs.PR_NR }}",
-                "OS": "${{ matrix.os_test }}",
-                "TEST_NAME": "${{ matrix.test_name }}"
-              }
-            }]
-          }
-          EOF
-          curl ${{ secrets.TF_ENDPOINT }}/requests --data @request.json --header "Content-Type: application/json" --output response.json
-          cat response.json
-
-          # Store REQ_ID into outputs for later on usage
-          req_id=$(jq -r .id response.json)
-          echo "REQ_ID=$req_id" >> $GITHUB_ENV
-
-      - name: Switch to running state of Testing Farm request
-        id: running
-        run: |
-          # Create running.json file for query, whether job is finished or not.
-          cat << EOF > running.json
-          {
-            "sha": "${{ steps.sha_value.outputs.SHA }}",
-            "state": "pending",
-            "context": "Testing Farm - ${{ matrix.context }}",
-            "description": "Build started",
-            "target_url": "${{ matrix.tmt_url }}/${{ env.REQ_ID }}"
-          }
-          EOF
-          # Update GitHub status description to 'Build started'
-          curl -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/${{ steps.sha_value.outputs.SHA }} \
-            --data @running.json
-
-      - name: Check test is still running
-        id: still_running
-        run: |
-          CMD=${{ secrets.TF_ENDPOINT }}/requests/${{ env.REQ_ID }}
-          curl $CMD > job.json
-          cat job.json
-          state=$(jq -r .state job.json)
-          # Wait till job is not finished. As soon as state is complete or failure then go to the finish action
-          while [ "$state" == "running" ] || [ "$state" == "new" ] || [ "$state" == "pending" ] || [ "$state" == "queued" ]; do
-            # Wait 30s. We do not need to query Testing Farm each second
-            sleep 30
-            curl $CMD > job.json
-            state=$(jq -r .state job.json)
-          done
-
-      - name: Get final state of Testing Farm request
-        id: final_state
-        run: |
-          curl ${{ secrets.TF_ENDPOINT }}/requests/${{ env.REQ_ID }} > job.json
-          cat job.json
-          state=$(jq -r .state job.json)
-          result=$(jq -r .result.overall job.json)
-          new_state="success"
-          infra_error=" "
-          echo "State is $state and result is: $result"
-          if [ "$state" == "complete" ]; then
-            if [ "$result" != "passed" ]; then
-              new_state="failure"
-            fi
-          else
-            # Mark job in case of infrastructure issues. Report to Testing Farm team
-            infra_error=" - Infra problems"
-            new_state="failure"
-          fi
-          echo "New State is: $new_state"
-          echo "Infra state is: $infra_error"
-          echo "::set-output name=FINAL_STATE::$new_state"
-          echo "::set-output name=INFRA_STATE::$infra_error"
-
-      - name: Switch to final state of Testing Farm request
-        run: |
-          cat << EOF > final.json
-          {
-            "sha": "${{ steps.sha_value.outputs.SHA }}",
-            "state": "${{ steps.final_state.outputs.FINAL_STATE }}",
-            "context": "Testing Farm - ${{ matrix.context }}",
-            "description": "Build finished${{ steps.final_state.outputs.INFRA_STATE }}",
-            "target_url": "${{ matrix.tmt_url }}/${{ env.REQ_ID }}"
-          }
-          EOF
-          cat final.json
-          # Switch Github status to proper state
-          curl -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/${{ steps.sha_value.outputs.SHA }} \
-            --data @final.json
+      # https://github.com/sclorg/testing-farm-as-github-action
+      - name: Schedule tests on external Testing Farm by Testing-Farm-as-github-action
+        id: github_action
+        uses: sclorg/testing-farm-as-github-action@v1
+        with:
+          api_key: ${{ secrets[matrix.api_key] }}
+          git_url: ${{ matrix.tmt_repo }}
+          git_ref: ${{ matrix.branch }}
+          tf_scope: ${{ matrix.tf_scope }}
+          tmt_plan_regex: ${{ matrix.tmt_plan }}
+          pull_request_status_name: ${{ matrix.context }}
+          variables: "REPO_URL=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY;REPO_NAME=$GITHUB_REPOSITORY;PR_NUMBER=${{ github.event.issue.number }};OS=${{ matrix.os_test }};TEST_NAME=${{ matrix.test_name }}"
+          compose: ${{ matrix.compose }}
