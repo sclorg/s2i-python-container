@@ -33,9 +33,9 @@ LABEL summary="$SUMMARY" \
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,python,python310,python-310,rh-python310" \
       com.redhat.component="$NAME" \
-      name="$FGC/$NAME" \
+      name="fedora/$NAME-310" \
       version="$VERSION" \
-      usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.10/test/setup-test-app/ $FGC/$NAME python-sample-app" \
+      usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.10/test/setup-test-app/ quay.io/fedora/$NAME-310 python-sample-app" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 RUN INSTALL_PKGS="python3 python3-devel python3-setuptools python3-pip nss_wrapper \
