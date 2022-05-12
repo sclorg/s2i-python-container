@@ -26,6 +26,45 @@ function test_python_imagestream() {
                                      8080 http 200 "-p SOURCE_REPOSITORY_REF=master -p PYTHON_VERSION=${VERSION} -p POSTGRESQL_VERSION=10 -p NAME=python-testing" \
                                      "quay.io/centos7/postgresql-10-centos7|postgresql:10"
 }
+function test_python_s2i_app_ex_standalone() {
+  ct_os_test_s2i_app "${IMAGE_NAME}" \
+        "https://github.com/sclorg/s2i-python-container.git" \
+        "examples/standalone-test-app" \
+        "Hello World from standalone WSGI application!"
+}
+function test_python_s2i_app_ex() {
+  if [[ ${VERSION} == "2.7" ]] || docker inspect ${IMAGE_NAME} --format "{{.Config.Env}}" | tr " " "\n" | grep -q "^PLATFORM=el7"; then
+    django_example_repo_url="https://github.com/sclorg/django-ex.git"
+  else
+    django_example_repo_url="https://github.com/sclorg/django-ex.git#2.2.x"
+  fi
+  ct_os_test_s2i_app "${IMAGE_NAME}" \
+        "${django_example_repo_url}" \
+        . \
+        'Welcome to your Django application on OpenShift'
+}
+
+
+function test_python_s2i_templates() {
+  if [ -z "${EPHEMERAL_TEMPLATES:-}" ]; then
+      EPHEMERAL_TEMPLATES="
+https://raw.githubusercontent.com/sclorg/django-ex/master/openshift/templates/django-postgresql.json \
+https://raw.githubusercontent.com/openshift/origin/master/examples/quickstarts/django-postgresql.json"
+  fi
+  for template in $EPHEMERAL_TEMPLATES; do
+      if [[ ${VERSION} == "2.7" ]] || docker inspect ${IMAGE_NAME} --format "{{.Config.Env}}" | tr " " "\n" | grep -q "^PLATFORM=el7"; then
+        branch="master"
+      else
+        branch="2.2.x"
+      fi
+      ct_os_test_template_app "$IMAGE_NAME" \
+                              "$template" \
+                              python \
+                              'Welcome to your Django application on OpenShift' \
+                              8080 http 200 "-p SOURCE_REPOSITORY_REF=$branch -p PYTHON_VERSION=${VERSION} -p POSTGRESQL_VERSION=10 -p NAME=python-testing" \
+                              "quay.io/centos7/postgresql-10-centos7|postgresql:10"
+  done
+}
 
 # vim: set tabstop=2:shiftwidth=2:expandtab:
 
