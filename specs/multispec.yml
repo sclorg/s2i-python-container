@@ -78,9 +78,11 @@ specs:
       fedora_version: "35"
       s2i_base: quay.io/fedora/s2i-base
       img_tag: "35"
-      python_pkgs: ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip']
       base_pkgs: ['nss_wrapper', 'httpd', 'httpd-devel', 'atlas-devel', 'gcc-gfortran',
                   'libffi-devel', 'libtool-ltdl enchant', 'redhat-rpm-config']
+      extra_pkgs:
+        "3.9": ['python{{ spec.version }}']
+        "default": ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip']
 
   version:
     "3.10":
@@ -155,7 +157,6 @@ matrix:
         - centos-stream-9-x86_64
       version: "3.8"
     - distros:
-        - fedora-35-x86_64
         - centos-7-x86_64
         - rhel-7-x86_64
       version: "3.9"
