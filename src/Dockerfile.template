@@ -73,7 +73,7 @@ LABEL summary="$SUMMARY" \
 {% else %}
     {% set extra_pkgs = [] %}
 {% endif %}
-RUN INSTALL_PKGS="{{ common.list_pkgs(extra_pkgs + spec.python_pkgs + spec.base_pkgs) -}}
+RUN INSTALL_PKGS="{{ common.list_pkgs(extra_pkgs + spec.get('python_pkgs', []) + spec.base_pkgs) -}}
     {% if spec.preinstall_cmd %}
 {{ common.preinstall_cmd(spec) -}}
     {% endif %}
