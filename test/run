@@ -261,28 +261,6 @@ test_scl_variables_in_dockerfile() {
   fi
 }
 
-function run_all_tests() {
-  local APP_NAME=${1:-undefined}
-  for test_case in $TEST_SET; do
-    info "Running test $test_case ... "
-    TESTCASE_RESULT=0
-    $test_case
-    local test_msg
-    if [ $TESTCASE_RESULT -eq 0 ]; then
-      test_msg="[PASSED]"
-    else
-      test_msg="[FAILED]"
-      TESTSUITE_RESULT=1
-    fi
-    test "$APP_NAME" == "undefined" && msg_app="" || msg_app="'$APP_NAME'"
-    printf -v test_short_summary "%s %s for %s %s\n" "${test_short_summary}" "${test_msg}" "${msg_app}" "$test_case"
-    [ -n "${FAIL_QUICKLY:-}" ] && {
-      cleanup "${APP_NAME}"
-      return 1
-    }
-  done;
-}
-
 # For debugging purposes, this script can be run with one or more arguments
 # those arguments list is a sub-set of values in the WEB_APPS array defined above
 # Example: ./run app-home-test-app pipenv-test-app
@@ -314,19 +292,9 @@ for app in ${@:-${WEB_APPS[@]}}; do
     printf -v test_short_summary "%s %s for %s\n" "${test_short_summary}" "$test_msg" "$msg_run_s2i_build"
   fi
   echo ""
-  TEST_SET=${TESTS:-$TEST_LIST} run_all_tests "${app}"
+  TEST_SET=${TESTS:-$TEST_LIST} ct_run_tests_from_testset "${app}"
 
   cleanup ${app}
 done
 
-TEST_SET=${TESTS:-$TEST_VAR_DOCKER} run_all_tests
-
-echo "$test_short_summary"
-
-if [ $TESTSUITE_RESULT -eq 0 ] ; then
-  echo "Tests for ${IMAGE_NAME} succeeded."
-else
-  echo "Tests for ${IMAGE_NAME} failed."
-fi
-
-exit $TESTSUITE_RESULT
+TEST_SET=${TESTS:-$TEST_VAR_DOCKER} ct_run_tests_from_testset "var-docker"
