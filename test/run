@@ -37,6 +37,8 @@ IMAGE_NAME=${IMAGE_NAME:-centos/python-${VERSION//./}-centos7}
 
 . test/test-lib.sh
 
+ct_enable_cleanup
+
 info() {
   echo -e "\n\e[1m[INFO] $@\e[0m\n"
 }
@@ -247,9 +249,7 @@ test_application_enable_init_wrapper() {
 test_scl_variables_in_dockerfile() {
   if [ "$OS" == "rhel7" ] || [ "$OS" == "centos7" ]; then
      TESTCASE_RESULT=0
-     # autocleanup only enabled here as only the following tests so far use it
      CID_FILE_DIR=$(mktemp -d)
-     ct_enable_cleanup
 
      info "Testing variable presence during \`docker exec\`"
      ct_check_exec_env_vars
@@ -298,3 +298,4 @@ for app in ${@:-${WEB_APPS[@]}}; do
 done
 
 TEST_SET=${TESTS:-$TEST_VAR_DOCKER} ct_run_tests_from_testset "var-docker"
+
