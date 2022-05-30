@@ -47,7 +47,7 @@ jobs:
             registry_namespace: "sclorg"
             quayio_username: "QUAY_IMAGE_SCLORG_BUILDER_USERNAME"
             quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
-            tag: "el8"
+            tag: "c9s"
             suffix: "c9s"
           - dockerfile_path: "3.9"
             dockerfile: "Dockerfile.fedora"
@@ -63,7 +63,7 @@ jobs:
             tag: "310"
     steps:
       - name: Build and push to quay.io registry
-        uses: sclorg/build-and-push-action@v1
+        uses: sclorg/build-and-push-action@v2
         with:
           registry: "quay.io"
           registry_namespace: ${{ matrix.registry_namespace }}
