@@ -38,7 +38,7 @@ jobs:
           - tmt_plan: "rhel8-docker"
             os_test: "rhel8"
             context: "RHEL8"
-            compose: "RHEL-8.3.1-Released"
+            compose: "RHEL-8.6.0-Nightly"
             api_key: "TF_INTERNAL_API_KEY"
             branch: "master"
             tmt_repo: "https://gitlab.cee.redhat.com/platform-eng-core-services/sclorg-tmt-plans"

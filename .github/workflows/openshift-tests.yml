@@ -44,7 +44,7 @@ jobs:
           - tmt_plan: "rhel8-openshift-4"
             os_test: "rhel8"
             context: "RHEL8 - OpenShift 4"
-            compose: "RHEL-8.3.1-Released"
+            compose: "RHEL-8.6.0-Nightly"
             tmt_url: "http://artifacts.osci.redhat.com/testing-farm/"
             test_name: "test-openshift-4"
             api_key: "TF_INTERNAL_API_KEY"
