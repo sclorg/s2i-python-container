@@ -47,7 +47,7 @@ jobs:
             registry_namespace: "sclorg"
             quayio_username: "QUAY_IMAGE_SCLORG_BUILDER_USERNAME"
             quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
-            tag: "el8"
+            tag: "c9s"
             suffix: "c9s"
           - dockerfile_path: "3.9"
             dockerfile: "Dockerfile.fedora"
