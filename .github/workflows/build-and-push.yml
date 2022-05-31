@@ -1,4 +1,4 @@
-name: Build and push CentOS7 images to Quay.io registry
+name: Build and push container images to Quay.io registry
 on:
   push:
     branches:
