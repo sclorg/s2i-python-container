@@ -8,6 +8,13 @@
 #
 declare -a WEB_APPS=({gunicorn-config-different-port,gunicorn-different-port,django-different-port,standalone,setup,setup-cfg,setup-requirements,django,numpy,app-home,npm-virtualenv-uwsgi,locale,mod-wsgi,pipenv,pipenv-and-micropipenv-should-fail,pin-pipenv-version,app-module{% if spec.version.startswith("3.") %},micropipenv,micropipenv-requirements{% endif %}}-test-app)
 
+# Some tests, like the one using the latest pipenv, might be unstable
+# because new upstream releases tend to break our tests sometimes.
+# If a test is in UNSTABLE_TESTS and IGNORE_UNSTABLE_TESTS env
+# variable is defined, a result of the test has no impact on
+# the overall result of the test suite.
+declare -a UNSTABLE_TESTS=(pipenv-test-app)
+
 # TODO: Make command compatible for Mac users
 test_dir="$(readlink -f $(dirname "${BASH_SOURCE[0]}"))"
 image_dir=$(readlink -f ${test_dir}/..)
