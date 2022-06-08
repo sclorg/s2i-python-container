@@ -20,7 +20,6 @@ test_python_imagestream
 test_python_s2i_templates
 "
 
-set -u
 # Pull image before going throw tests
 # Exit in case of failure
 ct_pull_image "quay.io/centos7/postgresql-10-centos7" "true"
@@ -31,7 +30,9 @@ trap ct_os_cleanup EXIT SIGINT
 
 ct_os_check_compulsory_vars
 
-oc status || false "It looks like oc is not properly logged in."
+ct_os_check_login || exit 1
+
+set -u
 
 # For testing on OpenShift 4 we use internal registry
 export CT_OCP4_TEST=true
