@@ -34,7 +34,7 @@ ct_os_check_compulsory_vars
 oc status || false "It looks like oc is not properly logged in."
 
 # For testing on OpenShift 4 we use internal registry
-export CT_EXTERNAL_REGISTRY=true
+export CT_OCP4_TEST=true
 
 test -n "${IMAGE_NAME-}" || false 'make sure $IMAGE_NAME is defined'
 test -n "${VERSION-}" || false 'make sure $VERSION is defined'
