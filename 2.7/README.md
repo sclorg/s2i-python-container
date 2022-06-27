@@ -5,7 +5,7 @@ This container image includes Python 2.7 as a [S2I](https://github.com/openshift
 Users can choose between RHEL and CentOS based builder images.
 The RHEL images are available in the [Red Hat Container Catalog](https://catalog.redhat.com/software/containers/explore),
 the CentOS images are available on [Quay.io](https://quay.io/organization/centos7),
-and the Fedora images are available in [Fedora Registry](https://registry.fedoraproject.org/).
+and the Fedora images are available in [Quay.io](https://quay.io/organization/fedora).
 The resulting image can be run using [podman](https://github.com/containers/libpod) or
 [docker](http://docker.io).
 
@@ -376,4 +376,4 @@ See also
 Dockerfile and other sources are available on https://github.com/sclorg/s2i-python-container.
 In that repository you also can find another versions of Python environment Dockerfiles.
 Dockerfile for CentOS is called `Dockerfile`, Dockerfile for RHEL7 is called `Dockerfile.rhel7`,
-for RHEL8 it's `Dockerfile.rhel8` and the Fedora Dockerfile is called `Dockerfile.fedora`.
+for RHEL8 it's `Dockerfile.rhel8`, for RHEL9 it's `Dockerfile.rhel9` and the Fedora Dockerfile is called `Dockerfile.fedora`.
