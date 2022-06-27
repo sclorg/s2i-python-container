@@ -1,4 +1,7 @@
 gunicorn<20.0.0; python_version < '3.5'
 gunicorn>=20.0.0; python_version >= '3.5'
-numpy<1.17.0; python_version < '3.5'
-numpy>=1.17.0; python_version >= '3.5'
+# Numpy 1.17 dropped support for Python 2
+numpy<1.17.0; python_version < '3.6'
+# Numpy 1.23.0 no longer builds from source
+# on RHEL 7 with old GCC
+numpy<1.23.0; python_version >= '3.6'
