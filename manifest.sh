@@ -53,6 +53,9 @@ DISTGEN_MULTI_RULES="
     dest=Dockerfile.rhel8;
 
     src=src/Dockerfile.template
+    dest=Dockerfile.rhel9;
+
+    src=src/Dockerfile.template
     dest=Dockerfile.fedora;
 
     src=src/Dockerfile.template

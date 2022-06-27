@@ -7,7 +7,7 @@
 {% macro _component_name(spec) -%}
 {% if spec.version.startswith('3.') %}{{ spec.python3_component_prefix }}{% endif -%}
 python
-{%- if spec.el_version == '8' %}-{% endif -%}
+{%- if spec.el_version == '8' or spec.el_version == '9' %}-{% endif -%}
 {{ spec.short_ver }}-container
 {%- endmacro %}
 
