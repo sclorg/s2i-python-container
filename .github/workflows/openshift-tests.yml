@@ -51,7 +51,7 @@ jobs:
           - tmt_plan: "rhel9-openshift-4"
             os_test: "rhel9"
             context: "RHEL9 - OpenShift 4"
-            compose: "RHEL-9.1.0-Nightly"
+            compose: "RHEL-9.0.0-Nightly"
             test_name: "test-openshift-4"
             api_key: "TF_INTERNAL_API_KEY"
             branch: "master"
