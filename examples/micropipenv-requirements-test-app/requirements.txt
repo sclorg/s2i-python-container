@@ -1,2 +1,4 @@
 mod_wsgi
 Flask
+# Tests that the pyenchant package is installable
+pyenchant
