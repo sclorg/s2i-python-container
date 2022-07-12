@@ -58,4 +58,12 @@ RUN \
     chown -R 1001:0 ${APP_ROOT} && \
     fix-permissions ${APP_ROOT} -P && \
     rpm-file-permissions
+
+{% if spec.el_version != '7' %}
+# For RHEL/Centos 8+ scl_enable isn't sourced automatically in s2i-core
+# so virtualenv needs to be activated this way
+ENV BASH_ENV="${APP_ROOT}/bin/activate" \
+    ENV="${APP_ROOT}/bin/activate" \
+    PROMPT_COMMAND=". ${APP_ROOT}/bin/activate"
+{% endif %}
 {% endmacro %}
