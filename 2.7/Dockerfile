@@ -21,7 +21,6 @@ ENV PYTHON_VERSION=2.7 \
     LANG=en_US.UTF-8 \
     PIP_NO_CACHE_DIR=off
 
-
 ENV SUMMARY="Platform for building and running Python $PYTHON_VERSION applications" \
     DESCRIPTION="Python $PYTHON_VERSION available as container is a base platform for \
 building and running various Python $PYTHON_VERSION applications and frameworks. \
@@ -72,6 +71,7 @@ RUN source scl_source enable python27 && \
     chown -R 1001:0 ${APP_ROOT} && \
     fix-permissions ${APP_ROOT} -P && \
     rpm-file-permissions
+
 
 USER 1001
 
