@@ -12,7 +12,6 @@ ENV PYTHON_VERSION=3.10 \
     LANG=en_US.UTF-8 \
     PIP_NO_CACHE_DIR=off
 
-
 ENV NAME=python3 \
     VERSION=0 \
     ARCH=x86_64
