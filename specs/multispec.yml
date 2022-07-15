@@ -71,7 +71,7 @@ specs:
       python_pkgs: ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip']
       base_pkgs: ['nss_wrapper', 'httpd', 'httpd-devel', 'mod_ssl',
                   'mod_auth_gssapi', 'mod_ldap', 'mod_session',
-                  'atlas-devel', 'gcc-gfortran', 'libffi-devel', 'libtool-ltdl']
+                  'atlas-devel', 'gcc-gfortran', 'libffi-devel', 'libtool-ltdl enchant']
       ubi_versions: ['3.9']
 
     c9s:
