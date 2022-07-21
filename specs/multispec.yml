@@ -72,6 +72,7 @@ specs:
       base_pkgs: ['nss_wrapper', 'httpd', 'httpd-devel', 'mod_ssl',
                   'mod_auth_gssapi', 'mod_ldap', 'mod_session',
                   'atlas-devel', 'gcc-gfortran', 'libffi-devel', 'libtool-ltdl']
+      ubi_versions: ['3.9']
 
     c9s:
       distros:
