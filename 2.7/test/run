@@ -13,6 +13,13 @@ declare -a WEB_APPS=({gunicorn-config-different-port,gunicorn-different-port,dja
 # If a test is in UNSTABLE_TESTS and IGNORE_UNSTABLE_TESTS env
 # variable is defined, a result of the test has no impact on
 # the overall result of the test suite.
+#
+# Reasons for specific tests to be marked as unstable:
+#   pipenv-test-app:
+#     - this testcase installs pipenv from the internet.
+#       Problem is that the upstream releases are from time-to-time broken
+#       which breaks this test. We generally want to know about it
+#       in upstream, but ignore this in downstream.
 declare -a UNSTABLE_TESTS=(pipenv-test-app)
 
 # TODO: Make command compatible for Mac users
