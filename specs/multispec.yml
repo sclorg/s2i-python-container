@@ -87,25 +87,15 @@ specs:
                   'mod_auth_gssapi', 'mod_ldap', 'mod_session',
                   'atlas-devel', 'gcc-gfortran', 'libffi-devel', 'libtool-ltdl enchant']
 
-    fedora34:
+    fedora36:
       distros:
-        - fedora-34-x86_64
-      fedora_version: "34"
+        - fedora-36-x86_64
+      fedora_version: "36"
       s2i_base: quay.io/fedora/s2i-base
-      img_tag: "34"
+      img_tag: "36"
       python_pkgs: ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip']
       base_pkgs: ['nss_wrapper', 'httpd', 'httpd-devel', 'atlas-devel', 'gcc-gfortran',
-                  'libffi-devel', 'libtool-ltdl enchant', 'redhat-rpm-config']
-
-    fedora35:
-      distros:
-        - fedora-35-x86_64
-      fedora_version: "35"
-      s2i_base: quay.io/fedora/s2i-base
-      img_tag: "35"
-      python_pkgs: ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip']
-      base_pkgs: ['nss_wrapper', 'httpd', 'httpd-devel', 'atlas-devel', 'gcc-gfortran',
-                  'libffi-devel', 'libtool-ltdl enchant', 'redhat-rpm-config']
+                  'libffi-devel', 'libtool-ltdl', 'enchant', 'redhat-rpm-config']
 
   version:
     "3.10":
@@ -159,16 +149,14 @@ specs:
 matrix:
   exclude:
     - distros:
-        - fedora-34-x86_64
-        - fedora-35-x86_64
+        - fedora-36-x86_64
         - centos-stream-9-x86_64
         - centos-7-x86_64
         - rhel-7-x86_64
         - rhel-9-x86_64
       version: "2.7"
     - distros:
-        - fedora-34-x86_64
-        - fedora-35-x86_64
+        - fedora-36-x86_64
         - centos-7-x86_64
         - rhel-7-x86_64
         - rhel-9-x86_64
@@ -176,26 +164,23 @@ matrix:
       version: "3.6"
     - distros:
         - centos-7-x86_64
-        - fedora-34-x86_64
-        - fedora-35-x86_64
+        - fedora-36-x86_64
         - rhel-7-x86_64
         - rhel-8-x86_64
         - rhel-9-x86_64
         - centos-stream-9-x86_64
       version: "3.7"
     - distros:
-        - fedora-34-x86_64
-        - fedora-35-x86_64
+        - fedora-36-x86_64
         - rhel-9-x86_64
         - centos-stream-9-x86_64
       version: "3.8"
     - distros:
-        - fedora-35-x86_64
+        - fedora-36-x86_64
         - centos-7-x86_64
         - rhel-7-x86_64
       version: "3.9"
     - distros:
-        - fedora-34-x86_64
         - centos-7-x86_64
         - rhel-7-x86_64
         - rhel-8-x86_64

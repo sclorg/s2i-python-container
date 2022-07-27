@@ -51,6 +51,7 @@ Python versions currently provided are:
 * [python-3.8](3.8)
 * [python-3.9](3.9)
 * [python-3.9 Minimal (tech-preview)](3.9-minimal)
+* [python-3.10](3.10)
 
 RHEL versions currently supported are:
 * RHEL 7 ([catalog.redhat.com](https://catalog.redhat.com/software/containers/search))
@@ -60,7 +61,7 @@ CentOS versions currently supported are:
 * CentOS 7 ([quay.io/centos7](https://quay.io/organization/centos7))
 
 Fedora versions currently supported are:
-* Fedora 34 ([registry.fedoraproject.org](https://registry.fedoraproject.org/repo/f34/python3/tags/))
+* Fedora 36 ([registry.fedoraproject.org](https://quay.io/organization/fedora))
 
 Download
 --------
