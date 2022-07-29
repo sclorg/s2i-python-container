@@ -81,8 +81,8 @@ COPY {{ spec.version }}/s2i/bin/ $STI_SCRIPTS_PATH
 # Copy extra files to the image.
 COPY {{ spec.version }}/root/ /
 
-{% if spec.version != "2.7" %}
-# Python 3 only
+{% if spec.version not in ["2.7", "3.6"] %}
+# Python 3.7+ only
 # Yes, the directory below is already copied by the previous command.
 # The problem here is that the wheels directory is copied as a symlink.
 # Only if you specify symlink directly as a source, COPY copies all the

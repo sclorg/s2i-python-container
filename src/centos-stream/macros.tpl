@@ -20,8 +20,8 @@ ENV NAME=python3 \
 
 {% macro venv_setup(spec) %}
 RUN python{{ spec.version }} -m venv ${APP_ROOT} && \
-{% if spec.version != "2.7" %}
-# Python 3 only code, Python 2 installs pip from PyPI in the assemble script. \
+{% if spec.version not in ["2.7", "3.6"] %}
+# Python 3.7+ only code, Python <3.7 installs pip from PyPI in the assemble script. \
 # We have to upgrade pip to a newer verison because: \
 # * pip < 9 does not support different packages' versions for Python 2/3 \
 # * pip < 19.3 does not support manylinux2014 wheels. Only manylinux2014 (and later) wheels \
