@@ -50,7 +50,7 @@ COPY 3.10/s2i/bin/ $STI_SCRIPTS_PATH
 # Copy extra files to the image.
 COPY 3.10/root/ /
 
-# Python 3 only
+# Python 3.7+ only
 # Yes, the directory below is already copied by the previous command.
 # The problem here is that the wheels directory is copied as a symlink.
 # Only if you specify symlink directly as a source, COPY copies all the
@@ -63,7 +63,7 @@ COPY 3.10/root/opt/wheels /opt/wheels
 #   writable as OpenShift default security model is to run the container
 #   under random UID.
 RUN python3.10 -m venv ${APP_ROOT} && \
-# Python 3 only code, Python 2 installs pip from PyPI in the assemble script. \
+# Python 3.7+ only code, Python <3.7 installs pip from PyPI in the assemble script. \
 # We have to upgrade pip to a newer verison because: \
 # * pip < 9 does not support different packages' versions for Python 2/3 \
 # * pip < 19.3 does not support manylinux2014 wheels. Only manylinux2014 (and later) wheels \
