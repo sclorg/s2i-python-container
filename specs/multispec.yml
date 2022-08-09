@@ -162,6 +162,8 @@ matrix:
         - fedora-34-x86_64
         - fedora-35-x86_64
         - centos-stream-9-x86_64
+        - centos-7-x86_64
+        - rhel-7-x86_64
         - rhel-9-x86_64
       version: "2.7"
     - distros:
