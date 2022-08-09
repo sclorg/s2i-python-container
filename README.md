@@ -3,12 +3,11 @@ Python container images
 [![Build and push container images to Quay.io registry](https://github.com/sclorg/s2i-python-container/actions/workflows/build-and-push.yml/badge.svg)](https://github.com/sclorg/s2i-python-container/actions/workflows/build-and-push.yml)
 
 Images available on Quay are:
-* CentOS 7 [python-27](https://quay.io/repository/centos7/python-27-centos7)
-* CentOS 7 [python-38](https://quay.io/repository/centos7/python-27-centos7)
+* CentOS 7 [python-38](https://quay.io/repository/centos7/python-38-centos7)
 * RHEL 8 [python-39-minimal](https://quay.io/repository/sclorg/python-39-minimal-el8)
 * CentOS Stream 9 [python-39-c9s](https://quay.io/repository/sclorg/python-39-c9s)
-* Fedora [nginx-39](https://quay.io/repository/fedora/python-39)
-* Fedora [nginx-310](https://quay.io/repository/fedora/python-310)
+* Fedora [python-39](https://quay.io/repository/fedora/python-39)
+* Fedora [python-310](https://quay.io/repository/fedora/python-310)
 
 This repository contains the source for building various versions of
 the Python application as a reproducible container image using
