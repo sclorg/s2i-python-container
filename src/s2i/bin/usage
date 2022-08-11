@@ -5,12 +5,12 @@ NAMESPACE=centos
 [[ $DISTRO =~ rhel* ]] && NAMESPACE=rhscl
 
 cat <<EOF
-This is a S2I python-{{ spec.version }} ${DISTRO} base image:
+This is a S2I python-{{ spec.version }}{% if spec.minimal %}-minimal{% endif %} ${DISTRO} base image:
 There are multiple ways how to run the image, see documentation at:
-https://github.com/sclorg/s2i-python-container/blob/master/{{ spec.version }}/README.md
+https://github.com/sclorg/s2i-python-container/blob/master/{{ spec.version }}{% if spec.minimal %}-minimal{% endif %}/README.md
 
 To use it in Openshift, run:
-oc new-app python:{{ spec.version }}~https://github.com/sclorg/s2i-python-container.git --context-dir={{ spec.version }}/test/setup-test-app/
+oc new-app python:{{ spec.version }}{% if spec.minimal %}-minimal{% endif %}~https://github.com/sclorg/s2i-python-container.git --context-dir={{ spec.version }}/test/setup-test-app/
 
 You can then run the resulting image via:
 oc get pods

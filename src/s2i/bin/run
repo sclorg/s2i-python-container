@@ -17,7 +17,13 @@ function should_migrate() {
 
 # Guess the number of workers according to the number of cores
 function get_default_web_concurrency() {
+  {% if spec.minimal %}
+  # Using python and just python here because the script has
+  # platform-python in its shebang which we don't have in the minimal image
+  limit_vars=$(python /usr/bin/cgroup-limits)
+  {% else %}
   limit_vars=$(cgroup-limits)
+  {% endif %}
   local $limit_vars
   if [ -z "${NUMBER_OF_CORES:-}" ]; then
     echo 1
