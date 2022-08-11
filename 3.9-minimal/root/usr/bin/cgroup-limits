@@ -22,14 +22,20 @@ Variables currently supported:
         /sys/fs/cgroup/memory/memory.limit_in_bytes for cgroups v1
         and from /sys/fs/cgroup/memory.max for cgroups v2
     NUMBER_OF_CORES
-        Number of detected CPU cores that can be used. This value is
-        calculated from /sys/fs/cgroup/cpuset/cpuset.cpus for cgroups v1
-        and from /sys/fs/cgroup/cpuset.cpus.effective for cgroups v2
+        Number of CPU cores that can be used. If both the cpu and cpuset
+        controllers specify a limit, the controller with the lowest CPU
+        limit takes precedence. For the cpu controller, the value is
+        calculated from /sys/fs/cgroup/cpu/cpu.cfs_{quota,period}_us for
+        cgroups v1 and from /sys/fs/cgroup/cpuset.cpus.effective for cgroups v2.
+        For the cpuset controller, the value is taken from
+        /sys/fs/cgroup/cpuset/cpuset.cpus for cgroups v1 and from
+        /sys/fs/cgroup/cpuset.cpus.effective for cgroups v2
     NO_MEMORY_LIMIT
         Set to "true" if MEMORY_LIMIT_IN_BYTES is so high that the caller
         can act as if no memory limit was set. Undefined otherwise.
 """
 
+from __future__ import division
 from __future__ import print_function
 import sys
 
@@ -64,6 +70,50 @@ def get_number_of_cores():
     Read number of CPU cores.
     """
 
+    limits = [_read_cpu_quota(), _read_cpuset_size()]
+    if not limits:
+        return None
+    return min([l for l in limits if l])
+
+
+def _read_cpu_quota():
+
+    quota, period = None, None
+
+    quota = _read_file("/sys/fs/cgroup/cpu/cpu.cfs_quota_us")
+    if quota:
+        # cgroups v1
+        quota = quota.strip()
+        if quota == "-1":
+            return None
+
+        period = _read_file("/sys/fs/cgroup/cpu/cpu.cfs_period_us")
+        if period:
+            period = period.strip()
+
+    else:
+        # cgroups v2
+        line = _read_file("/sys/fs/cgroup/cpu.max")
+        if line:
+            fields = line.split()
+
+            if len(fields) >= 2:
+                quota = fields[0]
+                if quota == "max":
+                    return None
+                period = fields[1]
+
+
+    if quota and quota.isdigit() and period and period.isdigit():
+        return int(quota)//int(period)
+
+    print("Warning: Can't detect cpu quota from cgroups",
+          file=sys.stderr)
+    return None
+
+
+def _read_cpuset_size():
+
     core_count = 0
 
     line = _read_file('/sys/fs/cgroup/cpuset/cpuset.cpus')
@@ -72,7 +122,7 @@ def get_number_of_cores():
     if line is None:
         # None of the files above exists when running podman as non-root,
         # so in that case, this warning is printed every-time
-        print("Warning: Can't detect number of CPU cores from cgroups",
+        print("Warning: Can't detect cpuset size from cgroups",
               file=sys.stderr)
         return None
 
