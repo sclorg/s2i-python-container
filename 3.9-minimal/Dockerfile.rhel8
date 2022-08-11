@@ -1,5 +1,6 @@
 FROM ubi8/ubi-minimal:latest
 
+
 EXPOSE 8080
 
 ENV PYTHON_VERSION=3.9 \
@@ -48,7 +49,7 @@ LABEL summary="$SUMMARY" \
       com.redhat.component="python-39-container" \
       name="ubi8/python-39-minimal" \
       version="1" \
-      usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.9/test/setup-test-app/ ubi8/python-39-minimal python-sample-app" \
+      usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.9-minimal/test/setup-test-app/ ubi8/python-39-minimal python-sample-app" \
       com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI" \
       io.buildpacks.stack.id="com.redhat.stacks.ubi8-python-39-minimal" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
@@ -69,7 +70,7 @@ COPY 3.9-minimal/s2i/bin/ $STI_SCRIPTS_PATH
 # Copy extra files to the image.
 COPY 3.9-minimal/root/ /
 
-# Python 3 only
+# Python 3.7+ only
 # Yes, the directory below is already copied by the previous command.
 # The problem here is that the wheels directory is copied as a symlink.
 # Only if you specify symlink directly as a source, COPY copies all the
@@ -96,7 +97,7 @@ RUN \
     #   support platforms like ppc64le, aarch64 or armv7 \
     # We are newly using wheel from one of the latest stable Fedora releases (from RPM python-pip-wheel) \
     # because it's tested better then whatever version from PyPI and contains useful patches. \
-    # We have to do it here (in the macro) so the permissions are correctly fixed and pip is able \
+    # We have to do it here so the permissions are correctly fixed and pip is able \
     # to reinstall itself in the next build phases in the assemble script if user wants the latest version \
     ${APP_ROOT}/bin/pip install /opt/wheels/pip-* && \
     rm -r /opt/wheels && \

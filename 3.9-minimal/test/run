@@ -6,13 +6,20 @@
 # IMAGE_NAME specifies a name of the candidate image used for testing.
 # The image has to be available before this script is executed.
 #
-declare -a WEB_APPS=({gunicorn-config-different-port,gunicorn-different-port,django-different-port,standalone,setup,setup-requirements,django,numpy,app-home,locale,pipenv,pipenv-and-micropipenv-should-fail,pin-pipenv-version,app-module,micropipenv}-test-app)
+declare -a WEB_APPS=({gunicorn-config-different-port,gunicorn-different-port,django-different-port,standalone,setup,setup-requirements,django,numpy,app-home,locale,pipenv,pipenv-and-micropipenv-should-fail,pyuwsgi-pipenv,app-module,micropipenv}-test-app)
 
 # Some tests, like the one using the latest pipenv, might be unstable
 # because new upstream releases tend to break our tests sometimes.
 # If a test is in UNSTABLE_TESTS and IGNORE_UNSTABLE_TESTS env
 # variable is defined, a result of the test has no impact on
 # the overall result of the test suite.
+#
+# Reasons for specific tests to be marked as unstable:
+#   pipenv-test-app:
+#     - this testcase installs pipenv from the internet.
+#       Problem is that the upstream releases are from time-to-time broken
+#       which breaks this test. We generally want to know about it
+#       in upstream, but ignore this in downstream.
 declare -a UNSTABLE_TESTS=(pipenv-test-app)
 
 # TODO: Make command compatible for Mac users
@@ -32,7 +39,7 @@ test_application_enable_init_wrapper
 
 TEST_VAR_DOCKER="\
 test_scl_variables_in_dockerfile
-test_from_dockerfile
+test_from_dockerfile_minimal
 "
 
 if [[ -z $VERSION ]]; then
@@ -43,6 +50,8 @@ fi
 IMAGE_NAME=${IMAGE_NAME:-centos/python-${VERSION//./}-centos7}
 
 . test/test-lib.sh
+
+ct_enable_cleanup
 
 info() {
   echo -e "\n\e[1m[INFO] $@\e[0m\n"
@@ -220,6 +229,27 @@ test_application() {
 
 test_from_dockerfile(){
   info "Test from Dockerfile"
+  # The latest LTS release of Django does not work on RHEL 7 (due to an old version of SQLite),
+  # and no longer supports Python 2. So on all CentOS/RHEL 7 images and all Python 2 images,
+  # we're using the old Django LTS version 1.11.x from the main git branch of the django-ex project.
+  # In all other cases we're using the newer Django LTS version 2.2.x from the corresponding git branch.
+
+  if [[ ${VERSION} == "2.7" ]] || docker inspect ${IMAGE_NAME} --format "{{.Config.Env}}" | tr " " "\n" | grep -q "^PLATFORM=el7"; then
+    django_example_repo_url="https://github.com/sclorg/django-ex.git"
+  else
+    django_example_repo_url="https://github.com/sclorg/django-ex.git@2.2.x"
+  fi
+
+  ct_test_app_dockerfile $test_dir/from-dockerfile/Dockerfile.tpl $django_example_repo_url 'Welcome to your Django application on OpenShift' app-src
+  check_result $?
+
+  info "Test from Dockerfile with no s2i scripts used"
+  ct_test_app_dockerfile $test_dir/from-dockerfile/Dockerfile_no_s2i.tpl $django_example_repo_url 'Welcome to your Django application on OpenShift' app-src
+  check_result $?
+}
+
+test_from_dockerfile_minimal(){
+  info "Test from Dockerfile"
 
   # uwsgi in uwsgi-test-app
   ct_test_app_dockerfile $test_dir/from-dockerfile/uwsgi.Dockerfile.tpl $test_dir/uwsgi-test-app 'Hello World from uWSGI hosted WSGI application!' app-src
@@ -246,9 +276,7 @@ test_application_enable_init_wrapper() {
 test_scl_variables_in_dockerfile() {
   if [ "$OS" == "rhel7" ] || [ "$OS" == "centos7" ]; then
      TESTCASE_RESULT=0
-     # autocleanup only enabled here as only the following tests so far use it
      CID_FILE_DIR=$(mktemp -d)
-     ct_enable_cleanup
 
      info "Testing variable presence during \`docker exec\`"
      ct_check_exec_env_vars
@@ -258,28 +286,6 @@ test_scl_variables_in_dockerfile() {
      ct_check_scl_enable_vars
      check_result $?
   fi
-}
-
-function run_all_tests() {
-  local APP_NAME=${1:-undefined}
-  for test_case in $TEST_SET; do
-    info "Running test $test_case ... "
-    TESTCASE_RESULT=0
-    $test_case
-    local test_msg
-    if [ $TESTCASE_RESULT -eq 0 ]; then
-      test_msg="[PASSED]"
-    else
-      test_msg="[FAILED]"
-      TESTSUITE_RESULT=1
-    fi
-    test "$APP_NAME" == "undefined" && msg_app="" || msg_app="'$APP_NAME'"
-    printf -v test_short_summary "%s %s for %s %s\n" "${test_short_summary}" "${test_msg}" "${msg_app}" "$test_case"
-    [ -n "${FAIL_QUICKLY:-}" ] && {
-      cleanup "${APP_NAME}"
-      return 1
-    }
-  done;
 }
 
 # For debugging purposes, this script can be run with one or more arguments
@@ -313,19 +319,10 @@ for app in ${@:-${WEB_APPS[@]}}; do
     printf -v test_short_summary "%s %s for %s\n" "${test_short_summary}" "$test_msg" "$msg_run_s2i_build"
   fi
   echo ""
-  TEST_SET=${TESTS:-$TEST_LIST} run_all_tests "${app}"
+  TEST_SET=${TESTS:-$TEST_LIST} ct_run_tests_from_testset "${app}"
 
   cleanup ${app}
 done
 
-TEST_SET=${TESTS:-$TEST_VAR_DOCKER} run_all_tests
+TEST_SET=${TESTS:-$TEST_VAR_DOCKER} ct_run_tests_from_testset "var-docker"
 
-echo "$test_short_summary"
-
-if [ $TESTSUITE_RESULT -eq 0 ] ; then
-  echo "Tests for ${IMAGE_NAME} succeeded."
-else
-  echo "Tests for ${IMAGE_NAME} failed."
-fi
-
-exit $TESTSUITE_RESULT
