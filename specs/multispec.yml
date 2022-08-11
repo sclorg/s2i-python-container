@@ -101,6 +101,7 @@ specs:
     "3.10":
       version: "3.10"
       short_ver: "310"
+      minimal: false
       base_img_version: "1"
       python_img_version: "1"
       scl: "rh-python310"
@@ -111,6 +112,7 @@ specs:
     "3.9":
       version: "3.9"
       short_ver: "39"
+      minimal: false
       base_img_version: "1"
       python_img_version: "1"
       scl: "rh-python39"
@@ -118,9 +120,21 @@ specs:
       pkg_prefix: "python39"
       main_image: "registry.access.redhat.com/ubi8/python-39"
 
+    "3.9-minimal":
+      version: "3.9"
+      short_ver: "39"
+      minimal: true
+      base_img_version: "1"
+      python_img_version: "1"
+      scl: "rh-python39"
+      module_stream: "python39:3.9"
+      pkg_prefix: "python39"
+      main_image: "registry.access.redhat.com/ubi8/python-39-minimal"
+
     "3.8":
       version: "3.8"
       short_ver: "38"
+      minimal: false
       base_img_version: "1"
       python_img_version: "1"
       scl: "rh-python38"
@@ -131,6 +145,7 @@ specs:
     "3.6":
       version: "3.6"
       short_ver: "36"
+      minimal: false
       base_img_version: "1"
       python_img_version: "1"
       scl: "rh-python36"
@@ -141,6 +156,7 @@ specs:
     "2.7":
       version: "2.7"
       short_ver: "27"
+      minimal: false
       scl: "python27"
       module_stream: "python27:2.7"
       pkg_prefix: "python2"
@@ -180,6 +196,13 @@ matrix:
         - centos-7-x86_64
         - rhel-7-x86_64
       version: "3.9"
+    - distros:
+        - fedora-36-x86_64
+        - centos-7-x86_64
+        - rhel-7-x86_64
+        - rhel-9-x86_64
+        - centos-stream-9-x86_64
+      version: "3.9-minimal"
     - distros:
         - centos-7-x86_64
         - rhel-7-x86_64
