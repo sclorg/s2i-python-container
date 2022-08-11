@@ -6,7 +6,7 @@
 # IMAGE_NAME specifies a name of the candidate image used for testing.
 # The image has to be available before this script is executed.
 #
-declare -a WEB_APPS=({gunicorn-config-different-port,gunicorn-different-port,django-different-port,standalone,setup,setup-cfg,setup-requirements,django,numpy,app-home,npm-virtualenv-uwsgi,locale,mod-wsgi,pipenv,pipenv-and-micropipenv-should-fail,pin-pipenv-version,app-module,micropipenv,micropipenv-requirements}-test-app)
+declare -a WEB_APPS=({gunicorn-config-different-port,gunicorn-different-port,django-different-port,standalone,setup,setup-cfg,setup-requirements,django,numpy,app-home,npm-virtualenv-uwsgi,locale,mod-wsgi,pipenv,pipenv-and-micropipenv-should-fail,pin-pipenv-version,app-module,pyuwsgi-pipenv,micropipenv,micropipenv-requirements}-test-app)
 
 # Some tests, like the one using the latest pipenv, might be unstable
 # because new upstream releases tend to break our tests sometimes.
@@ -215,7 +215,12 @@ test_application() {
   # that the container starts at all
   check_result $?
 
-  test_scl_usage "python --version" "Python $VERSION." "${cid_file}"
+  # Instead of relying on VERSION variable coming from Makefile
+  # set the expected string based on the PYTHON_VERSION defined
+  # inside the running container.
+  python_version=$(docker run --rm $IMAGE_NAME /bin/bash -c "echo \$PYTHON_VERSION" 2>&1)
+
+  test_scl_usage "python --version" "Python $python_version." "${cid_file}"
   check_result $?
   test_scl_usage "node --version" "^v[0-9]*\.[0-9]*\.[0-9]*" "${cid_file}"
   check_result $?
@@ -244,6 +249,20 @@ test_from_dockerfile(){
 
   info "Test from Dockerfile with no s2i scripts used"
   ct_test_app_dockerfile $test_dir/from-dockerfile/Dockerfile_no_s2i.tpl $django_example_repo_url 'Welcome to your Django application on OpenShift' app-src
+  check_result $?
+}
+
+test_from_dockerfile_minimal(){
+  info "Test from Dockerfile"
+
+  # uwsgi in uwsgi-test-app
+  ct_test_app_dockerfile $test_dir/from-dockerfile/uwsgi.Dockerfile.tpl $test_dir/uwsgi-test-app 'Hello World from uWSGI hosted WSGI application!' app-src
+  check_result $?
+
+  # mod_wsgi in micropipenv-requirements-test-app
+  # TODO: Find a better way how to specify full/minimal images that should work together
+  sed "s@#IMAGE_NAME#@${IMAGE_NAME}@;s@#FULL_IMAGE_NAME#@ubi/python-310:1@" $test_dir/from-dockerfile/mod_wsgi.Dockerfile.tpl > $test_dir/from-dockerfile/Dockerfile
+  ct_test_app_dockerfile $test_dir/from-dockerfile/Dockerfile $test_dir/micropipenv-requirements-test-app 'Hello World from mod_wsgi hosted WSGI application!' app-src
   check_result $?
 }
 
