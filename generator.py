@@ -75,8 +75,10 @@ def filename_to_distro_config(filename, version, mapping):
         sorted_configs = sorted(
             c for c in mapping[version] if c.startswith("fedora")
         )
-        if sorted_configs:
-            config = sorted_configs[-1]
+        if len(sorted_configs) > 1:
+            raise RuntimeError("Multiple Fedora configs for single version exist:", sorted_configs)
+        elif len(sorted_configs) == 1:
+            config = sorted_configs[0]
         else:
             config = None
     else:
