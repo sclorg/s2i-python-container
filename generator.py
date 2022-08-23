@@ -1,7 +1,7 @@
 import argparse
 import re
 from collections import defaultdict
-from os import chmod, makedirs, mkdir, symlink
+from os import chmod, makedirs, mkdir, symlink, unlink
 from pathlib import Path
 from shutil import copy2, rmtree
 from subprocess import CalledProcessError, check_output
@@ -58,8 +58,8 @@ def filename_to_distro_config(filename, version, mapping):
     This is usually needed only for dockerfiles.
     - Dockerfile.rhelXX → rhel-XX-x86_64.yaml
     - Dockerfile.cXXs → centos-stream-XX-x86_64.yaml
+    - Dockerfile.centosX → centos-X-x86_64.yaml
     - Dockerfile.fedora → the newest fedora-XX-x86_64.yaml
-    - Dockerfile → centos-7-x86_64.yaml
 
     If not found, None is returned indicating that the
     combination of distro and version is not included
@@ -69,6 +69,8 @@ def filename_to_distro_config(filename, version, mapping):
         config = f"rhel-{m.group(1)}-x86_64.yaml"
     elif m := re.match(r".*\.c(\d+)s$", filename):
         config = f"centos-stream-{m.group(1)}-x86_64.yaml"
+    elif m := re.match(r".*\.centos(\d+)$", filename):
+        config = f"centos-{m.group(1)}-x86_64.yaml"
     elif filename.endswith(".fedora"):
         sorted_configs = sorted(
             c for c in mapping[version] if c.startswith("fedora")
@@ -78,7 +80,7 @@ def filename_to_distro_config(filename, version, mapping):
         else:
             config = None
     else:
-        config = "centos-7-x86_64.yaml"
+        raise RuntimeError(f"File {filename} does not match any of the known suffixes: .rhelXX, .cXs, .centosX or .fedora")
 
     if config in mapping[version]:
         return config
@@ -139,6 +141,10 @@ def main():
             elif section == "SYMLINK_RULES":
                 print(f"LN\t{spec['src']} → {spec['dest']}")
                 symlink(spec["src"], spec["dest"])
+                # Remove dead symlinks
+                if not spec["dest"].exists():
+                    print(f"WARN: {spec['dest']} is a dead symlink, removed.")
+                    unlink(spec["dest"])
 
             elif section == "DISTGEN_RULES":
                 print(f"DG\t{spec['src']} → {spec['dest']}")
