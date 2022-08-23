@@ -104,7 +104,6 @@ specs:
       minimal: false
       base_img_version: "1"
       python_img_version: "1"
-      scl: "rh-python310"
       module_stream: "python310:3.10"
       pkg_prefix: "python310"
       main_image: "registry.fedoraproject.org/f35/python3"
@@ -115,7 +114,6 @@ specs:
       minimal: false
       base_img_version: "1"
       python_img_version: "1"
-      scl: "rh-python39"
       module_stream: "python39:3.9"
       pkg_prefix: "python39"
       main_image: "registry.access.redhat.com/ubi8/python-39"
@@ -126,7 +124,6 @@ specs:
       minimal: true
       base_img_version: "1"
       python_img_version: "1"
-      scl: "rh-python39"
       module_stream: "python39:3.9"
       pkg_prefix: "python39"
       main_image: "registry.access.redhat.com/ubi8/python-39-minimal"
@@ -148,7 +145,6 @@ specs:
       minimal: false
       base_img_version: "1"
       python_img_version: "1"
-      scl: "rh-python36"
       module_stream: "python36:3.6"
       pkg_prefix: "python3"
       main_image: "registry.access.redhat.com/ubi8/python-36"
@@ -157,7 +153,6 @@ specs:
       version: "2.7"
       short_ver: "27"
       minimal: false
-      scl: "python27"
       module_stream: "python27:2.7"
       pkg_prefix: "python2"
       main_image: "registry.access.redhat.com/ubi8/python-27"
