@@ -6,7 +6,10 @@
 # IMAGE_NAME specifies a name of the candidate image used for testing.
 # The image has to be available before this script is executed.
 #
-declare -a WEB_APPS=({gunicorn-config-different-port,gunicorn-different-port,django-different-port,standalone,setup,setup-requirements,django,numpy,app-home,locale,pipenv,pipenv-and-micropipenv-should-fail,pyuwsgi-pipenv,app-module,micropipenv}-test-app)
+declare -a COMMON_WEB_APPS=({gunicorn-config-different-port,gunicorn-different-port,django-different-port,standalone,setup,setup-requirements,django,numpy,app-home,locale,pipenv,pipenv-and-micropipenv-should-fail,app-module,pyuwsgi-pipenv,micropipenv,micropipenv-requirements}-test-app)
+declare -a FULL_WEB_APPS=({setup-cfg,npm-virtualenv-uwsgi,mod-wsgi,pin-pipenv-version}-test-app)
+declare -a MINIMAL_WEB_APPS=()
+declare -a WEB_APPS=(${COMMON_WEB_APPS[@]} ${MINIMAL_WEB_APPS[@]})
 
 # Some tests, like the one using the latest pipenv, might be unstable
 # because new upstream releases tend to break our tests sometimes.
