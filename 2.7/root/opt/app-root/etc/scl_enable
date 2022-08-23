@@ -4,6 +4,6 @@
 unset BASH_ENV PROMPT_COMMAND ENV
 if head "/etc/redhat-release" | grep -q "^CentOS Linux release 7" || \
    head "/etc/redhat-release" | grep -q "^Red Hat Enterprise Linux\( Server\)\? release 7"; then
-    source scl_source enable httpd24 $NODEJS_SCL python27
+    source scl_source enable httpd24 $NODEJS_SCL 
 fi
 source /opt/app-root/bin/activate
