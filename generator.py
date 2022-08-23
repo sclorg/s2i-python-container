@@ -145,7 +145,8 @@ def main():
                 # For common files like README.md or test/run
                 # we need to run distgen only once and it does not
                 # matter which distro config we use.
-                distro_config = version_distro_map[args.version][0]
+                # Sorting is here to make it deterministic.
+                distro_config = sorted(version_distro_map[args.version])[-1]
                 run_distgen(
                     spec["src"],
                     spec["dest"],
