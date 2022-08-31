@@ -267,6 +267,8 @@ test_from_dockerfile(){
 test_from_dockerfile_minimal(){
   info "Test from Dockerfile"
 
+The following tests are for multi-stage builds. These technically also work on full images, but there is no reason to do multi-stage builds with full images.
+
   # uwsgi in uwsgi-test-app
   ct_test_app_dockerfile $test_dir/from-dockerfile/uwsgi.Dockerfile.tpl $test_dir/uwsgi-test-app 'Hello World from uWSGI hosted WSGI application!' app-src
   check_result $?
