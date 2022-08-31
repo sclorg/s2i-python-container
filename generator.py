@@ -146,6 +146,8 @@ def main():
                 print(f"LN\t{spec['src']} → {spec['dest']}")
                 symlink(spec["src"], spec["dest"])
                 # Remove dead symlinks
+                # It's easier to remove dead symlinks than checking
+                # the relative path of the destination beforehand.
                 if not spec["dest"].exists():
                     print(f"WARN: {spec['dest']} is a dead symlink, removed.")
                     unlink(spec["dest"])
