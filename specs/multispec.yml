@@ -158,50 +158,26 @@ specs:
       main_image: "registry.access.redhat.com/ubi8/python-27"
 
 matrix:
-  exclude:
+  include:
     - distros:
-        - fedora-36-x86_64
-        - centos-stream-9-x86_64
-        - centos-7-x86_64
-        - rhel-7-x86_64
-        - rhel-9-x86_64
+        - rhel-8-x86_64
       version: "2.7"
     - distros:
-        - fedora-36-x86_64
-        - centos-7-x86_64
-        - rhel-7-x86_64
-        - rhel-9-x86_64
-        - centos-stream-9-x86_64
+        - rhel-8-x86_64
       version: "3.6"
     - distros:
         - centos-7-x86_64
-        - fedora-36-x86_64
         - rhel-7-x86_64
         - rhel-8-x86_64
-        - rhel-9-x86_64
-        - centos-stream-9-x86_64
-      version: "3.7"
-    - distros:
-        - fedora-36-x86_64
-        - rhel-9-x86_64
-        - centos-stream-9-x86_64
       version: "3.8"
     - distros:
-        - fedora-36-x86_64
-        - centos-7-x86_64
-        - rhel-7-x86_64
-      version: "3.9"
-    - distros:
-        - fedora-36-x86_64
-        - centos-7-x86_64
-        - rhel-7-x86_64
-        - rhel-9-x86_64
         - centos-stream-9-x86_64
-      version: "3.9-minimal"
-    - distros:
-        - centos-7-x86_64
-        - rhel-7-x86_64
         - rhel-8-x86_64
         - rhel-9-x86_64
-        - centos-stream-9-x86_64
+      version: "3.9"
+    - distros:
+        - rhel-8-x86_64
+      version: "3.9-minimal"
+    - distros:
+        - fedora-36-x86_64
       version: "3.10"
