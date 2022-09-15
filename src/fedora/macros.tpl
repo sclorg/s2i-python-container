@@ -36,5 +36,6 @@ fix-permissions ${APP_ROOT} -P
 # so virtualenv needs to be activated this way
 ENV BASH_ENV="${APP_ROOT}/bin/activate" \
     ENV="${APP_ROOT}/bin/activate" \
+    VIRTUAL_ENV="${APP_ROOT}" \
     PROMPT_COMMAND=". ${APP_ROOT}/bin/activate"
 {% endmacro %}
