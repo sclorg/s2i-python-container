@@ -13,7 +13,7 @@ source "${THISDIR}/test-lib-openshift.sh"
 
 function ct_pull_or_import_postgresql() {
   # Variable CVP is set by CVP pipeline
-  if [ "${CVP}" -eq "0" ]; then
+  if [ "${CVP:-0}" -eq "0" ]; then
     # In case of container or OpenShift 4 tests
     # Pull image before going throw tests
     # Exit in case of failure, because postgresql container is mandatory
@@ -29,7 +29,7 @@ function ct_pull_or_import_postgresql() {
 # Check the imagestream
 function test_python_imagestream() {
   case ${OS} in
-    rhel7|centos7) ;;
+    rhel7|centos7|rhel8) ;;
     *) echo "Imagestream testing not supported for $OS environment." ; return 0 ;;
   esac
 
