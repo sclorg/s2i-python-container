@@ -30,7 +30,7 @@ ct_os_check_login || exit 1
 
 ct_os_tag_image_for_cvp "python"
 
-ct_pull_or_import_postgresql
+ct_pull_or_import_postgresql || exit 1
 
 set -u
 
