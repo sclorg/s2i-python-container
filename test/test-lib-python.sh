@@ -15,7 +15,7 @@ function ct_pull_or_import_postgresql() {
   # Variable CVP is set by CVP pipeline
   if [ "${CVP:-0}" -eq "0" ]; then
     # In case of container or OpenShift 4 tests
-    # Pull image before going throw tests
+    # Pull image before going through tests
     # Exit in case of failure, because postgresql container is mandatory
     ct_pull_image "quay.io/centos7/postgresql-10-centos7" "true"
   else
