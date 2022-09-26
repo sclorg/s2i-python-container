@@ -20,10 +20,6 @@ test_python_imagestream
 test_python_s2i_templates
 "
 
-# Pull image before going throw tests
-# Exit in case of failure
-ct_pull_image "quay.io/centos7/postgresql-10-centos7" "true"
-
 ct_os_set_ocp4
 
 trap ct_os_cleanup EXIT SIGINT
@@ -31,6 +27,10 @@ trap ct_os_cleanup EXIT SIGINT
 ct_os_check_compulsory_vars
 
 ct_os_check_login || exit 1
+
+ct_os_tag_image_for_cvp "python"
+
+ct_pull_or_import_postgresql || exit 1
 
 set -u
 
