@@ -178,6 +178,9 @@ SYMLINK_RULES:
   - src: ../../common/test-lib-remote-openshift.sh
     dest: test/test-lib-remote-openshift.sh
 
+  - src: ../../common/test-openshift.yaml
+    dest: test/test-openshift.yaml
+
   - src: ../../test/test-lib-python.sh
     dest: test/test-lib-python.sh
 
