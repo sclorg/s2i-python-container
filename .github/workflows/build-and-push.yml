@@ -14,36 +14,32 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - dockerfile_path: "3.8"
-            dockerfile: "Dockerfile"
+          - dockerfile: "3.8/Dockerfile"
             registry_namespace: "centos7"
             quayio_username: "QUAY_IMAGE_BUILDER_USERNAME"
             quayio_token: "QUAY_IMAGE_BUILDER_TOKEN"
             tag: "centos7"
-            suffix: "centos7"
-          - dockerfile_path: "3.9-minimal"
-            dockerfile: "Dockerfile.rhel8"
+            image_name: "python-38-centos7"
+          - dockerfile: "3.9-minimal/Dockerfile.rhel8"
             registry_namespace: "sclorg"
             quayio_username: "QUAY_IMAGE_SCLORG_BUILDER_USERNAME"
             quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
             tag: "el8"
-            suffix: "el8"
-          - dockerfile_path: "3.10"
-            dockerfile: "Dockerfile.fedora"
+            image_name: "python-39-minimal-el8"
+          - dockerfile: "3.10/Dockerfile.fedora"
             registry_namespace: "fedora"
             quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_USERNAME"
             quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
             tag: "310"
+            image_name: "python-310"
     steps:
       - name: Build and push to quay.io registry
-        uses: sclorg/build-and-push-action@v2
+        uses: sclorg/build-and-push-action@v4
         with:
           registry: "quay.io"
           registry_namespace: ${{ matrix.registry_namespace }}
           registry_username: ${{ secrets[matrix.quayio_username] }}
           registry_token: ${{ secrets[matrix.quayio_token] }}
           dockerfile: ${{ matrix.dockerfile }}
-          dockerfile_path: ${{ matrix.dockerfile_path }}
-          use_distgen: "true"
           tag: ${{ matrix.tag }}
-          suffix: ${{ matrix.suffix }}
+          image_name: ${{ matrix.image_name }}
