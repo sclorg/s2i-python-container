@@ -24,13 +24,13 @@ ct_os_set_ocp4
 
 trap ct_os_cleanup EXIT SIGINT
 
-ct_os_check_compulsory_vars
+ct_os_check_compulsory_vars || exit $OC_ERR
 
-ct_os_check_login || exit 1
+ct_os_check_login || exit $OC_ERR
 
 ct_os_tag_image_for_cvp "python"
 
-ct_pull_or_import_postgresql || exit 1
+ct_pull_or_import_postgresql || exit $OC_ERR
 
 set -u
 
