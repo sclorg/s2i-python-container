@@ -16,7 +16,7 @@ specs:
                     '{{ spec.scl }}-python-setuptools', '{{ spec.scl }}-python-pip']
       base_pkgs: ['nss_wrapper', 'httpd24', 'httpd24-httpd-devel', 'httpd24-mod_ssl',
                   'httpd24-mod_auth_kerb', 'httpd24-mod_ldap', 'httpd24-mod_session',
-                  'atlas-devel', 'gcc-gfortran', 'libffi-devel', 'libtool-ltdl enchant',
+                  'atlas-devel', 'gcc-gfortran', 'libffi-devel', 'libtool-ltdl', 'enchant',
                   'krb5-devel']
       extra_pkgs:
         "2.7": ['libjpeg-turbo', 'libjpeg-turbo-devel']
@@ -36,7 +36,7 @@ specs:
                     '{{ spec.scl }}-python-setuptools', '{{ spec.scl }}-python-pip']
       base_pkgs: ['nss_wrapper', 'httpd24', 'httpd24-httpd-devel', 'httpd24-mod_ssl',
                   'httpd24-mod_auth_kerb', 'httpd24-mod_ldap', 'httpd24-mod_session',
-                  'atlas-devel', 'gcc-gfortran', 'libffi-devel', 'libtool-ltdl enchant',
+                  'atlas-devel', 'gcc-gfortran', 'libffi-devel', 'libtool-ltdl', 'enchant',
                   'krb5-devel']
       ubi_versions: ['2.7', '3.8']
 
@@ -53,7 +53,7 @@ specs:
       python_pkgs: ['{{ spec.pkg_prefix }}-setuptools', '{{ spec.pkg_prefix }}-pip']
       base_pkgs: ['nss_wrapper', 'httpd', 'httpd-devel', 'mod_ssl',
                   'mod_auth_gssapi', 'mod_ldap', 'mod_session',
-                  'atlas-devel', 'gcc-gfortran', 'libffi-devel', 'libtool-ltdl enchant',
+                  'atlas-devel', 'gcc-gfortran', 'libffi-devel', 'libtool-ltdl', 'enchant',
                   'krb5-devel']
       extra_pkgs:
         "2.7": ['{{ spec.pkg_prefix }}', '{{ spec.pkg_prefix }}-devel', 'glibc-langpack-en',
@@ -74,7 +74,7 @@ specs:
       python_pkgs: ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip']
       base_pkgs: ['nss_wrapper', 'httpd', 'httpd-devel', 'mod_ssl',
                   'mod_auth_gssapi', 'mod_ldap', 'mod_session',
-                  'atlas-devel', 'gcc-gfortran', 'libffi-devel', 'libtool-ltdl enchant',
+                  'atlas-devel', 'gcc-gfortran', 'libffi-devel', 'libtool-ltdl', 'enchant',
                   'krb5-devel']
       ubi_versions: ['3.9']
 
@@ -89,7 +89,7 @@ specs:
       python_pkgs: ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip']
       base_pkgs: ['nss_wrapper', 'httpd', 'httpd-devel', 'mod_ssl',
                   'mod_auth_gssapi', 'mod_ldap', 'mod_session',
-                  'atlas-devel', 'gcc-gfortran', 'libffi-devel', 'libtool-ltdl enchant',
+                  'atlas-devel', 'gcc-gfortran', 'libffi-devel', 'libtool-ltdl', 'enchant',
                   'krb5-devel']
 
     fedora36:
