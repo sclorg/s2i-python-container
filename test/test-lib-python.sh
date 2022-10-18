@@ -29,16 +29,21 @@ function ct_pull_or_import_postgresql() {
 # Check the imagestream
 function test_python_imagestream() {
   case ${OS} in
-    rhel7|centos7|rhel8) ;;
+    rhel7|centos7|rhel8|rhel9) ;;
     *) echo "Imagestream testing not supported for $OS environment." ; return 0 ;;
   esac
-
+  local tag="-el7"
+  if [ "${OS}" == "rhel8" ]; then
+    tag="-ubi8"
+  elif [ "${OS}" == "rhel9" ]; then
+    tag="-ubi9"
+  fi
   ct_os_test_image_stream_quickstart "${THISDIR}/imagestreams/python-${OS%[0-9]*}.json" \
                                      'https://raw.githubusercontent.com/sclorg/django-ex/master/openshift/templates/django-postgresql.json' \
                                      "${IMAGE_NAME}" \
                                      'python' \
                                      'Welcome to your Django application on OpenShift' \
-                                     8080 http 200 "-p SOURCE_REPOSITORY_REF=master -p PYTHON_VERSION=${VERSION} -p POSTGRESQL_VERSION=10 -p NAME=python-testing" \
+                                     8080 http 200 "-p SOURCE_REPOSITORY_REF=master -p PYTHON_VERSION=${VERSION}${tag} -p POSTGRESQL_VERSION=10 -p NAME=python-testing" \
                                      "quay.io/centos7/postgresql-10-centos7|postgresql:10"
 }
 function test_python_s2i_app_ex_standalone() {
