@@ -1,4 +1,6 @@
 mod_wsgi
 Flask
-# Tests that the pyenchant package is installable
+# Tests that the pyenchant and gssapi packages are installable.
+# This test is ideal place because it's skipped for minimal containers.
 pyenchant
+gssapi
