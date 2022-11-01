@@ -28,10 +28,6 @@ function ct_pull_or_import_postgresql() {
 
 # Check the imagestream
 function test_python_imagestream() {
-  case ${OS} in
-    rhel7|centos7|rhel8|rhel9) ;;
-    *) echo "Imagestream testing not supported for $OS environment." ; return 0 ;;
-  esac
   local tag="-ubi7"
   if [ "${OS}" == "rhel8" ]; then
     tag="-ubi8"
