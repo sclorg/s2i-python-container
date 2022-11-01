@@ -34,6 +34,9 @@ function test_python_imagestream() {
   elif [ "${OS}" == "rhel9" ]; then
     tag="-ubi9"
   fi
+  if [[ "${VERSION}" == *"minimal"* ]]; then
+    VERSION=$(echo "${VERSION}" | cut -d "-" -f 1)
+  fi
   ct_os_test_image_stream_quickstart "${THISDIR}/imagestreams/python-${OS%[0-9]*}.json" \
                                      'https://raw.githubusercontent.com/sclorg/django-ex/master/openshift/templates/django-postgresql.json' \
                                      "${IMAGE_NAME}" \
