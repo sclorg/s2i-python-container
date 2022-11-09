@@ -28,15 +28,14 @@ function ct_pull_or_import_postgresql() {
 
 # Check the imagestream
 function test_python_imagestream() {
-  case ${OS} in
-    rhel7|centos7|rhel8|rhel9) ;;
-    *) echo "Imagestream testing not supported for $OS environment." ; return 0 ;;
-  esac
   local tag="-ubi7"
   if [ "${OS}" == "rhel8" ]; then
     tag="-ubi8"
   elif [ "${OS}" == "rhel9" ]; then
     tag="-ubi9"
+  fi
+  if [[ "${VERSION}" == *"minimal"* ]]; then
+    VERSION=$(echo "${VERSION}" | cut -d "-" -f 1)
   fi
   ct_os_test_image_stream_quickstart "${THISDIR}/imagestreams/python-${OS%[0-9]*}.json" \
                                      'https://raw.githubusercontent.com/sclorg/django-ex/master/openshift/templates/django-postgresql.json' \
