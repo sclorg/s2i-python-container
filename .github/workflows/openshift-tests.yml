@@ -68,6 +68,10 @@ jobs:
         with:
           ref: "refs/pull/${{ github.event.issue.number }}/head"
 
+      - name: Check distgen generated files
+        shell: bash
+        run: ./common/tests/check_distgen_generated_files.sh
+
       - name: Prepare needed variables
         shell: bash
         id: vars
