@@ -76,10 +76,14 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: "refs/pull/${{ github.event.issue.number }}/head"
+          submodules: true
 
       - name: Check distgen generated files
         shell: bash
-        run: ./common/tests/check_distgen_generated_files.sh
+        run: |
+          sudo apt update && sudo apt -y install python3-pip
+          pip3 install pyyaml distgen Jinja2
+          ./common/tests/check_distgen_generated_files.sh
 
       - name: Prepare needed variables
         shell: bash
