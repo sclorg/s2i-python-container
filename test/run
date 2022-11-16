@@ -343,4 +343,3 @@ for app in ${@:-${WEB_APPS[@]}}; do
 done
 
 TEST_SET=${TESTS:-$TEST_VAR_DOCKER} ct_run_tests_from_testset "var-docker"
-
