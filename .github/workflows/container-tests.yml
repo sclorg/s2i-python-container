@@ -49,7 +49,9 @@ jobs:
 
       - name: Exit on ERR
         shell: bash
-        run: [[ "${{ steps.check.outputs.result }}" == passed ]] || exit 1
+        run: |
+          _result=${{ steps.check.outputs.result }}
+          [ "$_result" == passed ] || exit 1
 
   container-tests:
     needs: distgen-check
