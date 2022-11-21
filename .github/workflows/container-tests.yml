@@ -23,8 +23,8 @@ jobs:
         run: |
           sudo apt update && sudo apt -y install python3-pip
           pip3 install pyyaml distgen Jinja2
-          result="passed"
-          ./common/tests/check_distgen_generated_files.sh || result="failed"
+          result="success"
+          ./common/tests/check_distgen_generated_files.sh || result="failure"
           echo "result=$result" >> "$GITHUB_OUTPUT"
 
       - name: Update status of the distgen check to the PR
@@ -34,9 +34,8 @@ jobs:
           cat << EOF > result.json
           {
             "sha": "$_sha",
-            "state": "pending",
-            "context": "Distgen check",
-            "description": "${{ steps.check.outputs.result }}",
+            "state": "${{ steps.check.outputs.result }}",
+            "context": "Distgen check"
           }
           EOF
           cat result.json
@@ -51,7 +50,7 @@ jobs:
         shell: bash
         run: |
           _result=${{ steps.check.outputs.result }}
-          [ "$_result" == passed ] || exit 1
+          [ "$_result" == success ] || exit 1
 
   container-tests:
     needs: distgen-check
