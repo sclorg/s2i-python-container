@@ -3,7 +3,56 @@ on:
     types:
       - created
 jobs:
+  distgen-check:
+    name: "Check distgen generated files"
+    runs-on: ubuntu-20.04
+    if: |
+      github.event.issue.pull_request
+      && (contains(github.event.comment.body, '[test]') || contains(github.event.comment.body, '[test-all]'))
+      && contains(fromJson('["OWNER", "MEMBER"]'), github.event.comment.author_association)
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          ref: "refs/pull/${{ github.event.issue.number }}/head"
+          submodules: true
+
+      - name: Check distgen generated files
+        id: check
+        shell: bash
+        run: |
+          sudo apt update && sudo apt -y install python3-pip
+          pip3 install pyyaml distgen Jinja2
+          result="passed"
+          ./common/tests/check_distgen_generated_files.sh || result="failed"
+          echo "result=$result" >> "$GITHUB_OUTPUT"
+
+      - name: Update status of the distgen check to the PR
+        shell: bash
+        run: |
+          _sha=$(git rev-parse HEAD)
+          cat << EOF > result.json
+          {
+            "sha": "$_sha",
+            "state": "pending",
+            "context": "Distgen check",
+            "description": "${{ steps.check.outputs.result }}",
+          }
+          EOF
+          cat result.json
+          curl -X POST \
+            -H "Authorization: Bearer ${{ inputs.github_token }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/"$_sha" }} \
+            --data @result.json > update.json
+          cat update.json
+
+      - name: Exit on ERR
+        shell: bash
+        run: [[ "${{ steps.check.outputs.result }}" == passed ]] || exit 1
+
   container-tests:
+    needs: distgen-check
     # This job only runs for '[test]' pull request comments by owner, member
     name: "Container tests: ${{ matrix.version }} - ${{ matrix.context }}"
     runs-on: ubuntu-20.04
@@ -76,14 +125,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: "refs/pull/${{ github.event.issue.number }}/head"
-          submodules: true
-
-      - name: Check distgen generated files
-        shell: bash
-        run: |
-          sudo apt update && sudo apt -y install python3-pip
-          pip3 install pyyaml distgen Jinja2
-          ./common/tests/check_distgen_generated_files.sh
 
       - name: Prepare needed variables
         shell: bash
