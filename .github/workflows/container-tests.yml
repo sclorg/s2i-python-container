@@ -43,7 +43,7 @@ jobs:
           curl -X POST \
             -H "Authorization: Bearer ${{ inputs.github_token }}" \
             -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/"$_sha" }} \
+            https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/"$_sha" \
             --data @result.json > update.json
           cat update.json
 
