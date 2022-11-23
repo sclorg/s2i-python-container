@@ -3,7 +3,31 @@ on:
     types:
       - created
 jobs:
+  distgen-check:
+    name: "Check distgen generated files"
+    runs-on: ubuntu-20.04
+    if: |
+      github.event.issue.pull_request
+      && (contains(github.event.comment.body, '[test]') || contains(github.event.comment.body, '[test-all]'))
+      && contains(fromJson('["OWNER", "MEMBER"]'), github.event.comment.author_association)
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          ref: "refs/pull/${{ github.event.issue.number }}/head"
+          submodules: true
+
+      - name: Check distgen generated files
+        id: check
+        shell: bash
+        run: |
+          sudo apt update && sudo apt -y install python3-pip
+          pip3 install pyyaml distgen Jinja2
+          result="success"
+          ./common/tests/check_distgen_generated_files.sh
+
   openshift-tests:
+    needs: distgen-check
     # This job only runs for '[test-all]' or '[test-openshift] pull request comments by owner, member
     name: "OpenShift tests: ${{ matrix.version }} - ${{ matrix.context }}"
     runs-on: ubuntu-20.04
@@ -67,14 +91,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: "refs/pull/${{ github.event.issue.number }}/head"
-          submodules: true
-
-      - name: Check distgen generated files
-        shell: bash
-        run: |
-          sudo apt update && sudo apt -y install python3-pip
-          pip3 install pyyaml distgen Jinja2
-          ./common/tests/check_distgen_generated_files.sh
 
       - name: Prepare needed variables
         shell: bash
