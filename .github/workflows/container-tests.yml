@@ -21,36 +21,32 @@ jobs:
         id: check
         shell: bash
         run: |
+          sha=$(git rev-parse HEAD)
           sudo apt update && sudo apt -y install python3-pip
           pip3 install pyyaml distgen Jinja2
           result="success"
           ./common/tests/check_distgen_generated_files.sh || result="failure"
           echo "result=$result" >> "$GITHUB_OUTPUT"
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
 
-      - name: Update status of the distgen check to the PR
-        shell: bash
-        run: |
-          _sha=$(git rev-parse HEAD)
-          cat << EOF > result.json
-          {
-            "sha": "$_sha",
-            "state": "${{ steps.check.outputs.result }}",
-            "context": "Distgen check"
-          }
-          EOF
-          cat result.json
-          curl -X POST \
-            -H "Authorization: Bearer ${{ github.token }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/"$_sha" \
-            --data @result.json > update.json
-          cat update.json
+      - name: Set final commit status
+        uses: myrotvorets/set-commit-status-action@1.1.5
+        with:
+          status: ${{ steps.check.outputs.result }}
+          context: "Distgen check"
+          sha: ${{ steps.check.outputs.sha }}
 
       - name: Exit on ERR
         shell: bash
         run: |
           _result=${{ steps.check.outputs.result }}
-          [ "$_result" == success ] || exit 1
+          if [ "$_result" == failure ]; then
+            echo "Distgen-generated files are not regenerated properly."
+            echo "Please regenerate them with:"
+            echo "'make clean-versions'"
+            echo "'make generate-all'"
+            exit 1
+          fi
 
   container-tests:
     needs: distgen-check
