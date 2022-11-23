@@ -40,7 +40,7 @@ jobs:
         shell: bash
         run: |
           _result=${{ steps.check.outputs.result }}
-          if [ "$_result" == success ]; then
+          if [ "$_result" == failure ]; then
             echo "Distgen-generated files are not regenerated properly."
             echo "Please regenerate them with:"
             echo "'make clean-versions'"
