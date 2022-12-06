@@ -6,6 +6,7 @@ openshift.local.*
 auto_targets.mk
 .image-id
 .image-id.raw
+.image-id-from
 
 # help.1 files complied by container-common-scripts from README.md files
 */root/help.1
