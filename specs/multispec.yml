@@ -103,7 +103,27 @@ specs:
                   'libffi-devel', 'libtool-ltdl', 'enchant', 'redhat-rpm-config',
                   'krb5-devel']
 
+    fedora37:
+      distros:
+        - fedora-37-x86_64
+      fedora_version: "37"
+      s2i_base: quay.io/fedora/s2i-base
+      img_tag: "37"
+      python_pkgs: ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip']
+      base_pkgs: ['nss_wrapper', 'httpd', 'httpd-devel', 'atlas-devel', 'gcc-gfortran',
+                  'libffi-devel', 'libtool-ltdl', 'enchant', 'redhat-rpm-config',
+                  'krb5-devel']
+
   version:
+    "3.11":
+      version: "3.11"
+      short_ver: "311"
+      minimal: false
+      base_img_version: "1"
+      python_img_version: "1"
+      module_stream: "python311:3.11"
+      pkg_prefix: "python311"
+      main_image: "registry.fedoraproject.org/f37/python3"
     "3.10":
       version: "3.10"
       short_ver: "310"
@@ -187,3 +207,6 @@ matrix:
     - distros:
         - fedora-36-x86_64
       version: "3.10"
+    - distros:
+        - fedora-37-x86_64
+      version: "3.11"
