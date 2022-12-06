@@ -32,6 +32,12 @@ jobs:
             quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
             tag: "310"
             image_name: "python-310"
+          - dockerfile: "3.11/Dockerfile.fedora"
+            registry_namespace: "fedora"
+            quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_USERNAME"
+            quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
+            tag: "311"
+            image_name: "python-311"
     steps:
       - name: Build and push to quay.io registry
         uses: sclorg/build-and-push-action@v4
