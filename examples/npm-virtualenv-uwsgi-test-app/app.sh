@@ -16,6 +16,8 @@ for pkg in ${packages[@]}; do
   python -m pip install -U --no-deps --no-python-version-warning $pkg 2>&1 | grep -Ev "^Requirement already (up-to-date|satisfied): "
   if [ $? -eq 0 ]; then
     echo "ERROR: Failed to upgrade '$pkg' to the latest version."
+    echo "Output of the pip install command is:"
+    python -m pip install -U --no-deps --no-python-version-warning $pkg
     exit 1
   fi
 done
