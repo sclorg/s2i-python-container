@@ -139,6 +139,9 @@ SYMLINK_RULES:
   - src: ../../examples/numpy-test-app
     dest: test/numpy-test-app
 
+  - src: ../../examples/poetry-src-layout-test-app
+    dest: test/poetry-src-layout-test-app
+
   - src: ../../examples/pyuwsgi-pipenv-test-app
     dest: test/pyuwsgi-pipenv-test-app
 

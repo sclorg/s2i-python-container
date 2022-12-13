@@ -7,7 +7,7 @@
 # The image has to be available before this script is executed.
 #
 declare -a COMMON_WEB_APPS=({gunicorn-config-different-port,gunicorn-different-port,django-different-port,standalone,setup,setup-requirements,django,numpy,app-home,locale,pipenv,pipenv-and-micropipenv-should-fail,app-module,pyuwsgi-pipenv{% if spec.version.startswith("3.") %},micropipenv{% endif %}}-test-app)
-declare -a FULL_WEB_APPS=({setup-cfg,npm-virtualenv-uwsgi,mod-wsgi,pin-pipenv-version{% if spec.version.startswith("3.") %},micropipenv-requirements{% endif %}}-test-app)
+declare -a FULL_WEB_APPS=({setup-cfg,npm-virtualenv-uwsgi,mod-wsgi,pin-pipenv-version{% if spec.version.startswith("3.") %},micropipenv-requirements,poetry-src-layout{% endif %}}-test-app)
 declare -a MINIMAL_WEB_APPS=()
 {% if spec.minimal %}
 declare -a WEB_APPS=(${COMMON_WEB_APPS[@]} ${MINIMAL_WEB_APPS[@]})
