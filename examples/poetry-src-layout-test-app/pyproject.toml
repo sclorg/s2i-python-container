@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "poetry-src-layout"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+packages = [{include = "poetry_src_layout", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+gunicorn = "*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
