@@ -217,9 +217,9 @@ file inside your source code repository.
     Set this variable to a non-empty value to inhibit the execution of
     'manage.py collectstatic' during the build. This only affects Django projects.
 
-* **DISABLE_SETUP_PY_PROCESSING**
+* **DISABLE_SETUP_PY_PROCESSING** / **DISABLE_PYPROJECT_TOML_PROCESSING**
 
-    Set this to a non-empty value to skip processing of setup.{py,cfg} script if you
+    Set this to a non-empty value to skip processing of setup.{py,cfg} or pyproject.toml script if you
     use `-e .` in requirements.txt to trigger its processing or you don't want
     your application to be installed into site-packages directory.
 
