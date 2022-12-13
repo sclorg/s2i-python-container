@@ -86,7 +86,12 @@ elif [[ -f requirements.txt ]]; then
 fi
 
 if [[ ( -f setup.py || -f setup.cfg ) && -z "$DISABLE_SETUP_PY_PROCESSING" ]]; then
-  echo "---> Installing application ..."
+  echo "---> Installing application (via setup.{py,cfg})..."
+  pip install .
+fi
+
+if [[ -f pyproject.toml && -z "$DISABLE_PYPROJECT_TOML_PROCESSING" ]]; then
+  echo "---> Installing application (via pyproject.toml)..."
   pip install .
 fi
 
