@@ -33,9 +33,6 @@ declare -a UNSTABLE_TESTS=(pipenv-test-app)
 test_dir="$(readlink -f $(dirname "${BASH_SOURCE[0]}"))"
 image_dir=$(readlink -f ${test_dir}/..)
 
-test_short_summary=''
-TESTSUITE_RESULT=0
-
 TEST_LIST="\
 test_s2i_usage
 test_docker_run_usage
@@ -52,14 +49,13 @@ test_from_dockerfile{% if spec.minimal %}_minimal{% endif %}
 
 if [[ -z $VERSION ]]; then
     echo "ERROR: The VERSION variable must be set."
+    ct_check_testcase_result 1
     exit 1
 fi
 
 IMAGE_NAME=${IMAGE_NAME:-centos/python-${VERSION//./}-centos7}
 
 . test/test-lib.sh
-
-ct_enable_cleanup
 
 info() {
   echo -e "\n\e[1m[INFO] $@\e[0m\n"
@@ -87,7 +83,7 @@ run_s2i_build() {
 prepare() {
   if ! image_exists ${IMAGE_NAME}; then
     echo "ERROR: The image ${IMAGE_NAME} must exist before this script is executed."
-    exit 1
+    return 1
   fi
   # TODO: S2I build require the application is a valid 'GIT' repository, we
   # should remove this restriction in the future when a file:// is used.
@@ -101,15 +97,6 @@ prepare() {
 
 run_test_application() {
   docker run --user=100001 ${CONTAINER_ARGS} --rm --cidfile=${cid_file} ${IMAGE_NAME}-testapp
-}
-
-cleanup_app() {
-  info "Cleaning up app container ..."
-  if [ -f $cid_file ]; then
-    if container_exists; then
-      docker stop $(cat $cid_file)
-    fi
-  fi
 }
 
 cleanup() {
@@ -166,7 +153,7 @@ test_s2i_usage() {
 
 test_docker_run_usage() {
   info "Testing 'docker run' usage ..."
-  docker run ${IMAGE_NAME} &>/dev/null
+  docker run --rm ${IMAGE_NAME} &>/dev/null
 }
 
 test_scl_usage() {
@@ -214,7 +201,7 @@ test_connection() {
 }
 
 test_application() {
-  local cid_file=$(mktemp -u --suffix=.cid)
+  local cid_file="$CID_FILE_DIR"/"$(mktemp -u -p . --suffix .cid)"
   # Verify that the HTTP connection can be established to test application container
   run_test_application &
 
@@ -239,7 +226,7 @@ test_application() {
   {% endif %}
   test_connection
   check_result $?
-  cleanup_app
+  container_exists && docker stop $(cat "$cid_file")
 }
 
 test_from_dockerfile(){
@@ -316,6 +303,8 @@ test_scl_variables_in_dockerfile() {
   fi
 }
 
+ct_init
+
 # For debugging purposes, this script can be run with one or more arguments
 # those arguments list is a sub-set of values in the WEB_APPS array defined above
 # Example: ./run app-home-test-app pipenv-test-app
@@ -353,4 +342,3 @@ for app in ${@:-${WEB_APPS[@]}}; do
 done
 
 TEST_SET=${TESTS:-$TEST_VAR_DOCKER} ct_run_tests_from_testset "var-docker"
-
