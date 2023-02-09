@@ -63,7 +63,6 @@ LABEL summary="$SUMMARY" \
 # nss_wrapper - used in generate_container_user script
 RUN INSTALL_PKGS="python{{ spec.short_ver }} glibc-langpack-en findutils nss_wrapper" && \
     microdnf -y --setopt=tsflags=nodocs --setopt=install_weak_deps=0 install $INSTALL_PKGS && \
-    rpm -V $INSTALL_PKGS && \
     microdnf -y clean all --enablerepo='*'
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH.
