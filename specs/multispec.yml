@@ -44,6 +44,7 @@ specs:
       distros:
         - rhel-8-x86_64
       el_version: "8"
+      minimal_image: "ubi8/ubi-minimal:latest"
       s2i_base: ubi8/s2i-base
       img_tag: "1"
       org: "ubi8"

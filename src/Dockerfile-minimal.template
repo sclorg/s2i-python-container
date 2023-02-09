@@ -1,6 +1,6 @@
 {% import "src/common.tpl" as common with context %}
 {% import "src/" + config.os.id + "/macros.tpl" as macros with context %}
-FROM ubi{{ spec.el_version }}/ubi-minimal:latest
+FROM {{ spec.minimal_image }}
 
 
 EXPOSE 8080
