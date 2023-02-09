@@ -83,6 +83,7 @@ specs:
       distros:
         - centos-stream-9-x86_64
       el_version: "9"
+      minimal_image: "quay.io/centos/centos:stream9-minimal"
       s2i_base: quay.io/sclorg/s2i-base-c9s
       img_tag: "c9s"
       org: "sclorg"
@@ -204,6 +205,7 @@ matrix:
       version: "3.9"
     - distros:
         - rhel-8-x86_64
+        - centos-stream-9-x86_64
       version: "3.9-minimal"
     - distros:
         - fedora-36-x86_64
