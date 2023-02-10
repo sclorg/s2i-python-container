@@ -8,7 +8,9 @@ USER 0
 ADD app-src /tmp/src
 RUN /usr/bin/fix-permissions /tmp/src
 # Install packages necessary for compiling uwsgi from source
-RUN microdnf install -y gcc python39-devel which
+# pkgconfig(python-3.9) is provided by both python3-devel in c9s
+# and python39-devel in UBI8.
+RUN microdnf install -y gcc "pkgconfig(python-3.9)" which
 USER 1001
 
 # Install the dependencies
