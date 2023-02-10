@@ -49,7 +49,7 @@ LABEL summary="$SUMMARY" \
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,python,python{{ spec.short_ver }},python-{{ spec.short_ver }},rh-python{{ spec.short_ver }}" \
       com.redhat.component="python-{{ spec.short_ver }}-container" \
-      name="{{ spec.org }}/python-{{ spec.short_ver }}-minimal" \
+      name="{{ spec.org }}/python-{{ spec.short_ver }}-{% if spec.org == "sclorg" %}{{ spec.prod }}-{% endif %}minimal" \
       version="1" \
       usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir={{ spec.version }}-minimal/test/setup-test-app/ ubi{{ spec.el_version }}/python-{{ spec.short_ver }}-minimal python-sample-app" \
       com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI" \
