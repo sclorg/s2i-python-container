@@ -270,11 +270,15 @@ test_from_dockerfile_minimal(){
   # ubi8/python-39-minimal / ubi8/python-39
   FULL_IMAGE_NAME=${IMAGE_NAME/-minimal/}
 
-  # mod_wsgi in micropipenv-requirements-test-app
-  # TODO: Find a better way how to specify full/minimal images that should work together
-  sed "s@#IMAGE_NAME#@${IMAGE_NAME}@;s@#FULL_IMAGE_NAME#@${FULL_IMAGE_NAME}@" $test_dir/from-dockerfile/mod_wsgi.Dockerfile.tpl > $test_dir/from-dockerfile/Dockerfile
-  ct_test_app_dockerfile $test_dir/from-dockerfile/Dockerfile $test_dir/micropipenv-requirements-test-app 'Hello World from mod_wsgi hosted WSGI application!' app-src
-  check_result $?
+  if ct_pull_image "$FULL_IMAGE_NAME"; then
+    # mod_wsgi in micropipenv-requirements-test-app
+    sed "s@#IMAGE_NAME#@${IMAGE_NAME}@;s@#FULL_IMAGE_NAME#@${FULL_IMAGE_NAME}@" $test_dir/from-dockerfile/mod_wsgi.Dockerfile.tpl > $test_dir/from-dockerfile/Dockerfile
+    ct_test_app_dockerfile $test_dir/from-dockerfile/Dockerfile $test_dir/micropipenv-requirements-test-app 'Hello World from mod_wsgi hosted WSGI application!' app-src
+    check_result $?
+  else
+    echo "[SKIP] Multistage build from Dockerfile - $FULL_IMAGE_NAME does not exists."
+  fi
+
 }
 
 test_application_with_user() {
