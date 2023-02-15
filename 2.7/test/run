@@ -265,8 +265,8 @@ test_from_dockerfile_minimal(){
   check_result $?
 
   # So far, for all the minimal images, the name of the full container image counterpart
-  # is the same just without -minimal suffix.
-  # sclorg/python-39-c9s-minimal / sclorg/python-39-c9s
+  # is the same just without -minimal infix.
+  # sclorg/python-39-minimal-c9s / sclorg/python-39-c9s
   # ubi8/python-39-minimal / ubi8/python-39
   FULL_IMAGE_NAME=${IMAGE_NAME/-minimal/}
 
