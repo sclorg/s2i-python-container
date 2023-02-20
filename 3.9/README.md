@@ -32,12 +32,12 @@ the nodejs itself is included just to make the npm work.
 Usage in Openshift
 ------------------
 
-For this, we will assume that you are using the supported image, available via `python:3.9` imagestream tag in Openshift.
+For this, we will assume that you are using one of the supported images, available via `python:3.9-ubi8` or `python:3.9-ubi9` imagestream tag in Openshift.
 Building a simple [python-sample-app](https://github.com/sclorg/django-ex.git) application
 in Openshift can be achieved with the following step:
 
     ```
-    oc new-app python:3.9~https://github.com/sclorg/django-ex.git
+    oc new-app python:3.9-ubi9~https://github.com/sclorg/django-ex.git
     ```
 
 **Accessing the application:**
