@@ -76,7 +76,7 @@ jobs:
           - tmt_plan: "rhel7-docker"
             os_test: "rhel7"
             context: "RHEL7"
-            compose: "RHEL-7.9-Released"
+            compose: "RHEL-7-LatestUpdated"
             api_key: "TF_INTERNAL_API_KEY"
             branch: "master"
             tmt_repo: "https://gitlab.cee.redhat.com/platform-eng-core-services/sclorg-tmt-plans"
