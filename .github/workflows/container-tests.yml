@@ -57,7 +57,7 @@ jobs:
       fail-fast: false
       matrix:
         version: [ "2.7", "3.8", "3.9", "3.9-minimal", "3.10", "3.11" ]
-        os_test: [ "fedora", "centos7", "rhel7", "rhel8", "rhel9", "c9s"]
+        os_test: [ "fedora", "centos7", "rhel7", "rhel8", "rhel9", "c8s", "c9s"]
         include:
           - tmt_plan: "fedora"
             os_test: "fedora"
@@ -105,6 +105,13 @@ jobs:
             branch: "master"
             tmt_repo: "https://gitlab.cee.redhat.com/platform-eng-core-services/sclorg-tmt-plans"
             tf_scope: "private"
+          - tmt_plan: "c8s"
+            os_test: "c8s"
+            context: "CentOS Stream 8"
+            compose: "CentOS-Stream-8"
+            api_key: "TF_PUBLIC_API_KEY"
+            branch: "main"
+            tmt_repo: "https://github.com/sclorg/sclorg-testing-farm"
           - tmt_plan: "c9s"
             os_test: "c9s"
             context: "CentOS Stream 9"
