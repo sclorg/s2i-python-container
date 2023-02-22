@@ -123,15 +123,6 @@ check_type() {
   fi
 
 }
-check_result() {
-  # Function sets if test suite failed or not
-  # If return value is not 0 then mark test case as TESTCASE_RESULT=1
-  local result="$1"
-  if [[ "$result" != "0" ]]; then
-    TESTCASE_RESULT=1
-  fi
-  return $result
-}
 
 wait_for_cid() {
   local max_attempts=10
@@ -209,7 +200,7 @@ test_application() {
   wait_for_cid
   # Some test apps have tests in their startup code so we have to check
   # that the container starts at all
-  check_result $?
+  ct_check_testcase_result $?
 
   # Instead of relying on VERSION variable coming from Makefile
   # set the expected string based on the PYTHON_VERSION defined
@@ -217,15 +208,15 @@ test_application() {
   python_version=$(docker run --rm $IMAGE_NAME /bin/bash -c "echo \$PYTHON_VERSION" 2>&1)
 
   test_scl_usage "python --version" "Python $python_version." "${cid_file}"
-  check_result $?
+  ct_check_testcase_result $?
   {% if not spec.minimal %}
   test_scl_usage "node --version" "^v[0-9]*\.[0-9]*\.[0-9]*" "${cid_file}"
-  check_result $?
+  ct_check_testcase_result $?
   test_scl_usage "npm --version" "^[0-9]*\.[0-9]*\.[0-9]*" "${cid_file}"
-  check_result $?
+  ct_check_testcase_result $?
   {% endif %}
   test_connection
-  check_result $?
+  ct_check_testcase_result $?
   container_exists && docker stop $(cat "$cid_file")
 }
 
@@ -244,11 +235,11 @@ test_from_dockerfile(){
   fi
 
   ct_test_app_dockerfile $test_dir/from-dockerfile/Dockerfile.tpl $django_example_repo_url 'Welcome to your Django application on OpenShift' app-src
-  check_result $?
+  ct_check_testcase_result $?
 
   info "Test from Dockerfile with no s2i scripts used"
   ct_test_app_dockerfile $test_dir/from-dockerfile/Dockerfile_no_s2i.tpl $django_example_repo_url 'Welcome to your Django application on OpenShift' app-src
-  check_result $?
+  ct_check_testcase_result $?
 }
 
 test_from_dockerfile_minimal(){
@@ -258,7 +249,7 @@ test_from_dockerfile_minimal(){
 
   # uwsgi in uwsgi-test-app
   ct_test_app_dockerfile $test_dir/from-dockerfile/uwsgi.Dockerfile.tpl $test_dir/uwsgi-test-app 'Hello World from uWSGI hosted WSGI application!' app-src
-  check_result $?
+  ct_check_testcase_result $?
 
   # So far, for all the minimal images, the name of the full container image counterpart
   # is the same just without -minimal infix.
@@ -270,7 +261,7 @@ test_from_dockerfile_minimal(){
     # mod_wsgi in micropipenv-requirements-test-app
     sed "s@#IMAGE_NAME#@${IMAGE_NAME}@;s@#FULL_IMAGE_NAME#@${FULL_IMAGE_NAME}@" $test_dir/from-dockerfile/mod_wsgi.Dockerfile.tpl > $test_dir/from-dockerfile/Dockerfile
     ct_test_app_dockerfile $test_dir/from-dockerfile/Dockerfile $test_dir/micropipenv-requirements-test-app 'Hello World from mod_wsgi hosted WSGI application!' app-src
-    check_result $?
+    ct_check_testcase_result $?
   else
     echo "[SKIP] Multistage build from Dockerfile - $FULL_IMAGE_NAME does not exists."
   fi
@@ -295,11 +286,11 @@ test_scl_variables_in_dockerfile() {
 
      info "Testing variable presence during \`docker exec\`"
      ct_check_exec_env_vars
-     check_result $?
+     ct_check_testcase_result $?
 
      info "Checking if all scl variables are defined in Dockerfile"
      ct_check_scl_enable_vars
-     check_result $?
+     ct_check_testcase_result $?
   fi
 }
 
