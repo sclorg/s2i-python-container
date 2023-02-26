@@ -1,20 +1,17 @@
+name: Container tests
+
 on:
-  issue_comment:
-    types:
-      - created
+  pull_request:
+    branches:
+      - 'master'
 jobs:
   distgen-check:
     name: "Check distgen generated files"
     runs-on: ubuntu-20.04
-    if: |
-      github.event.issue.pull_request
-      && (contains(github.event.comment.body, '[test]') || contains(github.event.comment.body, '[test-all]'))
-      && contains(fromJson('["OWNER", "MEMBER"]'), github.event.comment.author_association)
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
         with:
-          ref: "refs/pull/${{ github.event.issue.number }}/head"
           submodules: true
 
       - name: Check distgen generated files
@@ -50,7 +47,6 @@ jobs:
 
   container-tests:
     needs: distgen-check
-    # This job only runs for '[test]' pull request comments by owner, member
     name: "Container tests: ${{ matrix.version }} - ${{ matrix.context }}"
     runs-on: ubuntu-20.04
     strategy:
@@ -120,15 +116,9 @@ jobs:
             branch: "main"
             tmt_repo: "https://github.com/sclorg/sclorg-testing-farm"
 
-    if: |
-      github.event.issue.pull_request
-      && (contains(github.event.comment.body, '[test]') || contains(github.event.comment.body, '[test-all]'))
-      && contains(fromJson('["OWNER", "MEMBER"]'), github.event.comment.author_association)
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
-        with:
-          ref: "refs/pull/${{ github.event.issue.number }}/head"
 
       - name: Prepare needed variables
         shell: bash
@@ -164,5 +154,5 @@ jobs:
           tf_scope: ${{ matrix.tf_scope }}
           tmt_plan_regex: ${{ matrix.tmt_plan }}
           pull_request_status_name: "${{ matrix.context }} - ${{ matrix.version }}"
-          variables: "REPO_URL=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY;REPO_NAME=$GITHUB_REPOSITORY;PR_NUMBER=${{ github.event.issue.number }};SINGLE_VERSION=${{ matrix.version }};OS=${{ matrix.os_test }};TEST_NAME=test"
+          variables: "REPO_URL=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY;REPO_NAME=$GITHUB_REPOSITORY;PR_NUMBER=${{ github.event.number }};SINGLE_VERSION=${{ matrix.version }};OS=${{ matrix.os_test }};TEST_NAME=test"
           compose: ${{ matrix.compose }}
