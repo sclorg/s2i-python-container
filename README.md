@@ -5,6 +5,7 @@ Python container images
 Images available on Quay are:
 * CentOS 7 [python-38](https://quay.io/repository/centos7/python-38-centos7)
 * RHEL 8 [python-39-minimal](https://quay.io/repository/sclorg/python-39-minimal-el8)
+* CentOS Stream 8 [python-39-c8s](https://quay.io/repository/sclorg/python-39-c8s)
 * CentOS Stream 9 minimal [python-39-minimal-c9s](https://quay.io/repository/sclorg/python-39-minimal-c9s)
 * CentOS Stream 9 [python-39-c9s](https://quay.io/repository/sclorg/python-39-c9s)
 * CentOS Stream 9 [python-311-c9s](https://quay.io/repository/sclorg/python-311-c9s)
