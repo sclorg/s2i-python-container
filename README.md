@@ -6,8 +6,9 @@ Images available on Quay are:
 * CentOS 7 [python-38](https://quay.io/repository/centos7/python-38-centos7)
 * RHEL 8 [python-39-minimal](https://quay.io/repository/sclorg/python-39-minimal-el8)
 * CentOS Stream 9 [python-39-c9s](https://quay.io/repository/sclorg/python-39-c9s)
-* Fedora [python-39](https://quay.io/repository/fedora/python-39)
+* CentOS Stream 9 minimal [python-39-minimal-c9s](https://quay.io/repository/sclorg/python-39-minimal-c9s)
 * Fedora [python-310](https://quay.io/repository/fedora/python-310)
+* Fedora [python-311](https://quay.io/repository/fedora/python-311)
 
 This repository contains the source for building various versions of
 the Python application as a reproducible container image using
