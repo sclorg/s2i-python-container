@@ -29,9 +29,6 @@ declare -a UNSTABLE_TESTS=(pipenv-test-app)
 test_dir="$(readlink -f $(dirname "${BASH_SOURCE[0]}"))"
 image_dir=$(readlink -f ${test_dir}/..)
 
-test_short_summary=''
-TESTSUITE_RESULT=0
-
 TEST_LIST="\
 test_s2i_usage
 test_docker_run_usage
@@ -47,14 +44,13 @@ test_from_dockerfile_minimal
 
 if [[ -z $VERSION ]]; then
     echo "ERROR: The VERSION variable must be set."
+    ct_check_testcase_result 1
     exit 1
 fi
 
 IMAGE_NAME=${IMAGE_NAME:-centos/python-${VERSION//./}-centos7}
 
 . test/test-lib.sh
-
-ct_enable_cleanup
 
 info() {
   echo -e "\n\e[1m[INFO] $@\e[0m\n"
@@ -81,7 +77,7 @@ run_s2i_build() {
 prepare() {
   if ! image_exists ${IMAGE_NAME}; then
     echo "ERROR: The image ${IMAGE_NAME} must exist before this script is executed."
-    exit 1
+    return 1
   fi
   # TODO: S2I build require the application is a valid 'GIT' repository, we
   # should remove this restriction in the future when a file:// is used.
@@ -95,15 +91,6 @@ prepare() {
 
 run_test_application() {
   docker run --user=100001 ${CONTAINER_ARGS} --rm --cidfile=${cid_file} ${IMAGE_NAME}-testapp
-}
-
-cleanup_app() {
-  info "Cleaning up app container ..."
-  if [ -f $cid_file ]; then
-    if container_exists; then
-      docker stop $(cat $cid_file)
-    fi
-  fi
 }
 
 cleanup() {
@@ -130,15 +117,6 @@ check_type() {
   fi
 
 }
-check_result() {
-  # Function sets if test suite failed or not
-  # If return value is not 0 then mark test case as TESTCASE_RESULT=1
-  local result="$1"
-  if [[ "$result" != "0" ]]; then
-    TESTCASE_RESULT=1
-  fi
-  return $result
-}
 
 wait_for_cid() {
   local max_attempts=10
@@ -160,7 +138,7 @@ test_s2i_usage() {
 
 test_docker_run_usage() {
   info "Testing 'docker run' usage ..."
-  docker run ${IMAGE_NAME} &>/dev/null
+  docker run --rm ${IMAGE_NAME} &>/dev/null
 }
 
 test_scl_usage() {
@@ -208,7 +186,7 @@ test_connection() {
 }
 
 test_application() {
-  local cid_file=$(mktemp -u --suffix=.cid)
+  local cid_file="$CID_FILE_DIR"/"$(mktemp -u -p . --suffix .cid)"
   # Verify that the HTTP connection can be established to test application container
   run_test_application &
 
@@ -216,7 +194,7 @@ test_application() {
   wait_for_cid
   # Some test apps have tests in their startup code so we have to check
   # that the container starts at all
-  check_result $?
+  ct_check_testcase_result $?
 
   # Instead of relying on VERSION variable coming from Makefile
   # set the expected string based on the PYTHON_VERSION defined
@@ -224,10 +202,10 @@ test_application() {
   python_version=$(docker run --rm $IMAGE_NAME /bin/bash -c "echo \$PYTHON_VERSION" 2>&1)
 
   test_scl_usage "python --version" "Python $python_version." "${cid_file}"
-  check_result $?
+  ct_check_testcase_result $?
   test_connection
-  check_result $?
-  cleanup_app
+  ct_check_testcase_result $?
+  container_exists && docker stop $(cat "$cid_file")
 }
 
 test_from_dockerfile(){
@@ -244,11 +222,11 @@ test_from_dockerfile(){
   fi
 
   ct_test_app_dockerfile $test_dir/from-dockerfile/Dockerfile.tpl $django_example_repo_url 'Welcome to your Django application on OpenShift' app-src
-  check_result $?
+  ct_check_testcase_result $?
 
   info "Test from Dockerfile with no s2i scripts used"
   ct_test_app_dockerfile $test_dir/from-dockerfile/Dockerfile_no_s2i.tpl $django_example_repo_url 'Welcome to your Django application on OpenShift' app-src
-  check_result $?
+  ct_check_testcase_result $?
 }
 
 test_from_dockerfile_minimal(){
@@ -258,7 +236,7 @@ test_from_dockerfile_minimal(){
 
   # uwsgi in uwsgi-test-app
   ct_test_app_dockerfile $test_dir/from-dockerfile/uwsgi.Dockerfile.tpl $test_dir/uwsgi-test-app 'Hello World from uWSGI hosted WSGI application!' app-src
-  check_result $?
+  ct_check_testcase_result $?
 
   # So far, for all the minimal images, the name of the full container image counterpart
   # is the same just without -minimal infix.
@@ -270,7 +248,7 @@ test_from_dockerfile_minimal(){
     # mod_wsgi in micropipenv-requirements-test-app
     sed "s@#IMAGE_NAME#@${IMAGE_NAME}@;s@#FULL_IMAGE_NAME#@${FULL_IMAGE_NAME}@" $test_dir/from-dockerfile/mod_wsgi.Dockerfile.tpl > $test_dir/from-dockerfile/Dockerfile
     ct_test_app_dockerfile $test_dir/from-dockerfile/Dockerfile $test_dir/micropipenv-requirements-test-app 'Hello World from mod_wsgi hosted WSGI application!' app-src
-    check_result $?
+    ct_check_testcase_result $?
   else
     echo "[SKIP] Multistage build from Dockerfile - $FULL_IMAGE_NAME does not exists."
   fi
@@ -295,13 +273,15 @@ test_scl_variables_in_dockerfile() {
 
      info "Testing variable presence during \`docker exec\`"
      ct_check_exec_env_vars
-     check_result $?
+     ct_check_testcase_result $?
 
      info "Checking if all scl variables are defined in Dockerfile"
      ct_check_scl_enable_vars
-     check_result $?
+     ct_check_testcase_result $?
   fi
 }
+
+ct_init
 
 # For debugging purposes, this script can be run with one or more arguments
 # those arguments list is a sub-set of values in the WEB_APPS array defined above
@@ -340,4 +320,3 @@ for app in ${@:-${WEB_APPS[@]}}; do
 done
 
 TEST_SET=${TESTS:-$TEST_VAR_DOCKER} ct_run_tests_from_testset "var-docker"
-
