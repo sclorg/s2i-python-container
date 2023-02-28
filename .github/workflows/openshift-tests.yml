@@ -1,3 +1,5 @@
+---
+
 on:
   issue_comment:
     types:
@@ -28,103 +30,29 @@ jobs:
 
   openshift-tests:
     needs: distgen-check
-    # This job only runs for '[test-all]' or '[test-openshift] pull request comments by owner, member
-    name: "OpenShift tests: ${{ matrix.version }} - ${{ matrix.context }}"
+    name: "OpenShift tests: ${{ matrix.version }} - ${{ matrix.test_os }}"
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
         version: [ "2.7", "3.8", "3.9", "3.11" ]
         os_test: [ "centos7", "rhel7", "rhel8", "rhel9" ]
+        test_case: [ "openshift-4" ]
         include:
-          - tmt_plan: "centos7"
-            os_test: "centos7"
-            context: "CentOS7 - OpenShift 3"
-            api_key: "TF_PUBLIC_API_KEY"
-            branch: "main"
-            tmt_repo: "https://github.com/sclorg/sclorg-testing-farm"
-            compose: "CentOS-7"
-            test_name: "test-openshift"
-          - tmt_plan: "rhel7-openshift-3"
-            os_test: "rhel7"
-            context: "RHEL7 - OpenShift 3"
-            compose: "RHEL-7-LatestUpdated"
-            api_key: "TF_INTERNAL_API_KEY"
-            branch: "master"
-            tmt_repo: "https://gitlab.cee.redhat.com/platform-eng-core-services/sclorg-tmt-plans"
-            test_name: "test-openshift"
-            tf_scope: "private"
-          - tmt_plan: "rhel7-openshift-4"
-            os_test: "rhel7"
-            context: "RHEL7 - OpenShift 4"
-            compose: "RHEL-7-LatestUpdated"
-            test_name: "test-openshift-4"
-            api_key: "TF_INTERNAL_API_KEY"
-            branch: "master"
-            tmt_repo: "https://gitlab.cee.redhat.com/platform-eng-core-services/sclorg-tmt-plans"
-            tf_scope: "private"
-          - tmt_plan: "rhel8-openshift-4"
-            os_test: "rhel8"
-            context: "RHEL8 - OpenShift 4"
-            compose: "RHEL-8.6.0-Nightly"
-            test_name: "test-openshift-4"
-            api_key: "TF_INTERNAL_API_KEY"
-            branch: "master"
-            tmt_repo: "https://gitlab.cee.redhat.com/platform-eng-core-services/sclorg-tmt-plans"
-            tf_scope: "private"
-          - tmt_plan: "rhel9-openshift-4"
-            os_test: "rhel9"
-            context: "RHEL9 - OpenShift 4"
-            compose: "RHEL-9.1.0-Nightly"
-            test_name: "test-openshift-4"
-            api_key: "TF_INTERNAL_API_KEY"
-            branch: "master"
-            tmt_repo: "https://gitlab.cee.redhat.com/platform-eng-core-services/sclorg-tmt-plans"
-            tf_scope: "private"
+          - os_test: "centos7"
+            test_case: "openshift-3"
+          - os_test: "rhel7"
+            test_case: "openshift-3"
 
     if: |
       github.event.issue.pull_request
       && (contains(github.event.comment.body, '[test-openshift]') || contains(github.event.comment.body, '[test-all]'))
       && contains(fromJson('["OWNER", "MEMBER"]'), github.event.comment.author_association)
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
+      - uses: sclorg/tfaga-wrapper@main
         with:
-          ref: "refs/pull/${{ github.event.issue.number }}/head"
-
-      - name: Prepare needed variables
-        shell: bash
-        id: vars
-        run: |
-          dockerfile="Dockerfile.${{ matrix.os_test }}"
-          if [[ ${{ matrix.os_test }} == "centos7" ]]; then
-            dockerfile="Dockerfile"
-          fi
-          echo "::set-output name=DOCKERFILE_NAME::${dockerfile}"
-
-      - name: Check if ${{ matrix.version }}/${{ steps.vars.outputs.DOCKERFILE_NAME }} is present
-        id: check_dockerfile
-        uses: andstor/file-existence-action@v1
-        with:
-          files: "${{ matrix.version }}/${{ steps.vars.outputs.DOCKERFILE_NAME }}"
-
-      - name: Check if .exclude-${{ matrix.os_test }} file is present
-        id: check_exclude_file
-        uses: andstor/file-existence-action@v1
-        with:
-          files: "${{ matrix.version }}/.exclude-${{ matrix.os_test }}"
-
-      # https://github.com/sclorg/testing-farm-as-github-action
-      - name: Schedule tests for ${{ matrix.version }} - ${{ matrix.context }}
-        id: github_action
-        if: ${{ steps.check_exclude_file.outputs.files_exists == 'false' && steps.check_dockerfile.outputs.files_exists == 'true' }}
-        uses: sclorg/testing-farm-as-github-action@v1
-        with:
-          api_key: ${{ secrets[matrix.api_key] }}
-          git_url: ${{ matrix.tmt_repo }}
-          git_ref: ${{ matrix.branch }}
-          tf_scope: ${{ matrix.tf_scope }}
-          tmt_plan_regex: ${{ matrix.tmt_plan }}
-          pull_request_status_name: "${{ matrix.context }} - ${{ matrix.version }}"
-          variables: "REPO_URL=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY;REPO_NAME=$GITHUB_REPOSITORY;PR_NUMBER=${{ github.event.issue.number }};SINGLE_VERSION=${{ matrix.version }};OS=${{ matrix.os_test }};TEST_NAME=${{ matrix.test_name }}"
-          compose: ${{ matrix.compose }}
+          os_test: ${{ matrix.os_test }}
+          version: ${{ matrix.version }}
+          test_case: ${{ matrix.test_case }}
+          public_api_key: ${{ secrets.TF_PUBLIC_API_KEY }}
+          private_api_key: ${{ secrets.TF_INTERNAL_API_KEY }}
