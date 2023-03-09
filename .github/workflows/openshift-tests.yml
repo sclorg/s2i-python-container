@@ -30,13 +30,13 @@ jobs:
 
   openshift-tests:
     needs: distgen-check
-    name: "OpenShift tests: ${{ matrix.version }} - ${{ matrix.os_test }}"
+    name: "${{ matrix.test_case }} tests: ${{ matrix.version }} - ${{ matrix.os_test }}"
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
         version: [ "2.7", "3.8", "3.9", "3.11" ]
-        os_test: [ "centos7", "rhel7", "rhel8", "rhel9" ]
+        os_test: [ "rhel7", "rhel8", "rhel9" ]
         test_case: [ "openshift-4" ]
         include:
           - os_test: "centos7"
