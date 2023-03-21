@@ -303,19 +303,23 @@ for app in ${@:-${WEB_APPS[@]}}; do
   fi
 
   prepare ${app}
+  if [ $? -ne 0 ]; then
+    ct_update_test_result "[FAILED]" "${app}" "preparation"
+    TESTSUITE_RESULT=1
+    continue
+  fi
   run_s2i_build ${app}
   RESULT=$?
-  msg_run_s2i_build="'${app}' run_s2i_build"
   if [[ "$app" == *"-should-fail-"* ]]; then
     # Tests with '-should-fail-' in their name should fail during a build, expecting non-zero exit status
     check_type $RESULT "negative"
     test "$?" == "0" && test_msg="[PASSED]" || test_msg="[FAILED]"
-    printf -v test_short_summary "%s %s for %s\n" "${test_short_summary}" "$test_msg" "$msg_run_s2i_build"
+    ct_update_test_result "$test_msg" "$app" run_s2i_build
     continue
   else
     check_type $RESULT
     test "$?" != "0"  && test_msg="[FAILED]" || test_msg="[PASSED]"
-    printf -v test_short_summary "%s %s for %s\n" "${test_short_summary}" "$test_msg" "$msg_run_s2i_build"
+    ct_update_test_result "$test_msg" "$app" run_s2i_build
   fi
   echo ""
   TEST_SET=${TESTS:-$TEST_LIST} ct_run_tests_from_testset "${app}"
