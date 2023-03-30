@@ -5,8 +5,9 @@ Python container images
 Images available on Quay are:
 * CentOS 7 [python-38](https://quay.io/repository/centos7/python-38-centos7)
 * RHEL 8 [python-39-minimal](https://quay.io/repository/sclorg/python-39-minimal-el8)
-* CentOS Stream 9 [python-39-c9s](https://quay.io/repository/sclorg/python-39-c9s)
 * CentOS Stream 9 minimal [python-39-minimal-c9s](https://quay.io/repository/sclorg/python-39-minimal-c9s)
+* CentOS Stream 9 [python-39-c9s](https://quay.io/repository/sclorg/python-39-c9s)
+* CentOS Stream 9 [python-311-c9s](https://quay.io/repository/sclorg/python-311-c9s)
 * Fedora [python-310](https://quay.io/repository/fedora/python-310)
 * Fedora [python-311](https://quay.io/repository/fedora/python-311)
 
@@ -52,16 +53,20 @@ Python versions currently provided are:
 * [python-3.9](3.9)
 * [python-3.9 Minimal (tech-preview)](3.9-minimal)
 * [python-3.10](3.10)
+* [python-3.11](3.11)
 
 RHEL versions currently supported are:
 * RHEL 7 ([catalog.redhat.com](https://catalog.redhat.com/software/containers/search))
 * RHEL 8 ([catalog.redhat.com](https://catalog.redhat.com/software/containers/search))
+* RHEL 9 ([catalog.redhat.com](https://catalog.redhat.com/software/containers/search))
 
-CentOS versions currently supported are:
+CentOS and CentOS Stream versions currently supported are:
 * CentOS 7 ([quay.io/centos7](https://quay.io/organization/centos7))
+* CentOS Stream 9 ([quay.io/sclorg](https://quay.io/organization/sclorg))
 
 Fedora versions currently supported are:
-* Fedora 36 ([registry.fedoraproject.org](https://quay.io/organization/fedora))
+* Fedora 36 ([quay.io/fedora](https://quay.io/organization/fedora))
+* Fedora 37 ([quay.io/fedora](https://quay.io/organization/fedora))
 
 Download
 --------
