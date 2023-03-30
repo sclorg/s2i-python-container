@@ -128,7 +128,7 @@ specs:
       python_img_version: "1"
       module_stream: "python311:3.11"
       pkg_prefix: "python311"
-      main_image: "registry.fedoraproject.org/f37/python3"
+      main_image: "quay.io/fedora/python-311"
     "3.10":
       version: "3.10"
       short_ver: "310"
@@ -137,7 +137,7 @@ specs:
       python_img_version: "1"
       module_stream: "python310:3.10"
       pkg_prefix: "python310"
-      main_image: "registry.fedoraproject.org/f35/python3"
+      main_image: "quay.io/fedora/python-310"
 
     "3.9":
       version: "3.9"
