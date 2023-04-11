@@ -38,7 +38,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Use the mkdirp module to create a directory and it's subdirectory
-node -e "var mkdirp = require('mkdirp'); mkdirp('dir1/dir2')"
+node -e "const { mkdirp } = require('mkdirp'); mkdirp('dir1/dir2')"
 if [ $? -ne 0 ]; then
     echo "ERROR: Nodejs cannot use the freshly installed 'mkdirp' module."
     exit 1
