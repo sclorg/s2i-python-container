@@ -8,6 +8,15 @@ if [ "$(which python)" != "/opt/app-root/bin/python" ]; then
     exit 1
 fi
 
+
+echo "Testing that the virtual environment is active ..."
+if ! export | grep -q 'VIRTUAL_ENV="/opt/app-root"'; then
+    echo "VIRTUAL_ENV is not set properly!"
+    export
+    exit 1
+fi
+
+
 echo "Testing UPGRADE_PIP_TO_LATEST=1 (set in .s2i/environment) ..."
 packages=("pip" "setuptools" "wheel")
 for pkg in ${packages[@]}; do
