@@ -120,17 +120,6 @@ specs:
         "3.9": ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip']
         "3.11": ['python3.11', 'python3.11-devel', 'python3.11-pip']
 
-    fedora36:
-      distros:
-        - fedora-36-x86_64
-      fedora_version: "36"
-      s2i_base: quay.io/fedora/s2i-base
-      img_tag: "36"
-      python_pkgs: ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip']
-      base_pkgs: ['nss_wrapper', 'httpd', 'httpd-devel', 'atlas-devel', 'gcc-gfortran',
-                  'libffi-devel', 'libtool-ltdl', 'enchant', 'redhat-rpm-config',
-                  'krb5-devel']
-
     fedora37:
       distros:
         - fedora-37-x86_64
@@ -154,15 +143,6 @@ specs:
       pkg_prefix: "python311"
       pkg_prefix_dot: "python3.11"
       main_image: "registry.access.redhat.com/ubi9/python-311"
-    "3.10":
-      version: "3.10"
-      short_ver: "310"
-      minimal: false
-      base_img_version: "1"
-      python_img_version: "1"
-      module_stream: "python310:3.10"
-      pkg_prefix: "python310"
-      main_image: "quay.io/fedora/python-310"
 
     "3.9":
       version: "3.9"
@@ -235,9 +215,6 @@ matrix:
         - rhel-8-x86_64
         - centos-stream-9-x86_64
       version: "3.9-minimal"
-    - distros:
-        - fedora-36-x86_64
-      version: "3.10"
     - distros:
         - fedora-37-x86_64
         - centos-stream-9-x86_64
