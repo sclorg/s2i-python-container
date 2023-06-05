@@ -51,17 +51,21 @@ specs:
       prod: "rhel8"
       logos: "redhat-logos-httpd"
       preinstall_cmd: ['yum -y module enable {{ spec.module_stream }} httpd:2.4']
-      python_pkgs: ['{{ spec.pkg_prefix }}-setuptools', '{{ spec.pkg_prefix }}-pip']
+      python_pkgs: []
       base_pkgs: ['nss_wrapper', 'httpd', 'httpd-devel', 'mod_ssl',
                   'mod_auth_gssapi', 'mod_ldap', 'mod_session',
                   'atlas-devel', 'gcc-gfortran', 'libffi-devel', 'libtool-ltdl', 'enchant',
                   'krb5-devel']
       extra_pkgs:
         "2.7": ['{{ spec.pkg_prefix }}', '{{ spec.pkg_prefix }}-devel', 'glibc-langpack-en',
-                    '{{ spec.pkg_prefix }}-virtualenv']
-        "3.6": ['python36', 'python36-devel', '{{ spec.pkg_prefix }}-virtualenv']
-        "default": ['{{ spec.pkg_prefix }}', '{{ spec.pkg_prefix }}-devel']
-      ubi_versions: ['2.7', '3.6', '3.8', '3.9']
+                '{{ spec.pkg_prefix }}-virtualenv', '{{ spec.pkg_prefix }}-setuptools', '{{ spec.pkg_prefix }}-pip']
+        "3.6": ['python36', 'python36-devel', '{{ spec.pkg_prefix }}-virtualenv',
+                '{{ spec.pkg_prefix }}-setuptools', '{{ spec.pkg_prefix }}-pip']
+        "default": ['{{ spec.pkg_prefix }}', '{{ spec.pkg_prefix }}-devel',
+                    '{{ spec.pkg_prefix }}-setuptools', '{{ spec.pkg_prefix }}-pip']
+        "3.11": ['{{ spec.pkg_prefix_dot }}', '{{ spec.pkg_prefix_dot }}-devel',
+                 '{{ spec.pkg_prefix_dot }}-setuptools', '{{ spec.pkg_prefix_dot }}-pip']
+      ubi_versions: ['2.7', '3.6', '3.8', '3.9', '3.11']
 
     rhel9:
       distros:
@@ -145,9 +149,11 @@ specs:
       minimal: false
       base_img_version: "1"
       python_img_version: "1"
-      module_stream: "python311:3.11"
+      # Python 3.11 doesn't come as a module
+      module_stream: ""
       pkg_prefix: "python311"
-      main_image: "quay.io/fedora/python-311"
+      pkg_prefix_dot: "python3.11"
+      main_image: "registry.access.redhat.com/ubi9/python-311"
     "3.10":
       version: "3.10"
       short_ver: "310"
@@ -237,4 +243,5 @@ matrix:
         - centos-stream-9-x86_64
         - centos-stream-8-x86_64
         - rhel-9-x86_64
+        - rhel-8-x86_64
       version: "3.11"
