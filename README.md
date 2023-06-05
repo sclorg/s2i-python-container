@@ -53,7 +53,6 @@ Python versions currently provided are:
 * [python-3.8](3.8)
 * [python-3.9](3.9)
 * [python-3.9 Minimal (tech-preview)](3.9-minimal)
-* [python-3.10](3.10)
 * [python-3.11](3.11)
 
 RHEL versions currently supported are:
