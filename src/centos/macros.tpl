@@ -57,7 +57,16 @@ RUN \
     rm -r /opt/wheels && \
     chown -R 1001:0 ${APP_ROOT} && \
     fix-permissions ${APP_ROOT} -P && \
+{% if spec.el_version != '7' %}
+    rpm-file-permissions && \
+    # The following echo adds the unset command for the variables set below to the \
+    # venv activation script. This is inspired from scl_enable script and prevents \
+    # the virtual environment to be activated multiple times and also every time \
+    # the prompt is rendered. \
+    echo "unset BASH_ENV PROMPT_COMMAND ENV" >> ${APP_ROOT}/bin/activate
+{% else %}
     rpm-file-permissions
+{% endif %}
 
 {% if spec.el_version != '7' %}
 # For RHEL/Centos 8+ scl_enable isn't sourced automatically in s2i-core
