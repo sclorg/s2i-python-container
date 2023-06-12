@@ -75,7 +75,12 @@ RUN python3.11 -m venv ${APP_ROOT} && \
 ${APP_ROOT}/bin/pip install /opt/wheels/pip-* && \
 rm -r /opt/wheels && \
 chown -R 1001:0 ${APP_ROOT} && \
-fix-permissions ${APP_ROOT} -P
+fix-permissions ${APP_ROOT} -P && \
+# The following echo adds the unset command for the variables set below to the \
+# venv activation script. This is inspired from scl_enable script and prevents \
+# the virtual environment to be activated multiple times and also every time \
+# the prompt is rendered. \
+echo "unset BASH_ENV PROMPT_COMMAND ENV" >> ${APP_ROOT}/bin/activate
 
 # For Fedora scl_enable isn't sourced automatically in s2i-core
 # so virtualenv needs to be activated this way
