@@ -202,7 +202,6 @@ matrix:
         - rhel-8-x86_64
       version: "3.6"
     - distros:
-        - centos-7-x86_64
         - rhel-7-x86_64
         - rhel-8-x86_64
       version: "3.8"
