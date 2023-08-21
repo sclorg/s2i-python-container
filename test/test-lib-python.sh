@@ -90,6 +90,13 @@ function test_python_s2i_templates() {
 https://raw.githubusercontent.com/sclorg/django-ex/master/openshift/templates/django-postgresql.json \
 https://raw.githubusercontent.com/openshift/origin/master/examples/quickstarts/django-postgresql.json"
   fi
+  if [[ "${VERSION}" == "3.11" ]]; then
+    postgresql_image="quay.io/sclorg/postgresql-12-c8s|postgresql:12"
+    postgresql_version="12"
+  else
+    postgresql_image="quay.io/centos7/postgresql-10-centos7|postgresql:10"
+    postgresql_version="10"
+  fi
   for template in $EPHEMERAL_TEMPLATES; do
       if [[ ${VERSION} == "2.7" ]] || docker inspect ${IMAGE_NAME} --format "{{.Config.Env}}" | tr " " "\n" | grep -q "^PLATFORM=el7"; then
         branch="master"
@@ -100,8 +107,8 @@ https://raw.githubusercontent.com/openshift/origin/master/examples/quickstarts/d
                               "$template" \
                               python \
                               'Welcome to your Django application on OpenShift' \
-                              8080 http 200 "-p SOURCE_REPOSITORY_REF=$branch -p PYTHON_VERSION=${VERSION} -p POSTGRESQL_VERSION=10 -p NAME=python-testing" \
-                              "quay.io/centos7/postgresql-10-centos7|postgresql:10"
+                              8080 http 200 "-p SOURCE_REPOSITORY_REF=$branch -p PYTHON_VERSION=${VERSION} -p POSTGRESQL_VERSION=${postgresql_version} -p NAME=python-testing" \
+                              "${postgresql_image}"
   done
 }
 
