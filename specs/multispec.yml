@@ -203,7 +203,6 @@ matrix:
       version: "3.6"
     - distros:
         - rhel-7-x86_64
-        - rhel-8-x86_64
       version: "3.8"
     - distros:
         - centos-stream-9-x86_64
