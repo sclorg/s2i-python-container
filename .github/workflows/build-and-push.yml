@@ -50,6 +50,12 @@ jobs:
             quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
             tag: "c8s"
             image_name: "python-311-c8s"
+          - dockerfile: "3.12/Dockerfile.fedora"
+            registry_namespace: "fedora"
+            quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_USERNAME"
+            quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
+            tag: "312"
+            image_name: "python-312"
     steps:
       - name: Build and push to quay.io registry
         uses: sclorg/build-and-push-action@v4
