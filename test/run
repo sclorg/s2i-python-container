@@ -327,8 +327,10 @@ for app in ${@:-${WEB_APPS[@]}}; do
     continue
   else
     check_type $RESULT
-    test "$?" != "0"  && test_msg="[FAILED]" || test_msg="[PASSED]"
+    result="$?"
+    test "$result" != "0"  && test_msg="[FAILED]" || test_msg="[PASSED]"
     ct_update_test_result "$test_msg" "$app" run_s2i_build
+    test "$result" != "0"  && continue
   fi
   echo ""
   TEST_SET=${TESTS:-$TEST_LIST} ct_run_tests_from_testset "${app}"
