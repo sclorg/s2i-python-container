@@ -34,6 +34,10 @@ DISTGEN_RULES:
   - src: src/test/pipenv-test-app/Pipfile.lock
     dest: test/micropipenv-test-app/Pipfile.lock
 
+  - src: src/test/from-dockerfile/uwsgi.Dockerfile.tpl
+    dest: test/from-dockerfile/uwsgi.Dockerfile.tpl
+
+
 # Files containing distgen directives, which are used for each
 # (distro, version) combination not excluded in multispec
 DISTGEN_MULTI_RULES:
@@ -162,9 +166,6 @@ SYMLINK_RULES:
 
   - src: ../../../src/test/from-dockerfile/mod_wsgi.Dockerfile.tpl
     dest: test/from-dockerfile/mod_wsgi.Dockerfile.tpl
-
-  - src: ../../../src/test/from-dockerfile/uwsgi.Dockerfile.tpl
-    dest: test/from-dockerfile/uwsgi.Dockerfile.tpl
 
   - src: ../../test/run-openshift
     dest: test/run-openshift
