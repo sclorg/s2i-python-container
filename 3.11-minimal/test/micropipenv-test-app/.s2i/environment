@@ -1,0 +1,5 @@
+ENABLE_MICROPIPENV=true
+DISABLE_SETUP_PY_PROCESSING=true
+# This tests second try to install micropipenv with --isolated
+# because the first one won't work with following setting
+PIP_INDEX_URL=https://example.com/
