@@ -1,20 +1,20 @@
-Python 3.9 container image - minimal version
+Python {{ spec.version }} container image - minimal version
 ============================================
 
-This container image is a special version of the [full Python 3.9 container image](https://github.com/sclorg/s2i-python-container/tree/master/3.9)
-provided as a [S2I](https://github.com/openshift/source-to-image) base image for your Python 3.9 applications.
+This container image is a special version of the [full Python {{ spec.version }} container image](https://github.com/sclorg/s2i-python-container/tree/master/{{ spec.version }})
+provided as a [S2I](https://github.com/openshift/source-to-image) base image for your Python {{ spec.version }} applications.
 
 Because the minimal and full images work similarly, we document here only the differences and limitations
-of the minimal container image. For the documentation of common features see the [full container image docs](https://github.com/sclorg/s2i-python-container/tree/master/3.9).
+of the minimal container image. For the documentation of common features see the [full container image docs](https://github.com/sclorg/s2i-python-container/tree/master/{{ spec.version }}).
 
-The Python 3.9 minimal container image is currently considered a tech-preview and only available on quay.io.
+The Python {{ spec.version }} minimal container image is currently considered a tech-preview and only available on quay.io.
 The image is built on top of the [Red Hat Universal Base Image 8 Micro image](https://catalog.redhat.com/software/containers/ubi8-micro/601a84aadd19c7786c47c8ea)
 and therefore uses the RPM packages from Red Hat Enterprise Linux, the same that are used by Python 3.9 supported container image and are part of the [UBI registry](https://www.redhat.com/en/blog/introducing-red-hat-universal-base-image).
 
-To pull the Python 3.9 minimal container image to build on, run
+To pull the Python {{ spec.version }} minimal container image to build on, run
 
 ```
-podman pull quay.io/sclorg/python-39-minimal
+podman pull quay.io/sclorg/python-{{ spec.short_ver }}-minimal
 ```
 
 Description
@@ -50,13 +50,13 @@ the full universal container image and you should be fine.
 
 Let's say that your application depends on uwsgi. uwsgi cannot be installed from Python wheel and has to be
 compiled from source which requires some additional packages to be installed - namely gcc for the compilation
-itself and python39-devel containing Python header files.
+itself and python{{ spec.short_ver }}-devel containing Python header files.
 
 To solve that problem, you can use all the pieces provided by the minimal container image and just add one more
 step to install the missing dependencies:
 
 ```
-FROM python-39-minimal
+FROM python-{{ spec.short_ver }}-minimal
 
 # Add application sources to a directory that the assemble script expects them
 # and set permissions so that the container runs without root access
@@ -65,7 +65,7 @@ ADD app-src /tmp/src
 RUN /usr/bin/fix-permissions /tmp/src
 
 # Install packages necessary for compiling uwsgi from source
-RUN microdnf install -y gcc python39-devel
+RUN microdnf install -y gcc python{{ spec.short_ver }}-devel
 USER 1001
 
 # Install the dependencies
@@ -86,14 +86,14 @@ We use the full container image with all compilers and other usefull packages in
 and we then move the result including the whole virtual environemnt to the minimal container image.
 
 This app needs mod_wsgi and to install (compile it from source) it, we'll need: httpd-devel for header files, gcc and redhat-rpm-config
-as a compiler and configuratuion and finally python39-devel containing Python header files. There is no need to install those packages
+as a compiler and configuratuion and finally python{{ spec.short_ver }}-devel containing Python header files. There is no need to install those packages
 manually because the full container image already contains them. However, the application needs httpd as a runtime dependency
 so we need to install it to the minimal container image as well.
 
 ```
 # Part 1 - build
 
-FROM python-39 as builder
+FROM python-{{ spec.short_ver }} as builder
 
 # Add application sources to a directory that the assemble script expects them
 # and set permissions so that the container runs without root access
@@ -107,7 +107,7 @@ RUN /usr/libexec/s2i/assemble
 
 # Part 2 - deploy
 
-FROM python-39-minimal
+FROM python-{{ spec.short_ver }}-minimal
 
 # Copy app sources together with the whole virtual environment from the builder image
 COPY --from=builder $APP_ROOT $APP_ROOT

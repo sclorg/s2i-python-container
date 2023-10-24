@@ -124,8 +124,10 @@ specs:
       distros:
         - fedora-38-x86_64
       fedora_version: "38"
+      minimal_image: "quay.io/fedora/fedora-minimal:38"
       s2i_base: quay.io/fedora/s2i-base
       img_tag: "38"
+      org: "fedora"
       python_pkgs: ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip']
       base_pkgs: ['nss_wrapper', 'httpd', 'httpd-devel', 'atlas-devel', 'gcc-gfortran',
                   'libffi-devel', 'libtool-ltdl', 'enchant', 'redhat-rpm-config',
@@ -143,6 +145,18 @@ specs:
       pkg_prefix: "python311"
       pkg_prefix_dot: "python3.11"
       main_image: "registry.access.redhat.com/ubi9/python-311"
+
+    "3.11-minimal":
+      version: "3.11"
+      short_ver: "311"
+      minimal: true
+      base_img_version: "1"
+      python_img_version: "1"
+      # Python 3.11 doesn't come as a module
+      module_stream: ""
+      pkg_prefix: "python311"
+      pkg_prefix_dot: "python3.11"
+      main_image: "registry.access.redhat.com/ubi8/python-311-minimal"
 
     "3.9":
       version: "3.9"
@@ -220,3 +234,8 @@ matrix:
         - rhel-9-x86_64
         - rhel-8-x86_64
       version: "3.11"
+    - distros:
+        - fedora-38-x86_64
+        - centos-stream-9-x86_64
+        - rhel-8-x86_64
+      version: "3.11-minimal"

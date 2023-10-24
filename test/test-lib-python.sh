@@ -12,6 +12,9 @@ source "${THISDIR}/test-lib.sh"
 source "${THISDIR}/test-lib-openshift.sh"
 
 function ct_pull_or_import_postgresql() {
+  if [[ "${VERSION}" == *"minimal"* ]]; then
+    VERSION=$(echo "${VERSION}" | cut -d "-" -f 1)
+  fi
   if [[ "${VERSION}" == "3.11" ]]; then
     postgresql_image="quay.io/sclorg/postgresql-12-c8s"
     image_short="postgresql:12"
@@ -89,6 +92,9 @@ function test_python_s2i_templates() {
       EPHEMERAL_TEMPLATES="
 https://raw.githubusercontent.com/sclorg/django-ex/master/openshift/templates/django-postgresql.json \
 https://raw.githubusercontent.com/openshift/origin/master/examples/quickstarts/django-postgresql.json"
+  fi
+  if [[ "${VERSION}" == *"minimal"* ]]; then
+    VERSION=$(echo "${VERSION}" | cut -d "-" -f 1)
   fi
   if [[ "${VERSION}" == "3.11" ]]; then
     postgresql_image="quay.io/sclorg/postgresql-12-c8s|postgresql:12"
