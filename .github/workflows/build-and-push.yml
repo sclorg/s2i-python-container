@@ -40,7 +40,7 @@ jobs:
             image_name: "python-311-minimal-el8"
           - dockerfile: "3.11-minimal/Dockerfile.fedora"
             registry_namespace: "fedora"
-            quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
+            quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_USERNAME"
             quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
             tag: "311"
             image_name: "python-311-minimal"
