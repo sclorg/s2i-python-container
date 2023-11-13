@@ -118,5 +118,14 @@ https://raw.githubusercontent.com/openshift/origin/master/examples/quickstarts/d
   done
 }
 
+function test_latest_imagestreams() {
+  info "Testing the latest version in imagestreams"
+  # Switch to root directory of a container
+  pushd "${THISDIR}/../.." >/dev/null
+  ct_check_latest_imagestreams
+  popd >/dev/null
+}
+
+
 # vim: set tabstop=2:shiftwidth=2:expandtab:
 
