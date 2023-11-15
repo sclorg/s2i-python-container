@@ -18,6 +18,7 @@ test_python_s2i_app_ex_standalone
 test_python_s2i_app_ex
 test_python_imagestream
 test_python_s2i_templates
+test_latest_imagestreams
 "
 
 ct_os_set_ocp4
