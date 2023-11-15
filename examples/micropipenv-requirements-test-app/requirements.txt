@@ -1,4 +1,5 @@
-mod_wsgi
+mod_wsgi==5.0.0; python_version >= '3.12'
+mod_wsgi<5.0.0; python_version < '3.12'
 Flask
 # Tests that the pyenchant and gssapi packages are installable.
 # This test is ideal place because it's skipped for minimal containers.
