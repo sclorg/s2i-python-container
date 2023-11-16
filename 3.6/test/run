@@ -100,24 +100,6 @@ cleanup() {
   fi
   rm -rf ${test_dir}/${1}/.git
 }
-
-check_type() {
-  # positive test & non-zero exit status = ERROR
-  # negative test & zero exit status = ERROR
-  local result="$1"
-  local type=${2:-positive}  # if not defined, we expect possitive test type (zero exit code)
-  if [[ "$type" == "positive" && "$result" != "0" ]]; then
-    info "TEST FAILED (${type}), EXPECTED:0 GOT:${result}"
-    cleanup
-    return $result
-  elif [[ "$type" == "negative" && "$result" == "0" ]]; then
-    info "TEST FAILED (${type}), EXPECTED: non-zero GOT:${result}"
-    cleanup
-    return 1
-  fi
-
-}
-
 wait_for_cid() {
   local max_attempts=10
   local sleep_time=1
@@ -285,6 +267,41 @@ test_scl_variables_in_dockerfile() {
   fi
 }
 
+# Positive test & non-zero exit status = ERROR.
+# Negative test & zero exit status = ERROR.
+# Tests with '-should-fail-' in their name should fail during a build,
+# expecting non-zero exit status.
+evaluate_build_result() {
+  local _result="$1"
+  local _app="$2"
+  local _type="positive"
+  local _test_msg="[PASSED]"
+  local _ret_code=0
+
+  if [[ "$_app" == *"-should-fail-"* ]]; then
+    _type="negative"
+  fi
+
+  if [[ "$_type" == "positive" && "$_result" != "0" ]]; then
+    info "TEST FAILED (${_type}), EXPECTED:0 GOT:${_result}"
+    _ret_code=$_result
+  elif [[ "$_type" == "negative" && "$_result" == "0" ]]; then
+    info "TEST FAILED (${_type}), EXPECTED: non-zero GOT:${_result}"
+    _ret_code=1
+  fi
+  if [ $_ret_code != 0 ]; then
+    cleanup
+    TESTSUITE_RESULT=1
+    _test_msg="[FAILED]"
+  fi
+  ct_update_test_result "$_test_msg" "$_app" run_s2i_build
+
+  if [[ "$_type" == "negative" && "$_result" != "0" ]]; then
+    _ret_code=127 # even though this is success, the app is still not built
+  fi
+  return $_ret_code
+}
+
 ct_init
 
 # For debugging purposes, this script can be run with one or more arguments
@@ -309,25 +326,8 @@ for app in ${@:-${WEB_APPS[@]}}; do
     continue
   fi
   run_s2i_build ${app}
-  RESULT=$?
-  if [[ "$app" == *"-should-fail-"* ]]; then
-    # Tests with '-should-fail-' in their name should fail during a build, expecting non-zero exit status
-    check_type $RESULT "negative"
-    test "$?" == "0" && test_msg="[PASSED]" || test_msg="[FAILED]"
-    ct_update_test_result "$test_msg" "$app" run_s2i_build
-    continue
-  else
-    check_type $RESULT
-    result="$?"
-    test_msg="[PASSED]"
-    if [ "$result" != "0" ]; then
-      test_msg="[FAILED]"
-      TESTSUITE_RESULT=1
-    fi
-    ct_update_test_result "$test_msg" "$app" run_s2i_build
-    test "$result" != "0"  && continue
-  fi
-  echo ""
+  evaluate_build_result $? "$app" || continue
+
   TEST_SET=${TESTS:-$TEST_LIST} ct_run_tests_from_testset "${app}"
 
   cleanup ${app}
