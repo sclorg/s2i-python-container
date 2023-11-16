@@ -315,7 +315,11 @@ for app in ${@:-${WEB_APPS[@]}}; do
   else
     check_type $RESULT
     result="$?"
-    test "$result" != "0"  && test_msg="[FAILED]" || test_msg="[PASSED]"
+    test_msg="[PASSED]"
+    if [ "$result" != "0" ]; then
+      test_msg="[FAILED]"
+      TESTSUITE_RESULT=1
+    fi
     ct_update_test_result "$test_msg" "$app" run_s2i_build
     test "$result" != "0"  && continue
   fi
