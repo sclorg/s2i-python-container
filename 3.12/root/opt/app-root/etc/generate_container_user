@@ -9,7 +9,7 @@ if [ x"$USER_ID" != x"0" -a x"$USER_ID" != x"1001" ]; then
 
     cat /etc/passwd | sed -e 's/^default:/builder:/' > $NSS_WRAPPER_PASSWD
 
-    echo "default:x:${USER_ID}:${GROUP_ID}:Default Application User:${HOME}:/sbin/nologin" >> $NSS_WRAPPER_PASSWD
+    echo "default:x:${USER_ID}:${GROUP_ID}:Default Application User:${HOME}:/bin/bash" >> $NSS_WRAPPER_PASSWD
 
     export NSS_WRAPPER_PASSWD
     export NSS_WRAPPER_GROUP
