@@ -1,0 +1,6 @@
+ENABLE_PIPENV=1
+{% if spec.version in ["2.7", "3.6", "3.8", "3.9", "3.10", "3.11"] %}
+PIN_PIPENV_VERSION=2021.5.29
+{% else %}
+PIN_PIPENV_VERSION=2023.11.14
+{% endif %}

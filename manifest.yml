@@ -37,6 +37,11 @@ DISTGEN_RULES:
   - src: src/test/from-dockerfile/Dockerfile_no_s2i.tpl
     dest: test/from-dockerfile/Dockerfile_no_s2i.tpl
 
+  - src: src/test/pin-pipenv-version-test-app/.s2i/environment
+    dest: test/pin-pipenv-version-test-app/.s2i/environment
+
+  - src: src/test/pin-pipenv-version-test-app/.s2i/environment
+    dest: test/pyuwsgi-pipenv-test-app/.s2i/environment
 
 # Files containing distgen directives, which are used for each
 # (distro, version) combination not excluded in multispec
@@ -96,6 +101,23 @@ COPY_RULES:
   - src: examples/micropipenv-test-app/.gitignore
     dest: test/micropipenv-test-app/.gitignore
 
+  - src: examples/pin-pipenv-version-test-app/requirements.txt
+    dest: test/pin-pipenv-version-test-app/requirements.txt
+
+  - src: examples/pin-pipenv-version-test-app/wsgi.py
+    dest: test/pin-pipenv-version-test-app/wsgi.py
+
+  - src: examples/pin-pipenv-version-test-app/app.sh
+    dest: test/pin-pipenv-version-test-app/app.sh
+
+  - src: examples/pyuwsgi-pipenv-test-app/requirements.txt
+    dest: test/pyuwsgi-pipenv-test-app/requirements.txt
+
+  - src: examples/pyuwsgi-pipenv-test-app/wsgi.py
+    dest: test/pyuwsgi-pipenv-test-app/wsgi.py
+
+  - src: examples/pyuwsgi-pipenv-test-app/app.sh
+    dest: test/pyuwsgi-pipenv-test-app/app.sh
 
 # Symbolic links
 # This section is the last one on purpose because the generator.py
@@ -137,14 +159,8 @@ SYMLINK_RULES:
   - src: ../../examples/numpy-test-app
     dest: test/numpy-test-app
 
-  - src: ../../examples/pin-pipenv-version-test-app
-    dest: test/pin-pipenv-version-test-app
-
   - src: ../../examples/poetry-src-layout-test-app
     dest: test/poetry-src-layout-test-app
-
-  - src: ../../examples/pyuwsgi-pipenv-test-app
-    dest: test/pyuwsgi-pipenv-test-app
 
   - src: ../../examples/setup-requirements-test-app
     dest: test/setup-requirements-test-app
