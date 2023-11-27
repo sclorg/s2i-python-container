@@ -37,6 +37,9 @@ DISTGEN_RULES:
   - src: src/test/from-dockerfile/uwsgi.Dockerfile.tpl
     dest: test/from-dockerfile/uwsgi.Dockerfile.tpl
 
+  - src: src/test/pin-pipenv-version-test-app/.s2i/environment
+    dest: test/pyuwsgi-pipenv-test-app/.s2i/environment
+
 
 # Files containing distgen directives, which are used for each
 # (distro, version) combination not excluded in multispec
@@ -105,6 +108,14 @@ COPY_RULES:
     dest: root/usr/bin/rpm-file-permissions
     mode: "0755"
 
+  - src: examples/pyuwsgi-pipenv-test-app/requirements.txt
+    dest: test/pyuwsgi-pipenv-test-app/requirements.txt
+
+  - src: examples/pyuwsgi-pipenv-test-app/wsgi.py
+    dest: test/pyuwsgi-pipenv-test-app/wsgi.py
+
+  - src: examples/pyuwsgi-pipenv-test-app/app.sh
+    dest: test/pyuwsgi-pipenv-test-app/app.sh
 
 # Symbolic links
 # This section is the last one on purpose because the generator.py
@@ -145,9 +156,6 @@ SYMLINK_RULES:
 
   - src: ../../examples/poetry-src-layout-test-app
     dest: test/poetry-src-layout-test-app
-
-  - src: ../../examples/pyuwsgi-pipenv-test-app
-    dest: test/pyuwsgi-pipenv-test-app
 
   - src: ../../examples/setup-requirements-test-app
     dest: test/setup-requirements-test-app

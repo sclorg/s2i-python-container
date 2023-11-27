@@ -1,8 +1,10 @@
 #!/bin/bash
 
+source .s2i/environment
+
 echo "Testing PIN_PIPENV_VERSION (set in .s2i/environment) ..."
 pipenv_version=`pipenv --version`
-expected="pipenv, version 2021.5.29"
+expected="pipenv, version $PIN_PIPENV_VERSION"
 if [ "$pipenv_version" != "$expected" ]; then
   echo "ERROR: pipenv version is different than expected."
   echo "Expected: ${expected}"
