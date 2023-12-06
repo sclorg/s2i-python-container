@@ -58,13 +58,18 @@ function test_python_imagestream() {
     postgresql_image="quay.io/centos7/postgresql-10-centos7|postgresql:10"
     postgresql_version="10"
   fi
-  ct_os_test_image_stream_quickstart "${THISDIR}/imagestreams/python-${OS%[0-9]*}.json" \
-                                     "https://raw.githubusercontent.com/sclorg/django-ex/${branch}/openshift/templates/django-postgresql.json" \
+  TEMPLATES="
+django-postgresql.json \
+django-postgresql-persistent.json"
+  for template in $TEMPLATES; do
+    ct_os_test_image_stream_quickstart "${THISDIR}/imagestreams/python-${OS%[0-9]*}.json" \
+                                     "https://raw.githubusercontent.com/sclorg/django-ex/${branch}/openshift/templates/${template}" \
                                      "${IMAGE_NAME}" \
                                      'python' \
                                      'Welcome to your Django application on OpenShift' \
                                      8080 http 200 "-p SOURCE_REPOSITORY_REF=$branch -p PYTHON_VERSION=${VERSION}${tag} -p POSTGRESQL_VERSION=${postgresql_version} -p NAME=python-testing" \
                                      "$postgresql_image"
+  done
 }
 
 function test_python_s2i_app_ex_standalone() {
@@ -90,8 +95,8 @@ function test_python_s2i_app_ex() {
 function test_python_s2i_templates() {
   if [ -z "${EPHEMERAL_TEMPLATES:-}" ]; then
       EPHEMERAL_TEMPLATES="
-https://raw.githubusercontent.com/sclorg/django-ex/master/openshift/templates/django-postgresql.json \
-https://raw.githubusercontent.com/openshift/origin/master/examples/quickstarts/django-postgresql.json"
+django-postgresql.json \
+django-postgresql-persistent.json"
   fi
   if [[ "${VERSION}" == *"minimal"* ]]; then
     VERSION=$(echo "${VERSION}" | cut -d "-" -f 1)
@@ -110,7 +115,7 @@ https://raw.githubusercontent.com/openshift/origin/master/examples/quickstarts/d
         branch="2.2.x"
       fi
       ct_os_test_template_app "$IMAGE_NAME" \
-                              "$template" \
+                              "https://raw.githubusercontent.com/sclorg/django-ex/${branch}/openshift/templates/${template}" \
                               python \
                               'Welcome to your Django application on OpenShift' \
                               8080 http 200 "-p SOURCE_REPOSITORY_REF=$branch -p PYTHON_VERSION=${VERSION} -p POSTGRESQL_VERSION=${postgresql_version} -p NAME=python-testing" \
