@@ -101,6 +101,7 @@ specs:
                   'krb5-devel']
       extra_pkgs:
         "3.11": ['python3.11', 'python3.11-devel', 'python3.11-pip']
+        "3.12": ['python3.12', 'python3.12-devel', 'python3.12-pip']
 
     c9s:
       distros:
@@ -119,6 +120,7 @@ specs:
       extra_pkgs:
         "3.9": ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip']
         "3.11": ['python3.11', 'python3.11-devel', 'python3.11-pip']
+        "3.12": ['python3.12', 'python3.12-devel', 'python3.12-pip']
 
     fedora38:
       distros:
@@ -264,4 +266,6 @@ matrix:
       version: "3.11-minimal"
     - distros:
         - fedora-39-x86_64
+        - centos-stream-9-x86_64
+        - centos-stream-8-x86_64
       version: "3.12"
