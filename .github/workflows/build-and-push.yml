@@ -74,6 +74,18 @@ jobs:
             quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
             tag: "312"
             image_name: "python-312"
+          - dockerfile: "3.12/Dockerfile.c9s"
+            registry_namespace: "sclorg"
+            quayio_username: "QUAY_IMAGE_SCLORG_BUILDER_USERNAME"
+            quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
+            tag: "c9s"
+            image_name: "python-312-c9s"
+          - dockerfile: "3.12/Dockerfile.c8s"
+            registry_namespace: "sclorg"
+            quayio_username: "QUAY_IMAGE_SCLORG_BUILDER_USERNAME"
+            quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
+            tag: "c8s"
+            image_name: "python-312-c8s"
     steps:
       - name: Build and push to quay.io registry
         uses: sclorg/build-and-push-action@v4
