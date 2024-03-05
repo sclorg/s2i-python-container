@@ -97,3 +97,4 @@ jobs:
           dockerfile: ${{ matrix.dockerfile }}
           tag: ${{ matrix.tag }}
           image_name: ${{ matrix.image_name }}
+          archs: amd64, arm64
