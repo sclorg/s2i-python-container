@@ -169,6 +169,9 @@ SYMLINK_RULES:
   - src: ../../examples/standalone-test-app
     dest: test/standalone-test-app
 
+  - src: ../../examples/standalone-custom-pypi-index-test-app
+    dest: test/standalone-custom-pypi-index-test-app
+
   - src: ../../src/test/pipenv-and-micropipenv-should-fail-test-app
     dest: test/pipenv-and-micropipenv-should-fail-test-app
 
