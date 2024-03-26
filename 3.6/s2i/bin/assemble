@@ -68,6 +68,12 @@ if ! pip install -U "pip"; then
   pip install --isolated -U "pip"
 fi
 
+if [[ ! -z "$PIP_INDEX_URL" ]]; then
+  echo "---> Creating pip.ini config file"
+  echo "[global]
+index-url = $PIP_INDEX_URL" >> /opt/app-root/src/pip.ini
+fi
+
 if [[ ! -z "$UPGRADE_PIP_TO_LATEST" ]]; then
   echo "---> Upgrading pip, setuptools and wheel to latest version ..."
   if ! pip install -U pip setuptools wheel; then
