@@ -9,7 +9,7 @@ ADD app-src /tmp/src
 RUN /usr/bin/fix-permissions /tmp/src
 # Install packages necessary for compiling uwsgi from source
 # pkgconfig(python-3.11) is provided by both python3-devel in c9s
-# and python311-devel in UBI8.
+# and python3.11-devel in UBI8.
 RUN microdnf install -y gcc "pkgconfig(python-3.11)" which
 USER 1001
 
