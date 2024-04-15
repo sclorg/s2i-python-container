@@ -50,7 +50,7 @@ the full universal container image and you should be fine.
 
 Let's say that your application depends on uwsgi. uwsgi cannot be installed from Python wheel and has to be
 compiled from source which requires some additional packages to be installed - namely gcc for the compilation
-itself and python311-devel containing Python header files.
+itself and python3.11-devel containing Python header files.
 
 To solve that problem, you can use all the pieces provided by the minimal container image and just add one more
 step to install the missing dependencies:
@@ -65,7 +65,7 @@ ADD app-src /tmp/src
 RUN /usr/bin/fix-permissions /tmp/src
 
 # Install packages necessary for compiling uwsgi from source
-RUN microdnf install -y gcc python311-devel
+RUN microdnf install -y gcc python3.11-devel
 USER 1001
 
 # Install the dependencies
@@ -86,7 +86,7 @@ We use the full container image with all compilers and other usefull packages in
 and we then move the result including the whole virtual environemnt to the minimal container image.
 
 This app needs mod_wsgi and to install (compile it from source) it, we'll need: httpd-devel for header files, gcc and redhat-rpm-config
-as a compiler and configuratuion and finally python311-devel containing Python header files. There is no need to install those packages
+as a compiler and configuratuion and finally python3.11-devel containing Python header files. There is no need to install those packages
 manually because the full container image already contains them. However, the application needs httpd as a runtime dependency
 so we need to install it to the minimal container image as well.
 
