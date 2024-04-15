@@ -63,8 +63,8 @@ specs:
                 '{{ spec.pkg_prefix }}-setuptools', '{{ spec.pkg_prefix }}-pip']
         "default": ['{{ spec.pkg_prefix }}', '{{ spec.pkg_prefix }}-devel',
                     '{{ spec.pkg_prefix }}-setuptools', '{{ spec.pkg_prefix }}-pip']
-        "3.11": ['{{ spec.pkg_prefix_dot }}', '{{ spec.pkg_prefix_dot }}-devel',
-                 '{{ spec.pkg_prefix_dot }}-setuptools', '{{ spec.pkg_prefix_dot }}-pip']
+        "3.11": ['{{ spec.pkg_prefix }}', '{{ spec.pkg_prefix }}-devel',
+                 '{{ spec.pkg_prefix }}-setuptools', '{{ spec.pkg_prefix }}-pip']
       ubi_versions: ['2.7', '3.6', '3.8', '3.9', '3.11']
 
     rhel9:
@@ -155,8 +155,7 @@ specs:
       python_img_version: "1"
       # Python 3.12 doesn't come as a module
       module_stream: ""
-      pkg_prefix: "python312"
-      pkg_prefix_dot: "python3.12"
+      pkg_prefix: "python3.12"
       main_image: "registry.access.redhat.com/ubi9/python-312"
 
     "3.11":
@@ -167,8 +166,7 @@ specs:
       python_img_version: "1"
       # Python 3.11 doesn't come as a module
       module_stream: ""
-      pkg_prefix: "python311"
-      pkg_prefix_dot: "python3.11"
+      pkg_prefix: "python3.11"
       main_image: "registry.access.redhat.com/ubi9/python-311"
 
     "3.11-minimal":
@@ -179,8 +177,7 @@ specs:
       python_img_version: "1"
       # Python 3.11 doesn't come as a module
       module_stream: ""
-      pkg_prefix: "python311"
-      pkg_prefix_dot: "python3.11"
+      pkg_prefix: "python3.11"
       main_image: "registry.access.redhat.com/ubi8/python-311-minimal"
 
     "3.9":
