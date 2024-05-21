@@ -1,0 +1,48 @@
+---
+- name: python
+  pretty_name: Python
+  sample_repo: https://github.com/sclorg/django-ex.git
+  category: builder
+  description: >-
+    Build and run Python APP_VERSION applications on DISTRO_NAME.
+    For more information about using this builder image,
+    including OpenShift considerations, see
+    https://github.com/sclorg/s2i-python-container/blob/master/APP_VERSION/README.md.
+  imagestream_files:
+  - filename: python-centos.json
+    latest: "3.9-ubi9"
+    distros:
+      - name: UBI 7
+        app_versions: ["3.8"]
+
+      - name: UBI 8
+        app_versions: ["2.7", "3.6", "3.8", "3.9"]
+
+      - name: UBI 9
+        app_versions: ["3.9"]
+
+  - filename: python-rhel.json
+    latest: "3.11-ubi8"
+    distros:
+      - name: UBI 7
+        app_versions: ["3.8"]
+
+      - name: UBI 8
+        app_versions: ["2.7", "3.6", "3.8", "3.9", "3.11"]
+
+      - name: UBI 9
+        app_versions: ["3.9", "3.11"]
+    custom_tags:
+      - name: "3.8"
+        distro: RHEL 7
+        app_version: "3.8"
+
+  - filename: python-rhel-aarch64.json
+    latest: "3.9-ubi8"
+    distros:
+      - name: UBI 8
+        app_versions: ["2.7", "3.6", "3.8", "3.9"]
+
+      - name: UBI 9
+        app_versions: ["3.9"]
+...
