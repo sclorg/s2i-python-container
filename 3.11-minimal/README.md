@@ -14,7 +14,7 @@ and therefore uses the RPM packages from Red Hat Enterprise Linux, the same that
 To pull the Python 3.11 minimal container image to build on, run
 
 ```
-podman pull quay.io/sclorg/python-311-minimal
+podman pull quay.io/sclorg/python-311-minimal-c9s
 ```
 
 Description
