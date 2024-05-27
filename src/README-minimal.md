@@ -14,7 +14,7 @@ and therefore uses the RPM packages from Red Hat Enterprise Linux, the same that
 To pull the Python {{ spec.version }} minimal container image to build on, run
 
 ```
-podman pull quay.io/sclorg/python-{{ spec.short_ver }}-minimal
+podman pull {{ spec.main_image }}
 ```
 
 Description
