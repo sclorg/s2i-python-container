@@ -87,23 +87,6 @@ specs:
         "3.11": ['python3.11', 'python3.11-devel', 'python3.11-pip']
         "3.12": ['python3.12', 'python3.12-devel', 'python3.12-pip']
 
-    c8s:
-      distros:
-        - centos-stream-8-x86_64
-      el_version: "8"
-      s2i_base: quay.io/sclorg/s2i-base-c8s
-      img_tag: "c8s"
-      org: "sclorg"
-      prod: "c8s"
-      python_pkgs: []
-      base_pkgs: ['nss_wrapper', 'httpd', 'httpd-devel', 'mod_ssl',
-                  'mod_auth_gssapi', 'mod_ldap', 'mod_session',
-                  'atlas-devel', 'gcc-gfortran', 'libffi-devel', 'libtool-ltdl', 'enchant',
-                  'krb5-devel']
-      extra_pkgs:
-        "3.11": ['python3.11', 'python3.11-devel', 'python3.11-pip']
-        "3.12": ['python3.12', 'python3.12-devel', 'python3.12-pip']
-
     c9s:
       distros:
         - centos-stream-9-x86_64
@@ -253,7 +236,6 @@ matrix:
     - distros:
         - fedora-38-x86_64
         - centos-stream-9-x86_64
-        - centos-stream-8-x86_64
         - rhel-9-x86_64
         - rhel-8-x86_64
       version: "3.11"
@@ -265,6 +247,5 @@ matrix:
     - distros:
         - fedora-39-x86_64
         - centos-stream-9-x86_64
-        - centos-stream-8-x86_64
         - rhel-9-x86_64
       version: "3.12"

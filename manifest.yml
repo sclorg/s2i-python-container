@@ -62,9 +62,6 @@ DISTGEN_MULTI_RULES:
     dest: Dockerfile.fedora
 
   - src: src/Dockerfile.template
-    dest: Dockerfile.c8s
-
-  - src: src/Dockerfile.template
     dest: Dockerfile.c9s
 
 

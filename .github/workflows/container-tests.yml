@@ -61,7 +61,7 @@ jobs:
       fail-fast: false
       matrix:
         version: [ "2.7", "3.8", "3.9", "3.9-minimal", "3.11", "3.11-minimal", "3.12" ]
-        os_test: [ "fedora", "rhel7", "rhel8", "rhel9", "c8s", "c9s" ]
+        os_test: [ "fedora", "rhel7", "rhel8", "rhel9", "c9s" ]
         test_case: [ "container" ]
     if: |
       github.event.issue.pull_request
