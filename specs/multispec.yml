@@ -162,7 +162,7 @@ specs:
       # Python 3.11 doesn't come as a module
       module_stream: ""
       pkg_prefix: "python3.11"
-      main_image: "registry.access.redhat.com/ubi8/python-311-minimal"
+      main_image: "quay.io/sclorg/python-311-minimal-c9s"
 
     "3.9":
       version: "3.9"
@@ -182,7 +182,7 @@ specs:
       python_img_version: "1"
       module_stream: "python39:3.9"
       pkg_prefix: "python39"
-      main_image: "registry.access.redhat.com/ubi8/python-39-minimal"
+      main_image: "quay.io/sclorg/python-39-minimal-c9s"
 
     "3.8":
       version: "3.8"
