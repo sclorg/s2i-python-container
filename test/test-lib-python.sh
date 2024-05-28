@@ -15,7 +15,7 @@ function ct_pull_or_import_postgresql() {
   if [[ "${VERSION}" == *"minimal"* ]]; then
     VERSION=$(echo "${VERSION}" | cut -d "-" -f 1)
   fi
-  if [[ "${VERSION}" == "3.11" ]]; then
+  if [[ "${VERSION}" == "3.11" ]] || [[ "${VERSION}" == "3.12" ]]; then
     postgresql_image="quay.io/sclorg/postgresql-12-c8s"
     image_short="postgresql:12"
     image_tag="${image_short}"
@@ -49,7 +49,7 @@ function test_python_imagestream() {
   if [[ "${VERSION}" == *"minimal"* ]]; then
     VERSION=$(echo "${VERSION}" | cut -d "-" -f 1)
   fi
-  if [[ "${VERSION}" == "3.11" ]]; then
+  if [[ "${VERSION}" == "3.11" ]] || [[ "${VERSION}" == "3.12" ]]; then
     branch="4.2.x"
     postgresql_image="quay.io/sclorg/postgresql-12-c8s|postgresql:12"
     postgresql_version="12"
@@ -101,7 +101,7 @@ django-postgresql-persistent.json"
   if [[ "${VERSION}" == *"minimal"* ]]; then
     VERSION=$(echo "${VERSION}" | cut -d "-" -f 1)
   fi
-  if [[ "${VERSION}" == "3.11" ]]; then
+  if [[ "${VERSION}" == "3.11" ]] || [[ "${VERSION}" == "3.12" ]]; then
     postgresql_image="quay.io/sclorg/postgresql-12-c8s|postgresql:12"
     postgresql_version="12"
   else

@@ -65,7 +65,9 @@ specs:
                     '{{ spec.pkg_prefix }}-setuptools', '{{ spec.pkg_prefix }}-pip']
         "3.11": ['{{ spec.pkg_prefix }}', '{{ spec.pkg_prefix }}-devel',
                  '{{ spec.pkg_prefix }}-setuptools', '{{ spec.pkg_prefix }}-pip']
-      ubi_versions: ['2.7', '3.6', '3.8', '3.9', '3.11']
+        "3.12": ['{{ spec.pkg_prefix }}', '{{ spec.pkg_prefix }}-devel',
+                 '{{ spec.pkg_prefix }}-setuptools', '{{ spec.pkg_prefix }}-pip']
+      ubi_versions: ['2.7', '3.6', '3.8', '3.9', '3.11', '3.12']
 
     rhel9:
       distros:
@@ -248,4 +250,5 @@ matrix:
         - fedora-39-x86_64
         - centos-stream-9-x86_64
         - rhel-9-x86_64
+        - rhel-8-x86_64
       version: "3.12"
