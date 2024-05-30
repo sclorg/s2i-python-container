@@ -86,6 +86,25 @@
         }
       },
       {
+        "name": "3.12-ubi8",
+        "annotations": {
+          "openshift.io/display-name": "Python 3.12 (UBI 8)",
+          "openshift.io/provider-display-name": "Red Hat, Inc.",
+          "description": "Build and run Python 3.12 applications on UBI 8. For more information about using this builder image, including OpenShift considerations, see https://github.com/sclorg/s2i-python-container/blob/master/3.12/README.md.",
+          "iconClass": "icon-python",
+          "tags": "builder,python",
+          "version": "3.12",
+          "sampleRepo": "https://github.com/sclorg/django-ex.git"
+        },
+        "from": {
+          "kind": "DockerImage",
+          "name": "registry.redhat.io/ubi8/python-312:latest"
+        },
+        "referencePolicy": {
+          "type": "Local"
+        }
+      },
+      {
         "name": "3.9-ubi9",
         "annotations": {
           "openshift.io/display-name": "Python 3.9 (UBI 9)",
@@ -99,6 +118,25 @@
         "from": {
           "kind": "DockerImage",
           "name": "registry.redhat.io/ubi9/python-39:latest"
+        },
+        "referencePolicy": {
+          "type": "Local"
+        }
+      },
+      {
+        "name": "3.12-ubi9",
+        "annotations": {
+          "openshift.io/display-name": "Python 3.12 (UBI 9)",
+          "openshift.io/provider-display-name": "Red Hat, Inc.",
+          "description": "Build and run Python 3.12 applications on UBI 9. For more information about using this builder image, including OpenShift considerations, see https://github.com/sclorg/s2i-python-container/blob/master/3.12/README.md.",
+          "iconClass": "icon-python",
+          "tags": "builder,python",
+          "version": "3.12",
+          "sampleRepo": "https://github.com/sclorg/django-ex.git"
+        },
+        "from": {
+          "kind": "DockerImage",
+          "name": "registry.redhat.io/ubi9/python-312:latest"
         },
         "referencePolicy": {
           "type": "Local"
