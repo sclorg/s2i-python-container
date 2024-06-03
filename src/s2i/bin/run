@@ -49,6 +49,19 @@ function maybe_run_in_init_wrapper() {
   fi
 }
 
+# Look for gunicorn>=20.1.0 to utilize gunicorn.conf.py
+if is_gunicorn_installed && [[ -f "gunicorn.conf.py" ]]; then
+  ret=$(python -c 'import gunicorn
+ver = gunicorn.version_info
+print(0 if ver[0]>=21 or (ver[0] == 20 and ver[1] >= 1) else 1)')
+  grep -q "wsgi_app" gunicorn.conf.py && grep_result=0 || grep_result=1
+  if [[ $ret -eq 0 ]] && [[ $grep_result -eq 0 ]]; then
+    echo "---> Using gunicorn.conf.py"
+    echo "---> Serving application with gunicorn ..."
+    exec gunicorn
+  fi
+fi
+
 APP_HOME=$(readlink -f "${APP_HOME:-.}")
 # Change the working directory to APP_HOME
 PYTHONPATH="$(pwd)${PYTHONPATH:+:$PYTHONPATH}"

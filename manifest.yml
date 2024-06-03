@@ -141,6 +141,9 @@ SYMLINK_RULES:
   - src: ../../examples/gunicorn-config-different-port-test-app
     dest: test/gunicorn-config-different-port-test-app
 
+  - src: ../../examples/gunicorn-python-configfile-different-port-test-app
+    dest: test/gunicorn-python-configfile-different-port-test-app
+
   - src: ../../examples/locale-test-app
     dest: test/locale-test-app
 
