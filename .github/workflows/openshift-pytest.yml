@@ -1,0 +1,56 @@
+---
+
+on:
+  issue_comment:
+    types:
+      - created
+jobs:
+  distgen-check:
+    name: "Check distgen generated files"
+    runs-on: ubuntu-20.04
+    if: |
+      github.event.issue.pull_request
+      && (contains(github.event.comment.body, '[test-openshift-pytest]') || contains(github.event.comment.body, '[test-all]'))
+      && contains(fromJson('["OWNER", "MEMBER"]'), github.event.comment.author_association)
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          ref: "refs/pull/${{ github.event.issue.number }}/head"
+          submodules: true
+
+      - name: Check distgen generated files
+        id: check
+        shell: bash
+        run: |
+          sudo apt update && sudo apt -y install python3-pip
+          pip3 install pyyaml distgen Jinja2
+          result="success"
+          ./common/tests/check_distgen_generated_files.sh
+
+  openshift-pytests:
+    needs: distgen-check
+    name: "${{ matrix.test_case }} PyTests: ${{ matrix.version }} - ${{ matrix.os_test }}"
+    runs-on: ubuntu-20.04
+    concurrency:
+      group: ocp-pytest-${{ github.event.issue.number }}-${{ matrix.version }}-${{ matrix.os_test }}
+      cancel-in-progress: true
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [ "2.7", "3.8", "3.9", "3.11" ]
+        os_test: [ "rhel8", "rhel9" ]
+        test_case: [ "openshift-pytest" ]
+
+    if: |
+      github.event.issue.pull_request
+      && (contains(github.event.comment.body, '[test-openshift-pytest]') || contains(github.event.comment.body, '[test-all]'))
+      && contains(fromJson('["OWNER", "MEMBER"]'), github.event.comment.author_association)
+    steps:
+      - uses: sclorg/tfaga-wrapper@main
+        with:
+          os_test: ${{ matrix.os_test }}
+          version: ${{ matrix.version }}
+          test_case: ${{ matrix.test_case }}
+          public_api_key: ${{ secrets.TF_PUBLIC_API_KEY }}
+          private_api_key: ${{ secrets.TF_INTERNAL_API_KEY }}
