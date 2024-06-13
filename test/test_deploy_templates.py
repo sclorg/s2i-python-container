@@ -16,12 +16,14 @@ VERSION = os.getenv("SINGLE_VERSION")
 IMAGE_NAME = os.getenv("IMAGE_NAME")
 OS = os.getenv("TARGET")
 
+
 BRANCH_TO_TEST = "2.2.x"
 DEPLOYED_PSQL_IMAGE = "quay.io/centos7/postgresql-10-centos7:centos7"
 IMAGE_TAG = "postgresql:10"
 PSQL_VERSION = "10"
 
-if VERSION == "2.7" and OS == "rhel7":
+
+if VERSION == "2.7" or OS == "rhel7":
     BRANCH_TO_TEST = "master"
 
 

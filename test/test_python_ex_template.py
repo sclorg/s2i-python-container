@@ -16,7 +16,7 @@ VERSION = os.getenv("SINGLE_VERSION")
 IMAGE_NAME = os.getenv("IMAGE_NAME")
 OS = os.getenv("TARGET")
 
-if VERSION == "2.7" and OS == "rhel7":
+if VERSION == "2.7" or OS == "rhel7":
     BRANCH_TO_TEST = "master"
 else:
     BRANCH_TO_TEST = "2.2.x"
