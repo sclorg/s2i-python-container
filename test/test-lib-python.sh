@@ -20,7 +20,7 @@ function ct_pull_or_import_postgresql() {
     image_short="postgresql:12"
     image_tag="${image_short}"
   else
-    postgresql_image="quay.io/centos7/postgresql-10-centos7"
+    postgresql_image="quay.io/centos7/postgresql-10-centos7:centos7"
     image_short="postgresql:10-centos7"
     image_tag="postgresql:10"
   fi
@@ -55,7 +55,7 @@ function test_python_imagestream() {
     postgresql_version="12"
   else
     branch="master"
-    postgresql_image="quay.io/centos7/postgresql-10-centos7|postgresql:10"
+    postgresql_image="quay.io/centos7/postgresql-10-centos7:centos7|postgresql:10"
     postgresql_version="10"
   fi
   TEMPLATES="
@@ -105,7 +105,7 @@ django-postgresql-persistent.json"
     postgresql_image="quay.io/sclorg/postgresql-12-c8s|postgresql:12"
     postgresql_version="12"
   else
-    postgresql_image="quay.io/centos7/postgresql-10-centos7|postgresql:10"
+    postgresql_image="quay.io/centos7/postgresql-10-centos7:centos7|postgresql:10"
     postgresql_version="10"
   fi
   for template in $EPHEMERAL_TEMPLATES; do
