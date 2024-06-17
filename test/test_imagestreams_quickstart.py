@@ -1,9 +1,10 @@
 import os
 import sys
+
 import pytest
 
 from container_ci_suite.openshift import OpenShiftAPI
-from container_ci_suite.utils import get_service_image, check_variables
+from container_ci_suite.utils import check_variables
 
 
 if not check_variables():
