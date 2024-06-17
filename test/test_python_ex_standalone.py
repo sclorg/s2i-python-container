@@ -26,7 +26,7 @@ class TestPythonExTemplate:
     def test_python_ex_template_inside_cluster(self):
         service_name = "python-testing"
         assert self.oc_api.deploy_s2i_app(
-            image_name=IMAGE_NAME, app=f"https://github.com/sclorg/s2i-python-container.git",
+            image_name=IMAGE_NAME, app="https://github.com/sclorg/s2i-python-container.git",
             context="examples/standalone-test-app",
             service_name=service_name
         )
