@@ -1,0 +1,1 @@
+../common/show_all_imagestreams.py
