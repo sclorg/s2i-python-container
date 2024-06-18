@@ -1,0 +1,11 @@
+#!/bin/bash
+#
+# IMAGE_NAME specifies a name of the candidate image used for testing.
+# The image has to be available before this script is executed.
+# VERSION specifies the major version of the MariaDB in format of X.Y
+# OS specifies RHEL version (e.g. OS=rhel7)
+#
+
+THISDIR=$(dirname ${BASH_SOURCE[0]})
+
+cd "${THISDIR}" && python3 -m pytest --showlocals -vv test_*.py
