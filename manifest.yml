@@ -47,12 +47,6 @@ DISTGEN_RULES:
 # (distro, version) combination not excluded in multispec
 DISTGEN_MULTI_RULES:
   - src: src/Dockerfile.template
-    dest: Dockerfile.centos7
-
-  - src: src/Dockerfile.template
-    dest: Dockerfile.rhel7
-
-  - src: src/Dockerfile.template
     dest: Dockerfile.rhel8
 
   - src: src/Dockerfile.template
@@ -120,9 +114,6 @@ COPY_RULES:
 # This section is the last one on purpose because the generator.py
 # does not allow dead symlinks.
 SYMLINK_RULES:
-  - src: ./Dockerfile.centos7
-    dest: Dockerfile
-
   - src: ../../examples/app-home-test-app
     dest: test/app-home-test-app
 
