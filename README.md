@@ -3,7 +3,6 @@ Python container images
 [![Build and push container images to Quay.io registry](https://github.com/sclorg/s2i-python-container/actions/workflows/build-and-push.yml/badge.svg)](https://github.com/sclorg/s2i-python-container/actions/workflows/build-and-push.yml)
 
 Images available on Quay are:
-* CentOS 7 [python-38](https://quay.io/repository/centos7/python-38-centos7)
 * RHEL 8 [python-39-minimal](https://quay.io/repository/sclorg/python-39-minimal-el8)
 * CentOS Stream 9 minimal [python-39-minimal-c9s](https://quay.io/repository/sclorg/python-39-minimal-c9s)
 * CentOS Stream 9 [python-39-c9s](https://quay.io/repository/sclorg/python-39-c9s)
@@ -50,19 +49,16 @@ Versions
 Python versions currently provided are:
 * [python-2.7](2.7)
 * [python-3.6](3.6)
-* [python-3.8](3.8)
 * [python-3.9](3.9)
 * [python-3.9 Minimal (tech-preview)](3.9-minimal)
 * [python-3.11](3.11)
 * [python-3.12](3.12)
 
 RHEL versions currently supported are:
-* RHEL 7 ([catalog.redhat.com](https://catalog.redhat.com/software/containers/search))
 * RHEL 8 ([catalog.redhat.com](https://catalog.redhat.com/software/containers/search))
 * RHEL 9 ([catalog.redhat.com](https://catalog.redhat.com/software/containers/search))
 
 CentOS and CentOS Stream versions currently supported are:
-* CentOS 7 ([quay.io/centos7](https://quay.io/organization/centos7))
 * CentOS Stream 9 ([quay.io/sclorg](https://quay.io/organization/sclorg))
 
 Fedora versions currently supported are:
@@ -76,7 +72,7 @@ To download one of the base Python images, follow the instructions you find in r
 For example, Centos image can be downloaded via:
 
 ```
-$ podman pull quay.io/centos7/python-38-centos7
+$ podman pull quay.io/c9s/python-38-c9s
 ```
 
 Build
@@ -86,7 +82,7 @@ To build a Python image from scratch run:
 ```
 $ git clone https://github.com/sclorg/s2i-python-container.git
 $ cd s2i-python-container
-$ make build TARGET=centos7 VERSIONS=3.8
+$ make build TARGET=c9s VERSIONS=3.8
 ```
 
 Where `TARGET` might be one of the supported platforms mentioned above.
@@ -105,7 +101,7 @@ which launches tests to check functionality of simple Python applications built 
 
 ```
 $ cd s2i-python-container
-$ make test TARGET=centos7 VERSIONS=3.8
+$ make test TARGET=c9s VERSIONS=3.8
 ```
 
 Where `TARGET` might be one of the supported platforms mentioned above.
@@ -118,15 +114,15 @@ Repository organization
 -----------------------
 * **`<python-version>`**
 
-    * **Dockerfile**
+    * **Dockerfile.c9s**
 
-        CentOS based Dockerfile.
+        CentOS Stream based Dockerfile.
 
     * **Dockerfile.fedora**
 
         Fedora based Dockerfile.
 
-    * **Dockerfile.rhel7** & **Dockerfile.rhel8**
+    * **Dockerfile.rhel8** & **Dockerfile.rhel9**
 
         RHEL 7/8 based Dockerfile. In order to perform build or test actions on this
         Dockerfile you need to run the action on a properly subscribed RHEL machine.
