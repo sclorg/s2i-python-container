@@ -13,20 +13,7 @@ FROM {{ spec.s2i_base }}{% if img_tag %}:{{ img_tag }}{% endif %}
 EXPOSE 8080
 
 ENV PYTHON_VERSION={{ spec.version }} \
-{% if spec.el_version == '7' %}
-    PYTHON_SCL_VERSION={{ spec.short_ver }} \
-    PATH=$PATH:/opt/rh/rh-python{{ spec.short_ver }}/root/usr/bin:$HOME/.local/bin/:/opt/rh/$NODEJS_SCL/root/usr/bin:/opt/rh/httpd24/root/usr/bin:/opt/rh/python{{ spec.short_ver }}/root/usr/bin:/opt/rh/httpd24/root/usr/sbin:/opt/rh/rh-python{{ spec.short_ver }}/root/usr/local/bin \
-    LD_LIBRARY_PATH=/opt/rh/rh-python{{ spec.short_ver }}/root/usr/lib64:/opt/rh/$NODEJS_SCL/root/usr/lib64:/opt/rh/httpd24/root/usr/lib64:/opt/rh/python{{ spec.short_ver }}/root/usr/lib64 \
-    LIBRARY_PATH=/opt/rh/httpd24/root/usr/lib64 \
-    X_SCLS={{ spec.scl }} \
-    MANPATH=/opt/rh/rh-python{{ spec.short_ver }}/root/usr/share/man:/opt/rh/python{{ spec.short_ver }}/root/usr/share/man:/opt/rh/httpd24/root/usr/share/man:/opt/rh/$NODEJS_SCL/root/usr/share/man \
-    VIRTUAL_ENV=/opt/app-root \
-    PYTHONPATH=/opt/rh/$NODEJS_SCL/root/usr/lib/python2.7/site-packages \
-    XDG_DATA_DIRS=/opt/rh/python{{ spec.short_ver }}/root/usr/share:/opt/rh/rh-python{{ spec.short_ver }}/root/usr/share:/usr/local/share:/usr/share \
-    PKG_CONFIG_PATH=/opt/rh/python{{ spec.short_ver }}/root/usr/lib64/pkgconfig:/opt/rh/httpd24/root/usr/lib64/pkgconfig:/opt/rh/rh-python{{ spec.short_ver }}/root/usr/lib64/pkgconfig \
-{% else %}
     PATH=$HOME/.local/bin/:$PATH \
-{% endif %}
     PYTHONUNBUFFERED=1 \
     PYTHONIOENCODING=UTF-8 \
     LC_ALL=en_US.UTF-8 \
@@ -81,7 +68,7 @@ COPY {{ spec.version }}/s2i/bin/ $STI_SCRIPTS_PATH
 # Copy extra files to the image.
 COPY {{ spec.version }}/root/ /
 
-{% if spec.version not in ["2.7", "3.6"] %}
+{% if spec.version != "3.6" %}
 # Python 3.7+ only
 # Yes, the directory below is already copied by the previous command.
 # The problem here is that the wheels directory is copied as a symlink.

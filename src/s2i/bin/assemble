@@ -9,7 +9,7 @@ function should_collectstatic() {
 }
 
 function virtualenv_bin() {
-  {% if spec.version not in ["2.7", "3.6"] %}
+  {% if spec.version != "3.6" %}
     # New versions of Python (>3.6) should use venv module
     # from stdlib instead of virtualenv package
     python{{ spec.version }} -m venv $1
@@ -31,9 +31,6 @@ function virtualenv_bin() {
 # (pip script installer).
 function install_tool() {
   echo "---> Installing $1 packaging tool ..."
-  {% if spec.version in ["2.7"] %}
-  pip install -U virtualenv
-  {% endif %}
   VENV_DIR=$HOME/.local/venvs/$1
   virtualenv_bin "$VENV_DIR"
   # First, try to install the tool without --isolated which means that if you
@@ -66,7 +63,7 @@ mv /tmp/src/* "$HOME"
 # set permissions for any installed artifacts
 fix-permissions /opt/app-root -P
 
-{% if spec.version in ["2.7", "3.6"] %}
+{% if spec.version == "3.6" %}
 # Python <3.7 only code, Python 3.7+ uses bundled wheel from Fedora
 # We have to first upgrade pip to at least 19.3 because:
 # * pip < 9 does not support different packages' versions for Python 2/3

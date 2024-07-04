@@ -20,7 +20,7 @@ ENV NAME=python3 \
 
 {% macro venv_setup(spec) %}
 RUN python{{ spec.version }} -m venv ${APP_ROOT} && \
-{% if spec.version not in ["2.7", "3.6"] %}
+{% if spec.version != "3.6" %}
 # Python 3.7+ only code, Python <3.7 installs pip from PyPI in the assemble script. \
 # We have to upgrade pip to a newer verison because: \
 # * pip < 9 does not support different packages' versions for Python 2/3 \

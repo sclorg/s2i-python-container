@@ -21,11 +21,6 @@ DEPLOYED_PSQL_IMAGE = "quay.io/centos7/postgresql-10-centos7:centos7"
 IMAGE_TAG = "postgresql:10"
 PSQL_VERSION = "10"
 
-
-if VERSION == "2.7" or OS == "rhel7":
-    BRANCH_TO_TEST = "master"
-
-
 if VERSION == "3.11":
     DEPLOYED_PSQL_IMAGE = "quay.io/sclorg/postgresql-12-c8s"
     IMAGE_TAG = "postgresql:12"

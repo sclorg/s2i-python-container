@@ -80,11 +80,7 @@ function test_python_s2i_app_ex_standalone() {
 }
 
 function test_python_s2i_app_ex() {
-  if [[ ${VERSION} == "2.7" ]] || docker inspect ${IMAGE_NAME} --format "{{.Config.Env}}" | tr " " "\n" | grep -q "^PLATFORM=el7"; then
-    django_example_repo_url="https://github.com/sclorg/django-ex.git"
-  else
-    django_example_repo_url="https://github.com/sclorg/django-ex.git#2.2.x"
-  fi
+  django_example_repo_url="https://github.com/sclorg/django-ex.git#2.2.x"
   ct_os_test_s2i_app "${IMAGE_NAME}" \
         "${django_example_repo_url}" \
         . \
@@ -109,11 +105,7 @@ django-postgresql-persistent.json"
     postgresql_version="10"
   fi
   for template in $EPHEMERAL_TEMPLATES; do
-      if [[ ${VERSION} == "2.7" ]] || docker inspect ${IMAGE_NAME} --format "{{.Config.Env}}" | tr " " "\n" | grep -q "^PLATFORM=el7"; then
-        branch="master"
-      else
-        branch="2.2.x"
-      fi
+      branch="2.2.x"
       ct_os_test_template_app "$IMAGE_NAME" \
                               "https://raw.githubusercontent.com/sclorg/django-ex/${branch}/openshift/templates/${template}" \
                               python \

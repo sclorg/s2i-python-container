@@ -5,10 +5,7 @@
 {% endmacro %}
 
 {% macro _component_name(spec) -%}
-{% if spec.version.startswith('3.') %}{{ spec.python3_component_prefix }}{% endif -%}
-python
-{%- if spec.el_version == '8' or spec.el_version == '9' %}-{% endif -%}
-{{ spec.short_ver }}-container
+python-{{ spec.short_ver }}-container
 {%- endmacro %}
 
 {% macro _image_name(spec) %}
@@ -28,21 +25,14 @@ python
 {% endmacro %}
 
 {% macro venv_setup(spec) %}
-{# Enable SCL only for RHEL 7 #}
-{% if spec.el_version == '7' %}
-RUN source scl_source enable {{ spec.scl }} && \
-{% else %}
 RUN \
-{% endif %}
 {# Use different virtualenv command of venv module based on Python and platform version #}
-{% if spec.version not in ["2.7", "3.6"] %}
+{% if spec.version != "3.6" %}
     python{{ spec.version }} -m venv ${APP_ROOT} && \
-{% elif spec.el_version == '7' %}
-    virtualenv ${APP_ROOT} && \
 {% else %}
     virtualenv-$PYTHON_VERSION ${APP_ROOT} && \
 {% endif %}
-{% if spec.version not in ["2.7", "3.6"] %}
+{% if spec.version != "3.6" %}
     # Python 3.7+ only code, Python <3.7 installs pip from PyPI in the assemble script. \
     # We have to upgrade pip to a newer verison because: \
     # * pip < 9 does not support different packages' versions for Python 2/3 \
@@ -57,22 +47,16 @@ RUN \
     rm -r /opt/wheels && \
     chown -R 1001:0 ${APP_ROOT} && \
     fix-permissions ${APP_ROOT} -P && \
-{% if spec.el_version != '7' %}
     rpm-file-permissions && \
     # The following echo adds the unset command for the variables set below to the \
     # venv activation script. This is inspired from scl_enable script and prevents \
     # the virtual environment to be activated multiple times and also every time \
     # the prompt is rendered. \
     echo "unset BASH_ENV PROMPT_COMMAND ENV" >> ${APP_ROOT}/bin/activate
-{% else %}
-    rpm-file-permissions
-{% endif %}
 
-{% if spec.el_version != '7' %}
 # For RHEL/Centos 8+ scl_enable isn't sourced automatically in s2i-core
 # so virtualenv needs to be activated this way
 ENV BASH_ENV="${APP_ROOT}/bin/activate" \
     ENV="${APP_ROOT}/bin/activate" \
     PROMPT_COMMAND=". ${APP_ROOT}/bin/activate"
-{% endif %}
 {% endmacro %}

@@ -29,25 +29,6 @@
         }
       },
       {
-        "name": "2.7-ubi8",
-        "annotations": {
-          "openshift.io/display-name": "Python 2.7 (UBI 8)",
-          "openshift.io/provider-display-name": "Red Hat, Inc.",
-          "description": "Build and run Python 2.7 applications on UBI 8. For more information about using this builder image, including OpenShift considerations, see https://github.com/sclorg/s2i-python-container/blob/master/2.7/README.md.",
-          "iconClass": "icon-python",
-          "tags": "builder,python",
-          "version": "2.7",
-          "sampleRepo": "https://github.com/sclorg/django-ex.git"
-        },
-        "from": {
-          "kind": "DockerImage",
-          "name": "registry.access.redhat.com/ubi8/python-27:latest"
-        },
-        "referencePolicy": {
-          "type": "Local"
-        }
-      },
-      {
         "name": "3.6-ubi8",
         "annotations": {
           "openshift.io/display-name": "Python 3.6 (UBI 8)",

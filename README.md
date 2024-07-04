@@ -47,7 +47,6 @@ For more information about contributing, see
 Versions
 ---------------
 Python versions currently provided are:
-* [python-2.7](2.7)
 * [python-3.6](3.6)
 * [python-3.9](3.9)
 * [python-3.9 Minimal (tech-preview)](3.9-minimal)
