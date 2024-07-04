@@ -229,6 +229,7 @@ file inside your source code repository.
     the higher-level Python packaging tool, to manage dependencies of the application.
     This should be used only if your project contains properly formated Pipfile
     and Pipfile.lock.
+
 * **PIN_PIPENV_VERSION**
 
     Set this variable together with `ENABLE_PIPENV` to use a specific version of Pipenv.

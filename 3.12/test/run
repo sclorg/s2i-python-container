@@ -196,16 +196,7 @@ test_application() {
 
 test_from_dockerfile(){
   info "Test from Dockerfile"
-  # The latest LTS release of Django does not work on RHEL 7 (due to an old version of SQLite),
-  # and no longer supports Python 2. So on all CentOS/RHEL 7 images and all Python 2 images,
-  # we're using the old Django LTS version 1.11.x from the main git branch of the django-ex project.
-  # In all other cases we're using the newer Django LTS version 2.2.x from the corresponding git branch.
-
-  if [[ ${VERSION} == "2.7" ]] || docker inspect ${IMAGE_NAME} --format "{{.Config.Env}}" | tr " " "\n" | grep -q "^PLATFORM=el7"; then
-    django_example_repo_url="https://github.com/sclorg/django-ex.git"
-  else
-    django_example_repo_url="https://github.com/sclorg/django-ex.git@2.2.x"
-  fi
+  django_example_repo_url="https://github.com/sclorg/django-ex.git@2.2.x"
 
   ct_test_app_dockerfile $test_dir/from-dockerfile/Dockerfile.tpl $django_example_repo_url 'Welcome to your Django application on OpenShift' app-src
   ct_check_testcase_result $?
