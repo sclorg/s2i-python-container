@@ -16,7 +16,7 @@
         app_versions: ["3.8"]
 
       - name: UBI 8
-        app_versions: ["2.7", "3.6", "3.8", "3.9", "3.12"]
+        app_versions: ["3.6", "3.8", "3.9", "3.12"]
 
       - name: UBI 9
         app_versions: ["3.9", "3.12"]
@@ -28,7 +28,7 @@
         app_versions: ["3.8"]
 
       - name: UBI 8
-        app_versions: ["2.7", "3.6", "3.8", "3.9", "3.11", "3.12"]
+        app_versions: ["3.6", "3.8", "3.9", "3.11", "3.12"]
 
       - name: UBI 9
         app_versions: ["3.9", "3.11", "3.12"]
@@ -41,7 +41,7 @@
     latest: "3.9-ubi8"
     distros:
       - name: UBI 8
-        app_versions: ["2.7", "3.6", "3.8", "3.9", "3.12"]
+        app_versions: ["3.6", "3.8", "3.9", "3.12"]
 
       - name: UBI 9
         app_versions: ["3.9", "3.12"]

@@ -134,7 +134,7 @@ RUN chown -R 1001:0 ./
 USER 1001
 
 # Install the dependencies
-RUN pip install -U "pip>=19.3.1{% if spec.version == "2.7" %},<21.0{% endif %}" && \
+RUN pip install -U "pip>=19.3.1" && \
     pip install -r requirements.txt && \
     python manage.py collectstatic --noinput && \
     python manage.py migrate
@@ -228,8 +228,7 @@ file inside your source code repository.
     Set this variable to use [Pipenv](https://github.com/pypa/pipenv),
     the higher-level Python packaging tool, to manage dependencies of the application.
     This should be used only if your project contains properly formated Pipfile
-    and Pipfile.lock.{% if spec.version in ["2.7"] %} (Implies `UPGRADE_PIP_TO_LATEST` to satisfy dependencies of
-    Pipenv.){% endif %}
+    and Pipfile.lock.
 
 * **PIN_PIPENV_VERSION**
 
@@ -237,14 +236,12 @@ file inside your source code repository.
     If not set, the latest stable version from PyPI is installed.
     For example `PIN_PIPENV_VERSION=2018.11.26` installs `pipenv==2018.11.26`.
 
-{% if spec.version.startswith("3.") %}
 * **ENABLE_MICROPIPENV**
 
     Set this variable to use [micropipenv](https://github.com/thoth-station/micropipenv),
     a lightweight wrapper for pip to support requirements.txt, Pipenv and Poetry lock
     files or converting them to pip-tools compatible output. Designed for containerized Python applications.
     Available only for Python 3 images.
-{% endif %}
 
 * **ENABLE_INIT_WRAPPER**
 
@@ -272,17 +269,10 @@ file inside your source code repository.
 
 * **UPGRADE_PIP_TO_LATEST**
 
-    {% if spec.version == "2.7" %}
-    Python 2 images are using the latest compatible pip release (<21.0) so this
-    option controls update of setuptools and wheel packages only. Set this variable
-    to a non-empty value to have the packages be upgraded to the most recent version
-    before any Python packages are installed.
-    {% else %}
     Set this variable to a non-empty value to have the 'pip' program and related
     python packages (setuptools and wheel) be upgraded to the most recent version
     before any Python packages are installed. If not set, the container will use
     the stable pip version this container was built with, taken from a recent Fedora release.
-    {% endif %}
 
 * **WEB_CONCURRENCY**
 

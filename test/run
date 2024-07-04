@@ -6,8 +6,8 @@
 # IMAGE_NAME specifies a name of the candidate image used for testing.
 # The image has to be available before this script is executed.
 #
-declare -a COMMON_WEB_APPS=({gunicorn-config-different-port,gunicorn-different-port,django-different-port,standalone,setup,setup-requirements,django,numpy,app-home,locale,pipenv,pipenv-and-micropipenv-should-fail,app-module,pyuwsgi-pipenv{% if spec.version.startswith("3.") %},micropipenv,standalone-custom-pypi-index,gunicorn-python-configfile-different-port{% endif %}}-test-app)
-declare -a FULL_WEB_APPS=({setup-cfg,npm-virtualenv-uwsgi,mod-wsgi,pin-pipenv-version{% if spec.version.startswith("3.") %},micropipenv-requirements,poetry-src-layout{% endif %}}-test-app)
+declare -a COMMON_WEB_APPS=({gunicorn-config-different-port,gunicorn-different-port,django-different-port,standalone,setup,setup-requirements,django,numpy,app-home,locale,pipenv,pipenv-and-micropipenv-should-fail,app-module,pyuwsgi-pipenv,micropipenv,standalone-custom-pypi-index,gunicorn-python-configfile-different-port}-test-app)
+declare -a FULL_WEB_APPS=({setup-cfg,npm-virtualenv-uwsgi,mod-wsgi,pin-pipenv-version,micropipenv-requirements,poetry-src-layout}-test-app)
 declare -a MINIMAL_WEB_APPS=()
 {% if spec.minimal %}
 declare -a WEB_APPS=(${COMMON_WEB_APPS[@]} ${MINIMAL_WEB_APPS[@]})
@@ -204,17 +204,7 @@ test_application() {
 
 test_from_dockerfile(){
   info "Test from Dockerfile"
-  # The latest LTS release of Django does not work on RHEL 7 (due to an old version of SQLite),
-  # and no longer supports Python 2. So on all CentOS/RHEL 7 images and all Python 2 images,
-  # we're using the old Django LTS version 1.11.x from the main git branch of the django-ex project.
-  # In all other cases we're using the newer Django LTS version 2.2.x from the corresponding git branch.
-{% raw %}
-  if [[ ${VERSION} == "2.7" ]] || docker inspect ${IMAGE_NAME} --format "{{.Config.Env}}" | tr " " "\n" | grep -q "^PLATFORM=el7"; then
-{% endraw %}
-    django_example_repo_url="https://github.com/sclorg/django-ex.git"
-  else
-    django_example_repo_url="https://github.com/sclorg/django-ex.git@2.2.x"
-  fi
+  django_example_repo_url="https://github.com/sclorg/django-ex.git@2.2.x"
 
   ct_test_app_dockerfile $test_dir/from-dockerfile/Dockerfile.tpl $django_example_repo_url 'Welcome to your Django application on OpenShift' app-src
   ct_check_testcase_result $?

@@ -5,7 +5,7 @@ name = "pypi"
 
 [packages]
 "e1839a8" = {path = ".", editable = true}
-{% if spec.version in ["2.7", "3.6", "3.8", "3.9", "3.10", "3.11"] %}
+{% if spec.version in ["3.6", "3.8", "3.9", "3.10", "3.11"] %}
 requests = "==2.20.0"
 {% else %}
 requests = "==2.28.2"
