@@ -14,7 +14,7 @@ if not check_variables():
     print("At least one variable from IMAGE_NAME, OS, SINGLE_VERSION is missing.")
     sys.exit(1)
 
-VERSION = os.getenv("SINGLE_VERSION")
+VERSION = os.getenv("VERSION")
 
 
 # Replacement with 'test_latest_imagestreams'
