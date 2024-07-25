@@ -12,9 +12,6 @@
   - filename: python-centos.json
     latest: "3.9-ubi9"
     distros:
-      - name: UBI 7
-        app_versions: ["3.8"]
-
       - name: UBI 8
         app_versions: ["3.6", "3.8", "3.9", "3.12"]
 
@@ -24,18 +21,11 @@
   - filename: python-rhel.json
     latest: "3.11-ubi8"
     distros:
-      - name: UBI 7
-        app_versions: ["3.8"]
-
       - name: UBI 8
         app_versions: ["3.6", "3.8", "3.9", "3.11", "3.12"]
 
       - name: UBI 9
         app_versions: ["3.9", "3.11", "3.12"]
-    custom_tags:
-      - name: "3.8"
-        distro: RHEL 7
-        app_version: "3.8"
 
   - filename: python-rhel-aarch64.json
     latest: "3.9-ubi8"
