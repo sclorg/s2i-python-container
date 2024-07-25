@@ -21,7 +21,7 @@ DEPLOYED_PSQL_IMAGE = "quay.io/centos7/postgresql-10-centos7:centos7"
 IMAGE_TAG = "postgresql:10"
 PSQL_VERSION = "10"
 
-if VERSION == "3.11":
+if VERSION == "3.11" or VERSION == "3.12":
     BRANCH_TO_TEST = "4.2.x"
     DEPLOYED_PSQL_IMAGE = "quay.io/sclorg/postgresql-12-c8s"
     IMAGE_TAG = "postgresql:12"
@@ -29,7 +29,6 @@ if VERSION == "3.11":
 
 
 TAGS = {
-    "rhel7": "-ubi7",
     "rhel8": "-ubi8",
     "rhel9": "-ubi9"
 }
@@ -50,7 +49,7 @@ class TestImagestreamsQuickstart:
     @pytest.mark.parametrize(
         "template",
         [
-            "django-postgresql.json",
+            "django.json",
             "django-postgresql-persistent.json"
         ]
     )
@@ -59,17 +58,26 @@ class TestImagestreamsQuickstart:
         template_url = self.oc_api.get_raw_url_for_json(
             container="django-ex", dir="openshift/templates", filename=template, branch=BRANCH_TO_TEST
         )
+        openshift_args = [
+            f"SOURCE_REPOSITORY_REF={BRANCH_TO_TEST}",
+            f"PYTHON_VERSION={VERSION}",
+            f"NAME={service_name}"
+        ]
+        if template != "django.json":
+            openshift_args = [
+                f"SOURCE_REPOSITORY_REF={BRANCH_TO_TEST}",
+                f"POSTGRESQL_VERSION={PSQL_VERSION}",
+                f"PYTHON_VERSION={VERSION}",
+                f"NAME={service_name}",
+                f"DATABASE_USER=testu",
+                f"DATABASE_PASSWORD=testp"
+            ]
         assert self.oc_api.imagestream_quickstart(
             imagestream_file="imagestreams/python-rhel.json",
             template_file=template_url,
             image_name=IMAGE_NAME,
             name_in_template="python",
-            openshift_args=[
-                f"SOURCE_REPOSITORY_REF={BRANCH_TO_TEST}",
-                f"PYTHON_VERSION={VERSION}{TAG}",
-                f"NAME={service_name}",
-                f"POSTGRESQL_VERSION={PSQL_VERSION}"
-            ]
+            openshift_args=openshift_args
         )
         assert self.oc_api.template_deployed(name_in_template=service_name)
         assert self.oc_api.check_response_inside_cluster(
