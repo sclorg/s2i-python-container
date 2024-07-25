@@ -10,25 +10,6 @@
   "spec": {
     "tags": [
       {
-        "name": "3.8-ubi7",
-        "annotations": {
-          "openshift.io/display-name": "Python 3.8 (UBI 7)",
-          "openshift.io/provider-display-name": "Red Hat, Inc.",
-          "description": "Build and run Python 3.8 applications on UBI 7. For more information about using this builder image, including OpenShift considerations, see https://github.com/sclorg/s2i-python-container/blob/master/3.8/README.md.",
-          "iconClass": "icon-python",
-          "tags": "builder,python",
-          "version": "3.8",
-          "sampleRepo": "https://github.com/sclorg/django-ex.git"
-        },
-        "from": {
-          "kind": "DockerImage",
-          "name": "registry.access.redhat.com/ubi7/python-38:latest"
-        },
-        "referencePolicy": {
-          "type": "Local"
-        }
-      },
-      {
         "name": "3.6-ubi8",
         "annotations": {
           "openshift.io/display-name": "Python 3.6 (UBI 8)",
