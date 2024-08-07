@@ -105,6 +105,6 @@ jobs:
           dockerfile: ${{ matrix.dockerfile }}
           tag: ${{ matrix.tag }}
           image_name: ${{ matrix.image_name }}
-          archs: amd64, arm64
+          archs: amd64, arm64, ppc64le
           readme: "${{ matrix.docker_context }}/README.md"
           quay_application_token: ${{ secrets.QUAY_IMAGE_SCLORG_UPDATE_DESC }}
