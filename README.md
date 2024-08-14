@@ -5,13 +5,16 @@ Python container images
 Images available on Quay are:
 * RHEL 8 [python-39-minimal-el8](https://quay.io/repository/sclorg/python-39-minimal-el8)
 * RHEL 8 [python-311-minimal-el8](https://quay.io/repository/sclorg/python-311-minimal-el8)
+* RHEL 8 [python-312-minimal-el8](https://quay.io/repository/sclorg/python-312-minimal-el8)
 * CentOS Stream 9 minimal [python-39-minimal-c9s](https://quay.io/repository/sclorg/python-39-minimal-c9s)
 * CentOS Stream 9 [python-39-c9s](https://quay.io/repository/sclorg/python-39-c9s)
 * CentOS Stream 9 minimal [python-311-minimal-c9s](https://quay.io/repository/sclorg/python-311-minimal-c9s)
 * CentOS Stream 9 [python-311-c9s](https://quay.io/repository/sclorg/python-311-c9s)
+* CentOS Stream 9 [python-312-minimal-c9s](https://quay.io/repository/sclorg/python-312-minimal-c9s)
 * CentOS Stream 9 [python-312-c9s](https://quay.io/repository/sclorg/python-312-c9s)
 * Fedora [python-311-minimal](https://quay.io/repository/fedora/python-311-minimal)
 * Fedora [python-311](https://quay.io/repository/fedora/python-311)
+* Fedora [python-312-minimal](https://quay.io/repository/fedora/python-312-minimal)
 * Fedora [python-312](https://quay.io/repository/fedora/python-312)
 
 This repository contains the source for building various versions of
@@ -56,6 +59,7 @@ Python versions currently provided are:
 * [python-3.11](3.11)
 * [python-3.11 Minimal (tech-preview)](3.11-minimal)
 * [python-3.12](3.12)
+* [python-3.12 Minimal (tech-preview)](3.12-minimal)
 
 RHEL versions currently supported are:
 * RHEL 8 ([catalog.redhat.com](https://catalog.redhat.com/software/containers/search))
