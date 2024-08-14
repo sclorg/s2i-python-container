@@ -3,11 +3,14 @@ Python container images
 [![Build and push container images to Quay.io registry](https://github.com/sclorg/s2i-python-container/actions/workflows/build-and-push.yml/badge.svg)](https://github.com/sclorg/s2i-python-container/actions/workflows/build-and-push.yml)
 
 Images available on Quay are:
-* RHEL 8 [python-39-minimal](https://quay.io/repository/sclorg/python-39-minimal-el8)
+* RHEL 8 [python-39-minimal-el8](https://quay.io/repository/sclorg/python-39-minimal-el8)
+* RHEL 8 [python-311-minimal-el8](https://quay.io/repository/sclorg/python-311-minimal-el8)
 * CentOS Stream 9 minimal [python-39-minimal-c9s](https://quay.io/repository/sclorg/python-39-minimal-c9s)
 * CentOS Stream 9 [python-39-c9s](https://quay.io/repository/sclorg/python-39-c9s)
+* CentOS Stream 9 minimal [python-311-minimal-c9s](https://quay.io/repository/sclorg/python-311-minimal-c9s)
 * CentOS Stream 9 [python-311-c9s](https://quay.io/repository/sclorg/python-311-c9s)
 * CentOS Stream 9 [python-312-c9s](https://quay.io/repository/sclorg/python-312-c9s)
+* Fedora [python-311-minimal](https://quay.io/repository/fedora/python-311-minimal)
 * Fedora [python-311](https://quay.io/repository/fedora/python-311)
 * Fedora [python-312](https://quay.io/repository/fedora/python-312)
 
@@ -51,6 +54,7 @@ Python versions currently provided are:
 * [python-3.9](3.9)
 * [python-3.9 Minimal (tech-preview)](3.9-minimal)
 * [python-3.11](3.11)
+* [python-3.11 Minimal (tech-preview)](3.11-minimal)
 * [python-3.12](3.12)
 
 RHEL versions currently supported are:
