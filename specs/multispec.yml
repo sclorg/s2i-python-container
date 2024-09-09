@@ -68,13 +68,13 @@ specs:
         "3.11": ['python3.11', 'python3.11-devel', 'python3.11-pip']
         "3.12": ['python3.12', 'python3.12-devel', 'python3.12-pip']
 
-    fedora39:
+    fedora40:
       distros:
-        - fedora-39-x86_64
-      fedora_version: "39"
-      minimal_image: "quay.io/fedora/fedora-minimal:39"
+        - fedora-40-x86_64
+      fedora_version: "40"
+      minimal_image: "quay.io/fedora/fedora-minimal:40"
       s2i_base: quay.io/fedora/s2i-base
-      img_tag: "39"
+      img_tag: "40"
       org: "fedora"
       python_pkgs: ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip']
       base_pkgs: ['nss_wrapper', 'httpd', 'httpd-devel', 'atlas-devel', 'gcc-gfortran',
@@ -180,13 +180,13 @@ matrix:
         - rhel-8-x86_64
       version: "3.11-minimal"
     - distros:
-        - fedora-39-x86_64
+        - fedora-40-x86_64
         - centos-stream-9-x86_64
         - rhel-9-x86_64
         - rhel-8-x86_64
       version: "3.12"
     - distros:
-        - fedora-39-x86_64
+        - fedora-40-x86_64
         - centos-stream-9-x86_64
         - rhel-8-x86_64
       version: "3.12-minimal"
