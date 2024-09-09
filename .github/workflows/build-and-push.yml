@@ -46,14 +46,6 @@ jobs:
             tag: "el8"
             image_name: "python-311-minimal-el8"
 
-          - dockerfile: "3.11-minimal/Dockerfile.fedora"
-            docker_context: "3.11-minimal"
-            registry_namespace: "fedora"
-            quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_USERNAME"
-            quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
-            tag: "311"
-            image_name: "python-311-minimal"
-
           - dockerfile: "3.11-minimal/Dockerfile.c9s"
             docker_context: "3.11-minimal"
             registry_namespace: "sclorg"
@@ -61,14 +53,6 @@ jobs:
             quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
             tag: "c9s"
             image_name: "python-311-minimal-c9s"
-
-          - dockerfile: "3.11/Dockerfile.fedora"
-            docker_context: "3.11"
-            registry_namespace: "fedora"
-            quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_USERNAME"
-            quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
-            tag: "311"
-            image_name: "python-311"
 
           - dockerfile: "3.11/Dockerfile.c9s"
             docker_context: "3.11"
