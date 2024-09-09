@@ -9,8 +9,8 @@ python-{{ spec.short_ver }}-container
 {%- endmacro %}
 
 {% macro _image_name(spec) %}
-{{ spec.org }}/python-{{ spec.short_ver }}{% if spec.el_version == '7' %}-{{ spec.prod }}{% endif %}
-{% endmacro %}
+{{ spec.org }}/python-{{ spec.short_ver }}
+{%- endmacro %}
 
 {% macro labels(spec) %}
       com.redhat.component="{{ _component_name(spec) }}" \
@@ -34,9 +34,8 @@ RUN \
 {% endif %}
 {% if spec.version != "3.6" %}
     # Python 3.7+ only code, Python <3.7 installs pip from PyPI in the assemble script. \
-    # We have to upgrade pip to a newer verison because: \
-    # * pip < 9 does not support different packages' versions for Python 2/3 \
-    # * pip < 19.3 does not support manylinux2014 wheels. Only manylinux2014 (and later) wheels \
+    # We have to upgrade pip to a newer verison because \
+    # pip < 19.3 does not support manylinux2014 wheels. Only manylinux2014 (and later) wheels \
     #   support platforms like ppc64le, aarch64 or armv7 \
     # We are newly using wheel from one of the latest stable Fedora releases (from RPM python-pip-wheel) \
     # because it's tested better then whatever version from PyPI and contains useful patches. \
