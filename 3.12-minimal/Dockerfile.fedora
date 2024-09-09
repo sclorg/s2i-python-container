@@ -89,10 +89,8 @@ WORKDIR ${HOME}
 #   under random UID.
 RUN \
     python3.12 -m venv ${APP_ROOT} && \
-    # Python 3 only code, Python 2 installs pip from PyPI in the assemble script. \
-    # We have to upgrade pip to a newer verison because: \
-    # * pip < 9 does not support different packages' versions for Python 2/3 \
-    # * pip < 19.3 does not support manylinux2014 wheels. Only manylinux2014 (and later) wheels \
+    # We have to upgrade pip to a newer version because \
+    # pip < 19.3 does not support manylinux2014 wheels. Only manylinux2014 (and later) wheels \
     #   support platforms like ppc64le, aarch64 or armv7 \
     # We are newly using wheel from one of the latest stable Fedora releases (from RPM python-pip-wheel) \
     # because it's tested better then whatever version from PyPI and contains useful patches. \
