@@ -58,9 +58,8 @@ mv /tmp/src/* "$HOME"
 fix-permissions /opt/app-root -P
 
 # Python <3.7 only code, Python 3.7+ uses bundled wheel from Fedora
-# We have to first upgrade pip to at least 19.3 because:
-# * pip < 9 does not support different packages' versions for Python 2/3
-# * pip < 19.3 does not support manylinux2014 wheels. Only manylinux2014 (and later) wheels
+# We have to first upgrade pip to at least 19.3 because
+# pip < 19.3 does not support manylinux2014 wheels. Only manylinux2014 (and later) wheels
 #   support platforms like ppc64le, aarch64 or armv7
 echo "---> Upgrading pip to latest version supported for Python $PYTHON_VERSION ..."
 if ! pip install -U "pip"; then
