@@ -1,6 +1,6 @@
 # This image provides a Python 3.12 environment you can use to run your Python
 # applications.
-FROM quay.io/fedora/s2i-base:39
+FROM quay.io/fedora/s2i-base:40
 
 EXPOSE 8080
 
