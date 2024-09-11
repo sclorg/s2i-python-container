@@ -382,4 +382,5 @@ See also
 Dockerfile and other sources are available on https://github.com/sclorg/s2i-python-container.
 In that repository you also can find another versions of Python environment Dockerfiles.
 Dockerfile for RHEL8 is called `Dockerfile.rhel8`, for RHEL9 it's `Dockerfile.rhel9`,
-for CentOS Stream 9 it's `Dockerfile.c9s` and the Fedora Dockerfile is called `Dockerfile.fedora`.
+for CentOS Stream 9 it's `Dockerfile.c9s`, for CentOS Stream 10 it's `Dockerfile.c10s`,
+and the Fedora Dockerfile is called `Dockerfile.fedora`.

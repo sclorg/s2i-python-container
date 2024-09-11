@@ -56,6 +56,8 @@ DISTGEN_MULTI_RULES:
   - src: src/Dockerfile-minimal.template
     dest: Dockerfile.c9s
 
+  - src: src/Dockerfile-minimal.template
+    dest: Dockerfile.c10s
 
 # Files to copy
 COPY_RULES:

@@ -86,6 +86,14 @@ jobs:
             tag: "c9s"
             image_name: "python-312-minimal-c9s"
 
+          - dockerfile: "3.12-minimal/Dockerfile.c10s"
+            docker_context: "3.12-minimal"
+            registry_namespace: "sclorg"
+            quayio_username: "QUAY_IMAGE_SCLORG_BUILDER_USERNAME"
+            quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
+            tag: "c10s"
+            image_name: "python-312-minimal-c10s"
+
           - dockerfile: "3.12/Dockerfile.fedora"
             docker_context: "3.12"
             registry_namespace: "fedora"
@@ -101,6 +109,14 @@ jobs:
             quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
             tag: "c9s"
             image_name: "python-312-c9s"
+
+          - dockerfile: "3.12/Dockerfile.c10s"
+            docker_context: "3.12"
+            registry_namespace: "sclorg"
+            quayio_username: "QUAY_IMAGE_SCLORG_BUILDER_USERNAME"
+            quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
+            tag: "c10s"
+            image_name: "python-312-c10s"
 
     steps:
       - name: Build and push to quay.io registry
