@@ -13,6 +13,8 @@ Images available on Quay are:
 * CentOS Stream 9 [python-312-minimal-c9s](https://quay.io/repository/sclorg/python-312-minimal-c9s)
 * CentOS Stream 9 [python-312-c9s](https://quay.io/repository/sclorg/python-312-c9s)
 * Fedora [python-312-minimal](https://quay.io/repository/fedora/python-312-minimal)
+* CentOS Stream 10 [python-312-minimal-c9s](https://quay.io/repository/sclorg/python-312-minimal-c10s)
+* CentOS Stream 10 [python-312-c9s](https://quay.io/repository/sclorg/python-312-c10s)
 * Fedora [python-312](https://quay.io/repository/fedora/python-312)
 
 This repository contains the source for building various versions of
@@ -63,8 +65,9 @@ RHEL versions currently supported are:
 * RHEL 8 ([catalog.redhat.com](https://catalog.redhat.com/software/containers/search))
 * RHEL 9 ([catalog.redhat.com](https://catalog.redhat.com/software/containers/search))
 
-CentOS and CentOS Stream versions currently supported are:
+CentOS Stream versions currently supported are:
 * CentOS Stream 9 ([quay.io/sclorg](https://quay.io/organization/sclorg))
+* CentOS Stream 10 ([quay.io/sclorg](https://quay.io/organization/sclorg))
 
 Fedora versions currently supported are:
 * Fedora 40 ([quay.io/fedora](https://quay.io/organization/fedora))
