@@ -8,8 +8,7 @@ Because the minimal and full images work similarly, we document here only the di
 of the minimal container image. For the documentation of common features see the [full container image docs](https://github.com/sclorg/s2i-python-container/tree/master/3.12).
 
 The Python 3.12 minimal container image is currently considered a tech-preview and only available on quay.io.
-The image is built on top of the [Red Hat Universal Base Image 8 Micro image](https://catalog.redhat.com/software/containers/ubi8-micro/601a84aadd19c7786c47c8ea)
-and therefore uses the RPM packages from Red Hat Enterprise Linux, the same that are used by Python 3.9 supported container image and are part of the [UBI registry](https://www.redhat.com/en/blog/introducing-red-hat-universal-base-image).
+The image is built on top of the [official CentOS Stream base containers](quay.io/centos/centos).
 
 To pull the Python 3.12 minimal container image to build on, run
 
