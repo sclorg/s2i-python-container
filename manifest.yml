@@ -195,6 +195,15 @@ SYMLINK_RULES:
   - src: ../../test/test_python_ex_template.py
     dest: test/test_python_ex_template.py
 
+  - src: ../../test/test_helm_python_django_app.py
+    dest: test/test_helm_python_django_app.py
+
+  - src: ../../test/test_helm_python_django_psql_persistent.py
+    dest: test/test_helm_python_django_psql_persistent.py
+
+  - src: ../../test/test_helm_python_imagestreams.py
+    dest: test/test_helm_python_imagestreams.py
+
   - src: ../../common/test-lib.sh
     dest: test/test-lib.sh
 
