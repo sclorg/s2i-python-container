@@ -38,7 +38,7 @@ LABEL summary="$SUMMARY" \
       io.buildpacks.stack.id="com.redhat.stacks.ubi8-python-39" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
-RUN INSTALL_PKGS="python39 python39-devel python39-setuptools python39-pip nss_wrapper \
+RUN INSTALL_PKGS="python39 python39-devel python39-setuptools python39-pip nss_wrapper-libs \
         httpd httpd-devel mod_ssl mod_auth_gssapi mod_ldap \
         mod_session atlas-devel gcc-gfortran libffi-devel libtool-ltdl \
         enchant krb5-devel" && \
