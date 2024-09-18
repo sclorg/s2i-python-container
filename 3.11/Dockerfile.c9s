@@ -37,7 +37,7 @@ LABEL summary="$SUMMARY" \
       usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.11/test/setup-test-app/ $FGC/$NAME python-sample-app" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
-RUN INSTALL_PKGS="python3.11 python3.11-devel python3.11-pip nss_wrapper httpd \
+RUN INSTALL_PKGS="python3.11 python3.11-devel python3.11-pip nss_wrapper-libs httpd \
         httpd-devel mod_ssl mod_auth_gssapi mod_ldap mod_session \
         atlas-devel gcc-gfortran libffi-devel libtool-ltdl enchant \
         krb5-devel" && \
