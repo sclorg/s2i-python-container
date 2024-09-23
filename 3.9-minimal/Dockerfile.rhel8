@@ -59,7 +59,7 @@ LABEL summary="$SUMMARY" \
 # glibc-langpack-en is needed to set locale to en_US and disable warning about it
 # findutils - find command is needed for fix-permissions script
 # nss_wrapper - used in generate_container_user script
-RUN INSTALL_PKGS="python39 glibc-langpack-en findutils nss_wrapper" && \
+RUN INSTALL_PKGS="python39 glibc-langpack-en findutils nss_wrapper-libs" && \
     microdnf -y --setopt=tsflags=nodocs --setopt=install_weak_deps=0 install $INSTALL_PKGS && \
     microdnf -y clean all --enablerepo='*'
 
