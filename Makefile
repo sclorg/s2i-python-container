@@ -1,6 +1,6 @@
 # Variables are documented in common/build.sh.
 BASE_IMAGE_NAME = python
-VERSIONS = 3.6 3.9 3.9-minimal 3.11 3.11-minimal 3.12 3.12-minimal
+VERSIONS = 3.6 3.9 3.9-minimal 3.11 3.11-minimal 3.12 3.12-minimal 3.13
 OPENSHIFT_NAMESPACES = 
 DOCKER_BUILD_CONTEXT = ..
 
