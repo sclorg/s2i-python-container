@@ -76,10 +76,10 @@ Download
 --------
 To download one of the base Python images, follow the instructions you find in registries mentioned above.
 
-For example, Centos image can be downloaded via:
+For example, CentOS Stream image can be downloaded via:
 
 ```
-$ podman pull quay.io/c9s/python-38-c9s
+$ podman pull quay.io/c9s/python-39-c9s
 ```
 
 Build
@@ -89,7 +89,7 @@ To build a Python image from scratch run:
 ```
 $ git clone https://github.com/sclorg/s2i-python-container.git
 $ cd s2i-python-container
-$ make build TARGET=c9s VERSIONS=3.8
+$ make build TARGET=c9s VERSIONS=3.9
 ```
 
 Where `TARGET` might be one of the supported platforms mentioned above.
@@ -108,7 +108,7 @@ which launches tests to check functionality of simple Python applications built 
 
 ```
 $ cd s2i-python-container
-$ make test TARGET=c9s VERSIONS=3.8
+$ make test TARGET=c9s VERSIONS=3.9
 ```
 
 Where `TARGET` might be one of the supported platforms mentioned above.
@@ -131,7 +131,7 @@ Repository organization
 
     * **Dockerfile.rhel8** & **Dockerfile.rhel9**
 
-        RHEL 7/8 based Dockerfile. In order to perform build or test actions on this
+        RHEL 8/9 based Dockerfile. In order to perform build or test actions on this
         Dockerfile you need to run the action on a properly subscribed RHEL machine.
 
     * **`s2i/bin/`**
