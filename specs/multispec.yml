@@ -98,7 +98,31 @@ specs:
                   'libffi-devel', 'libtool-ltdl', 'enchant', 'redhat-rpm-config',
                   'krb5-devel']
 
+    fedora41:
+      distros:
+        - fedora-41-x86_64
+      fedora_version: "41"
+      minimal_image: "quay.io/fedora/fedora-minimal:41"
+      s2i_base: quay.io/fedora/s2i-base
+      img_tag: "41"
+      org: "fedora"
+      python_pkgs: ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip']
+      base_pkgs: ['nss_wrapper-libs', 'httpd', 'httpd-devel', 'atlas-devel', 'gcc-gfortran',
+                  'libffi-devel', 'libtool-ltdl', 'enchant', 'redhat-rpm-config',
+                  'krb5-devel']
+
   version:
+    "3.13":
+      version: "3.13"
+      short_ver: "313"
+      minimal: false
+      base_img_version: "1"
+      python_img_version: "1"
+      # Python 3.13 doesn't come as a module
+      module_stream: ""
+      pkg_prefix: "python3.13"
+      main_image: "https://quay.io/fedora/python-313"
+
     "3.12-minimal":
       version: "3.12"
       short_ver: "312"
@@ -209,3 +233,6 @@ matrix:
         - centos-stream-9-x86_64
         - rhel-8-x86_64
       version: "3.12-minimal"
+    - distros:
+        - fedora-41-x86_64
+      version: "3.13"
