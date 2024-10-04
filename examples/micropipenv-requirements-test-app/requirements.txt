@@ -1,4 +1,4 @@
-mod_wsgi==5.0.0; python_version >= '3.12'
+mod_wsgi==5.0.1; python_version >= '3.12'
 mod_wsgi<5.0.0; python_version < '3.12'
 Flask
 # Tests that gssapi package is installable.
