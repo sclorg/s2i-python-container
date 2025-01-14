@@ -121,7 +121,7 @@ specs:
       # Python 3.13 doesn't come as a module
       module_stream: ""
       pkg_prefix: "python3.13"
-      main_image: "https://quay.io/fedora/python-313"
+      main_image: "quay.io/fedora/python-313"
 
     "3.12-minimal":
       version: "3.12"
