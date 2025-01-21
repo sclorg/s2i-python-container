@@ -196,7 +196,8 @@ test_application() {
 
 test_from_dockerfile(){
   info "Test from Dockerfile"
-  django_example_repo_url="https://github.com/sclorg/django-ex.git@2.2.x"
+  # Django 4.2 supports Python 3.9+
+  django_example_repo_url="https://github.com/sclorg/django-ex.git@4.2.x"
 
   ct_test_app_dockerfile $test_dir/from-dockerfile/Dockerfile.tpl $django_example_repo_url 'Welcome to your Django application on OpenShift' app-src
   ct_check_testcase_result $?
