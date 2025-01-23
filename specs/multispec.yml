@@ -33,6 +33,7 @@ specs:
       distros:
         - rhel-9-x86_64
       el_version: "9"
+      minimal_image: "ubi9/ubi-minimal:latest"
       s2i_base: ubi9/s2i-base
       img_tag: "1"
       org: "ubi9"
@@ -232,6 +233,7 @@ matrix:
         - centos-stream-10-x86_64
         - centos-stream-9-x86_64
         - rhel-8-x86_64
+        - rhel-9-x86_64
       version: "3.12-minimal"
     - distros:
         - fedora-41-x86_64
