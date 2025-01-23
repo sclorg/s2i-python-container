@@ -76,7 +76,7 @@ COPY {{ spec.version }}-minimal/root/ /
 # The problem here is that the wheels directory is copied as a symlink.
 # Only if you specify symlink directly as a source, COPY copies all the
 # files from the symlink destination.
-COPY {{ spec.version }}/root/opt/wheels /opt/wheels
+COPY {{ spec.version }}-minimal/root/opt/wheels /opt/wheels
 
 # This command sets (and also creates if necessary)
 # the home directory - it has to be done here so the latter
