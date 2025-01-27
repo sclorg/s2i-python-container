@@ -66,6 +66,7 @@ Python versions currently provided are:
 RHEL versions currently supported are:
 * RHEL 8 ([catalog.redhat.com](https://catalog.redhat.com/software/containers/search))
 * RHEL 9 ([catalog.redhat.com](https://catalog.redhat.com/software/containers/search))
+* RHEL 10 ([catalog.redhat.com](https://catalog.redhat.com/software/containers/search))
 
 CentOS Stream versions currently supported are:
 * CentOS Stream 9 ([quay.io/sclorg](https://quay.io/organization/sclorg))
