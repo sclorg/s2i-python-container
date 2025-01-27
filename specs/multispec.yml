@@ -50,6 +50,26 @@ specs:
         "3.11": ['python3.11', 'python3.11-devel', 'python3.11-pip']
         "3.12": ['python3.12', 'python3.12-devel', 'python3.12-pip']
 
+    rhel10:
+      distros:
+        - rhel-10-x86_64
+      el_version: "10"
+      minimal_image: "ubi10-minimal:latest"
+      s2i_base: ubi10/s2i-base
+      img_tag: "1"
+      org: "ubi10"
+      prod: "rhel10"
+      logos: "redhat-logos-httpd"
+      python_pkgs: []
+      base_pkgs: ['nss_wrapper-libs', 'httpd', 'httpd-devel', 'mod_ssl',
+                  'mod_auth_gssapi', 'mod_ldap', 'mod_session',
+                  'atlas-devel', 'gcc-gfortran', 'libffi-devel', 'libtool-ltdl', 'enchant',
+                  'krb5-devel']
+      ubi_versions: ['3.12']
+      extra_pkgs:
+        "3.12": ['python3.12', 'python3.12-devel', 'python3.12-pip']
+
+
     c9s:
       distros:
         - centos-stream-9-x86_64
@@ -234,6 +254,7 @@ matrix:
         - centos-stream-9-x86_64
         - rhel-8-x86_64
         - rhel-9-x86_64
+        - rhel-10-x86_64
       version: "3.12-minimal"
     - distros:
         - fedora-41-x86_64

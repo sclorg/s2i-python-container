@@ -51,6 +51,9 @@ DISTGEN_MULTI_RULES:
     dest: Dockerfile.rhel9
 
   - src: src/Dockerfile-minimal.template
+    dest: Dockerfile.rhel10
+
+  - src: src/Dockerfile-minimal.template
     dest: Dockerfile.fedora
 
   - src: src/Dockerfile-minimal.template
