@@ -7,7 +7,7 @@ on:
 jobs:
   distgen-check:
     name: "Check distgen generated files"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     if: |
       github.event.issue.pull_request
       && (contains(github.event.comment.body, '[test-openshift-pytest]') || contains(github.event.comment.body, '[test-all]'))
@@ -31,7 +31,7 @@ jobs:
   openshift-pytests:
     needs: distgen-check
     name: "${{ matrix.test_case }} PyTests: ${{ matrix.version }} - ${{ matrix.os_test }}"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     concurrency:
       group: ocp-pytest-${{ github.event.issue.number }}-${{ matrix.version }}-${{ matrix.os_test }}
       cancel-in-progress: true
