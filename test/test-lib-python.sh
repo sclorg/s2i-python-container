@@ -80,7 +80,16 @@ function test_python_s2i_app_ex_standalone() {
 }
 
 function test_python_s2i_app_ex() {
-  django_example_repo_url="https://github.com/sclorg/django-ex.git#2.2.x"
+  if [[ "${VERSION}" == *"minimal"* ]]; then
+    VERSION=$(echo "${VERSION}" | cut -d "-" -f 1)
+  fi
+  if [[ "${VERSION}" == "3.11" ]] || [[ "${VERSION}" == "3.12" ]]; then
+    branch="4.2.x"
+  else
+    branch="2.2.x"
+  fi
+
+  django_example_repo_url="https://github.com/sclorg/django-ex.git#${branch}"
   ct_os_test_s2i_app "${IMAGE_NAME}" \
         "${django_example_repo_url}" \
         . \
