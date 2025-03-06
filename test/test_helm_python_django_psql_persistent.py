@@ -35,19 +35,9 @@ class TestHelmPythonDjangoPsqlTemplate:
     def teardown_method(self):
         self.hc_api.delete_project()
 
-    @pytest.mark.parametrize(
-        "version,branch",
-        [
-            ("3.12-ubi9", "4.2.x"),
-            ("3.12-ubi8", "4.2.x"),
-            ("3.11-ubi9", "4.2.x"),
-            ("3.11-ubi8", "4.2.x"),
-            ("3.9-ubi9", "master"),
-            ("3.9-ubi8", "master"),
-            ("3.6-ubi8", "master"),
-        ],
-    )
+
     def test_django_psql_curl_output(self, version, branch):
+
         if self.hc_api.oc_api.shared_cluster:
             pytest.skip("Do NOT test on shared cluster")
         self.hc_api.package_name = "postgresql-imagestreams"
@@ -60,9 +50,9 @@ class TestHelmPythonDjangoPsqlTemplate:
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation(
             values={
-                "python_version": version,
+                "python_version": f"{VERSION}{TAG}",
                 "namespace": self.hc_api.namespace,
-                "source_repository_ref": branch,
+                "source_repository_ref": BRANCH_TO_TEST,
             }
         )
         assert self.hc_api.is_s2i_pod_running(pod_name_prefix="django-psql")
@@ -71,19 +61,12 @@ class TestHelmPythonDjangoPsqlTemplate:
             expected_str="Welcome to your Django application"
         )
 
-    @pytest.mark.parametrize(
-        "version,branch",
-        [
-            ("3.12-ubi9", "4.2.x"),
-            ("3.12-ubi8", "4.2.x"),
-            ("3.11-ubi9", "4.2.x"),
-            ("3.11-ubi8", "4.2.x"),
-            ("3.9-ubi9", "master"),
-            ("3.9-ubi8", "master"),
-            ("3.6-ubi8", "master"),
-        ],
-    )
     def test_django_psql_helm_test(self, version, branch):
+        new_version = VERSION
+        if "minimal" in VERSION:
+            new_version = VERSION.replace("-minimal", "")
+        if OS == "rhel10":
+            pytest.skip("Do NOT test on rhel10. Imagestreams are not ready yet.")
         self.hc_api.package_name = "postgresql-imagestreams"
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation()
@@ -94,9 +77,9 @@ class TestHelmPythonDjangoPsqlTemplate:
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation(
             values={
-                "python_version": version,
+                "python_version": f"{new_version}{TAG}",
                 "namespace": self.hc_api.namespace,
-                "source_repository_ref": branch,
+                "source_repository_ref": BRANCH_TO_TEST,
             }
         )
         assert self.hc_api.is_s2i_pod_running(pod_name_prefix="django-psql")
