@@ -24,7 +24,7 @@ if VERSION == "3.11" or VERSION == "3.12":
 class TestHelmPythonDjangoPsqlTemplate:
 
     def setup_method(self):
-        package_name = "django-psql-persistent"
+        package_name = "redhat-django-psql-persistent"
         path = test_dir
         self.hc_api = HelmChartsAPI(path=path, package_name=package_name, tarball_dir=test_dir, shared_cluster=True)
         self.hc_api.clone_helm_chart_repo(
@@ -40,13 +40,13 @@ class TestHelmPythonDjangoPsqlTemplate:
 
         if self.hc_api.oc_api.shared_cluster:
             pytest.skip("Do NOT test on shared cluster")
-        self.hc_api.package_name = "postgresql-imagestreams"
+        self.hc_api.package_name = "redhat-postgresql-imagestreams"
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation()
-        self.hc_api.package_name = "python-imagestreams"
+        self.hc_api.package_name = "redhat-python-imagestreams"
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation()
-        self.hc_api.package_name = "django-psql-persistent"
+        self.hc_api.package_name = "redhat-django-psql-persistent"
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation(
             values={
@@ -67,13 +67,13 @@ class TestHelmPythonDjangoPsqlTemplate:
             new_version = VERSION.replace("-minimal", "")
         if OS == "rhel10":
             pytest.skip("Do NOT test on rhel10. Imagestreams are not ready yet.")
-        self.hc_api.package_name = "postgresql-imagestreams"
+        self.hc_api.package_name = "redhat-postgresql-imagestreams"
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation()
-        self.hc_api.package_name = "python-imagestreams"
+        self.hc_api.package_name = "redhat-python-imagestreams"
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation()
-        self.hc_api.package_name = "django-psql-persistent"
+        self.hc_api.package_name = "redhat-django-psql-persistent"
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation(
             values={

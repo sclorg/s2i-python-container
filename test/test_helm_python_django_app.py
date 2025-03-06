@@ -33,7 +33,7 @@ if VERSION == "3.11" or VERSION == "3.12":
 class TestHelmPythonDjangoAppTemplate:
 
     def setup_method(self):
-        package_name = "python-django-application"
+        package_name = "redhat-python-django-application"
         path = test_dir
         self.hc_api = HelmChartsAPI(path=path, package_name=package_name, tarball_dir=test_dir, shared_cluster=True)
         self.hc_api.clone_helm_chart_repo(
@@ -50,10 +50,10 @@ class TestHelmPythonDjangoAppTemplate:
         new_version = VERSION
         if "minimal" in VERSION:
             new_version = VERSION.replace("-minimal", "")
-        self.hc_api.package_name = "python-imagestreams"
+        self.hc_api.package_name = "redhat-python-imagestreams"
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation()
-        self.hc_api.package_name = "python-django-application"
+        self.hc_api.package_name = "redhat-python-django-application"
         self.hc_api.helm_package()
         assert self.hc_api.helm_installation(
             values={
@@ -73,10 +73,10 @@ class TestHelmPythonDjangoAppTemplate:
         new_version = VERSION
         if "minimal" in VERSION:
             new_version = VERSION.replace("-minimal", "")
-        self.hc_api.package_name = "python-imagestreams"
+        self.hc_api.package_name = "redhat-python-imagestreams"
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation()
-        self.hc_api.package_name = "python-django-application"
+        self.hc_api.package_name = "redhat-python-django-application"
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation(
             values={
