@@ -41,7 +41,7 @@ TAG = TAGS.get(OS, None)
 class TestImagestreamsQuickstart:
 
     def setup_method(self):
-        self.oc_api = OpenShiftAPI(pod_name_prefix="python-testing", version=VERSION)
+        self.oc_api = OpenShiftAPI(pod_name_prefix="python-testing", version=VERSION, shared_cluster=True)
         assert self.oc_api.upload_image(DEPLOYED_PSQL_IMAGE, IMAGE_TAG)
 
     def teardown_method(self):
