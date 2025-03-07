@@ -2,6 +2,7 @@ import os
 import sys
 
 import pytest
+from packaging.version import Version
 
 from container_ci_suite.utils import check_variables
 from container_ci_suite.openshift import OpenShiftAPI
@@ -15,7 +16,10 @@ VERSION = os.getenv("VERSION")
 IMAGE_NAME = os.getenv("IMAGE_NAME")
 OS = os.getenv("TARGET")
 
-BRANCH_TO_TEST = "2.2.x"
+if Version(VERSION) >= Version("3.11"):
+    BRANCH_TO_TEST = "4.2.x"
+else:
+    BRANCH_TO_TEST = "2.2.x"
 
 
 # Replacement with 'test_python_s2i_app_ex'
