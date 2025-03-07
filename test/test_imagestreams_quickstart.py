@@ -2,6 +2,7 @@ import os
 import sys
 
 import pytest
+from packaging.version import Version
 
 from container_ci_suite.openshift import OpenShiftAPI
 from container_ci_suite.utils import check_variables
@@ -21,7 +22,7 @@ DEPLOYED_PSQL_IMAGE = "quay.io/centos7/postgresql-10-centos7:centos7"
 IMAGE_TAG = "postgresql:10"
 PSQL_VERSION = "10"
 
-if VERSION == "3.11" or VERSION == "3.12":
+if Version(VERSION) >= Version("3.11"):
     BRANCH_TO_TEST = "4.2.x"
     DEPLOYED_PSQL_IMAGE = "quay.io/sclorg/postgresql-12-c8s"
     IMAGE_TAG = "postgresql:12"
