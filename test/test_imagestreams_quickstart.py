@@ -31,7 +31,8 @@ if Version(VERSION) >= Version("3.11"):
 
 TAGS = {
     "rhel8": "-ubi8",
-    "rhel9": "-ubi9"
+    "rhel9": "-ubi9",
+    "rhel10": "-ubi10",
 }
 
 TAG = TAGS.get(OS, None)
@@ -41,7 +42,7 @@ TAG = TAGS.get(OS, None)
 class TestImagestreamsQuickstart:
 
     def setup_method(self):
-        self.oc_api = OpenShiftAPI(pod_name_prefix="python-testing", version=VERSION)
+        self.oc_api = OpenShiftAPI(pod_name_prefix="python-testing", version=VERSION, shared_cluster=True)
         assert self.oc_api.upload_image(DEPLOYED_PSQL_IMAGE, IMAGE_TAG)
 
     def teardown_method(self):
@@ -55,6 +56,8 @@ class TestImagestreamsQuickstart:
         ]
     )
     def test_python_template_inside_cluster(self, template):
+        if OS == "rhel10":
+            pytest.skip("Do not test on RHEL10. Imagestreams are not ready yet.")
         service_name = "python-testing"
         template_url = self.oc_api.get_raw_url_for_json(
             container="django-ex", dir="openshift/templates", filename=template, branch=BRANCH_TO_TEST
