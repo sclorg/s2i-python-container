@@ -109,12 +109,14 @@ django-postgresql-persistent.json"
   if [[ "${VERSION}" == "3.11" ]] || [[ "${VERSION}" == "3.12" ]]; then
     postgresql_image="quay.io/sclorg/postgresql-12-c8s|postgresql:12"
     postgresql_version="12"
+    branch="4.2.x"
   else
     postgresql_image="quay.io/centos7/postgresql-10-centos7:centos7|postgresql:10"
     postgresql_version="10"
+    branch="2.2.x"
   fi
   for template in $EPHEMERAL_TEMPLATES; do
-      branch="2.2.x"
+
       ct_os_test_template_app "$IMAGE_NAME" \
                               "https://raw.githubusercontent.com/sclorg/django-ex/${branch}/openshift/templates/${template}" \
                               python \
