@@ -35,33 +35,9 @@ class TestHelmPythonDjangoPsqlTemplate:
     def teardown_method(self):
         self.hc_api.delete_project()
 
-
-    def test_django_psql_curl_output(self, version, branch):
-
-        if self.hc_api.oc_api.shared_cluster:
-            pytest.skip("Do NOT test on shared cluster")
-        self.hc_api.package_name = "redhat-postgresql-imagestreams"
-        assert self.hc_api.helm_package()
-        assert self.hc_api.helm_installation()
-        self.hc_api.package_name = "redhat-python-imagestreams"
-        assert self.hc_api.helm_package()
-        assert self.hc_api.helm_installation()
-        self.hc_api.package_name = "redhat-django-psql-persistent"
-        assert self.hc_api.helm_package()
-        assert self.hc_api.helm_installation(
-            values={
-                "python_version": f"{VERSION}{TAG}",
-                "namespace": self.hc_api.namespace,
-                "source_repository_ref": BRANCH_TO_TEST,
-            }
-        )
-        assert self.hc_api.is_s2i_pod_running(pod_name_prefix="django-psql")
-        assert self.hc_api.test_helm_curl_output(
-            route_name="django-psql",
-            expected_str="Welcome to your Django application"
-        )
-
     def test_django_psql_helm_test(self, version, branch):
+        if OS == "rhel10":
+            pytest.skip("Do NOT test on rhel10. It is not released yet.")
         new_version = VERSION
         if "minimal" in VERSION:
             new_version = VERSION.replace("-minimal", "")

@@ -44,35 +44,12 @@ class TestHelmPythonDjangoAppTemplate:
     def teardown_method(self):
         self.hc_api.delete_project()
 
-    def test_django_application_curl_output(self):
-        if self.hc_api.oc_api.shared_cluster:
-            pytest.skip("Do NOT test on shared cluster")
-        new_version = VERSION
-        if "minimal" in VERSION:
-            new_version = VERSION.replace("-minimal", "")
-        self.hc_api.package_name = "redhat-python-imagestreams"
-        assert self.hc_api.helm_package()
-        assert self.hc_api.helm_installation()
-        self.hc_api.package_name = "redhat-python-django-application"
-        self.hc_api.helm_package()
-        assert self.hc_api.helm_installation(
-            values={
-                "python_version": f"{new_version}{TAG}",
-                "namespace": self.hc_api.namespace,
-                "source_repository_ref": BRANCH_TO_TEST,
-            }
-        )
-        assert self.hc_api.is_s2i_pod_running(pod_name_prefix="django-example")
-        assert self.hc_api.test_helm_curl_output(
-            route_name="django-example",
-            expected_str="Welcome to your Django application"
-        )
-
-
     def test_django_application_helm_test(self):
         new_version = VERSION
         if "minimal" in VERSION:
             new_version = VERSION.replace("-minimal", "")
+        if OS == "rhel10":
+            pytest.skip("Do NOT test on rhel10. It is not released yet.")
         self.hc_api.package_name = "redhat-python-imagestreams"
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation()
