@@ -26,7 +26,7 @@ SHORT_VERSION = VERSION.replace(".", "")
 class TestPythonExTemplate:
 
     def setup_method(self):
-        self.oc_api = OpenShiftAPI(pod_name_prefix=f"python-{SHORT_VERSION}-testing", version=VERSION, shared_cluster=True)
+        self.oc_api = OpenShiftAPI(pod_name_prefix=f"python-{SHORT_VERSION}-test", version=VERSION, shared_cluster=True)
 
     def teardown_method(self):
         self.oc_api.delete_project()
@@ -34,7 +34,7 @@ class TestPythonExTemplate:
     def test_python_ex_template_inside_cluster(self):
         if OS == "rhel10":
             pytest.skip("Do NOT test on rhel10. It is not released yet.")
-        service_name = f"python-{SHORT_VERSION}-testing"
+        service_name = f"python-{SHORT_VERSION}-test"
         assert self.oc_api.deploy_s2i_app(
             image_name=IMAGE_NAME, app=f"https://github.com/sclorg/django-ex.git#{BRANCH_TO_TEST}",
             context=".",

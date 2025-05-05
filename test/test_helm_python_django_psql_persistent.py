@@ -35,7 +35,7 @@ class TestHelmPythonDjangoPsqlTemplate:
     def teardown_method(self):
         self.hc_api.delete_project()
 
-    def test_django_psql_helm_test(self, version, branch):
+    def test_django_psql_helm_test(self):
         if OS == "rhel10":
             pytest.skip("Do NOT test on rhel10. It is not released yet.")
         new_version = VERSION

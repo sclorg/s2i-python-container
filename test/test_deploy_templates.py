@@ -34,7 +34,7 @@ SHORT_VERSION = VERSION.replace(".", "")
 class TestDeployTemplate:
 
     def setup_method(self):
-        self.oc_api = OpenShiftAPI(pod_name_prefix=f"python-{SHORT_VERSION}-testing", version=VERSION, shared_cluster=True)
+        self.oc_api = OpenShiftAPI(pod_name_prefix=f"python-{SHORT_VERSION}-test", version=VERSION, shared_cluster=True)
 
     def teardown_method(self):
         self.oc_api.delete_project()
@@ -50,7 +50,7 @@ class TestDeployTemplate:
         if OS == "rhel10":
             pytest.skip("Do NOT test on rhel10. It is not released yet.")
         assert self.oc_api.upload_image(DEPLOYED_PSQL_IMAGE, IMAGE_TAG)
-        service_name = f"python-{SHORT_VERSION}-testing"
+        service_name = f"python-{SHORT_VERSION}-test"
         template_url = self.oc_api.get_raw_url_for_json(
             container="django-ex", dir="openshift/templates", filename=template, branch=BRANCH_TO_TEST
         )
