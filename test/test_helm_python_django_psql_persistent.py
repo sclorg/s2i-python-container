@@ -16,7 +16,7 @@ TAGS = {
     "rhel9": "-ubi9",
     "rhel10": "-ubi10",
 }
-TAG = TAGS.get(OS, None)
+TAG = TAGS.get(OS)
 BRANCH_TO_TEST = "master"
 if VERSION == "3.11" or VERSION == "3.12":
     BRANCH_TO_TEST = "4.2.x"
