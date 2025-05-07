@@ -16,7 +16,7 @@ TAGS = {
     "rhel9": "-ubi9",
     "rhel10": "-ubi10",
 }
-TAG = TAGS.get(OS, None)
+TAG = TAGS.get(OS)
 DEPLOYED_PSQL_IMAGE = "quay.io/centos7/postgresql-10-centos7:centos7"
 IMAGE_TAG = "postgresql:10"
 PSQL_VERSION = "10"
