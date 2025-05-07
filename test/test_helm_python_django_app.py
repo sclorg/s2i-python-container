@@ -9,7 +9,7 @@ test_dir = Path(os.path.abspath(os.path.dirname(__file__)))
 
 VERSION = os.getenv("VERSION")
 IMAGE_NAME = os.getenv("IMAGE_NAME")
-OS = os.getenv("TARGET")
+OS = os.getenv("TARGET").lower()
 
 TAGS = {
     "rhel8": "-ubi8",
