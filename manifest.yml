@@ -206,6 +206,12 @@ SYMLINK_RULES:
   - src: ../../test/test_helm_python_imagestreams.py
     dest: test/test_helm_python_imagestreams.py
 
+  - src: ../../test/constants.py
+    dest: test/constants.py
+
+  - src: ../../test/__init__.py
+    dest: test/__init__.py
+
   - src: ../../common/test-lib.sh
     dest: test/test-lib.sh
 
