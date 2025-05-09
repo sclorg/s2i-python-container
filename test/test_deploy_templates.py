@@ -14,7 +14,7 @@ if not check_variables():
 
 VERSION = os.getenv("VERSION")
 IMAGE_NAME = os.getenv("IMAGE_NAME")
-OS = os.getenv("TARGET")
+OS = os.getenv("TARGET").lower()
 
 
 BRANCH_TO_TEST = "2.2.x"

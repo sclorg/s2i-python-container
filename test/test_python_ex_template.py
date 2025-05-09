@@ -14,12 +14,11 @@ if not check_variables():
 
 VERSION = os.getenv("VERSION")
 IMAGE_NAME = os.getenv("IMAGE_NAME")
-OS = os.getenv("TARGET")
+OS = os.getenv("TARGET").lower()
 
+BRANCH_TO_TEST = "2.2.x"
 if Version(VERSION) >= Version("3.11"):
     BRANCH_TO_TEST = "4.2.x"
-else:
-    BRANCH_TO_TEST = "2.2.x"
 SHORT_VERSION = VERSION.replace(".", "")
 
 # Replacement with 'test_python_s2i_app_ex'

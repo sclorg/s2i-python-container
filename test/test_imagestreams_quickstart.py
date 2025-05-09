@@ -7,6 +7,7 @@ from packaging.version import Version
 from container_ci_suite.openshift import OpenShiftAPI
 from container_ci_suite.utils import check_variables
 
+from constants import TAGS, BRANCH_TO_MASTER
 
 if not check_variables():
     print("At least one variable from IMAGE_NAME, OS, VERSION is missing.")
@@ -15,9 +16,9 @@ if not check_variables():
 
 VERSION = os.getenv("VERSION")
 IMAGE_NAME = os.getenv("IMAGE_NAME")
-OS = os.getenv("OS")
+OS = os.getenv("TARGET").lower()
 
-BRANCH_TO_TEST = "master"
+BRANCH_TO_TEST = BRANCH_TO_MASTER
 DEPLOYED_PSQL_IMAGE = "quay.io/centos7/postgresql-10-centos7:centos7"
 IMAGE_TAG = "postgresql:10"
 PSQL_VERSION = "10"
@@ -27,13 +28,6 @@ if Version(VERSION) >= Version("3.11"):
     DEPLOYED_PSQL_IMAGE = "quay.io/sclorg/postgresql-12-c8s"
     IMAGE_TAG = "postgresql:12"
     PSQL_VERSION = "12"
-
-
-TAGS = {
-    "rhel8": "-ubi8",
-    "rhel9": "-ubi9",
-    "rhel10": "-ubi10",
-}
 
 TAG = TAGS.get(OS, None)
 

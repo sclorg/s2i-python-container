@@ -5,19 +5,16 @@ from pathlib import Path
 
 from container_ci_suite.helm import HelmChartsAPI
 
+from constants import TAGS, BRANCH_TO_MASTER
+
 test_dir = Path(os.path.abspath(os.path.dirname(__file__)))
 
 VERSION = os.getenv("VERSION")
 IMAGE_NAME = os.getenv("IMAGE_NAME")
 OS = os.getenv("TARGET").lower()
 
-TAGS = {
-    "rhel8": "-ubi8",
-    "rhel9": "-ubi9",
-    "rhel10": "-ubi10",
-}
 TAG = TAGS.get(OS)
-BRANCH_TO_TEST = "master"
+BRANCH_TO_TEST = BRANCH_TO_MASTER
 if VERSION == "3.11" or VERSION == "3.12":
     BRANCH_TO_TEST = "4.2.x"
 
@@ -41,8 +38,6 @@ class TestHelmPythonDjangoPsqlTemplate:
         new_version = VERSION
         if "minimal" in VERSION:
             new_version = VERSION.replace("-minimal", "")
-        if OS == "rhel10":
-            pytest.skip("Do NOT test on rhel10. Imagestreams are not ready yet.")
         self.hc_api.package_name = "redhat-postgresql-imagestreams"
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation()

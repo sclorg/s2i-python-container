@@ -5,28 +5,23 @@ from pathlib import Path
 
 from container_ci_suite.helm import HelmChartsAPI
 
+from constants import TAGS, BRANCH_TO_MASTER
 test_dir = Path(os.path.abspath(os.path.dirname(__file__)))
 
 VERSION = os.getenv("VERSION")
 IMAGE_NAME = os.getenv("IMAGE_NAME")
 OS = os.getenv("TARGET").lower()
 
-TAGS = {
-    "rhel8": "-ubi8",
-    "rhel9": "-ubi9",
-    "rhel10": "-ubi10",
-}
 TAG = TAGS.get(OS)
 DEPLOYED_PSQL_IMAGE = "quay.io/centos7/postgresql-10-centos7:centos7"
 IMAGE_TAG = "postgresql:10"
 PSQL_VERSION = "10"
+BRANCH_TO_TEST = BRANCH_TO_MASTER
 
 if VERSION == "3.11" or VERSION == "3.12":
     DEPLOYED_PSQL_IMAGE = "quay.io/sclorg/postgresql-12-c8s"
     IMAGE_TAG = "postgresql:12"
     PSQL_VERSION = "12"
-BRANCH_TO_TEST = "master"
-if VERSION == "3.11" or VERSION == "3.12":
     BRANCH_TO_TEST = "4.2.x"
 
 
@@ -45,11 +40,11 @@ class TestHelmPythonDjangoAppTemplate:
         self.hc_api.delete_project()
 
     def test_django_application_helm_test(self):
+        if OS == "rhel10":
+            pytest.skip("Do NOT test on rhel10. It is not released yet.")
         new_version = VERSION
         if "minimal" in VERSION:
             new_version = VERSION.replace("-minimal", "")
-        if OS == "rhel10":
-            pytest.skip("Do NOT test on rhel10. It is not released yet.")
         self.hc_api.package_name = "redhat-python-imagestreams"
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation()
