@@ -1,0 +1,1 @@
+../../test/test_helm_python_imagestreams.py
