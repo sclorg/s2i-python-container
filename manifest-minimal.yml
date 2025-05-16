@@ -183,6 +183,36 @@ SYMLINK_RULES:
   - src: ../../test/run-openshift-remote-cluster
     dest: test/run-openshift-remote-cluster
 
+  - src: ../../test/run-openshift-pytest
+    dest: test/run-openshift-pytest
+
+  - src: ../../test/test_deploy_templates.py
+    dest: test/test_deploy_templates.py
+
+  - src: ../../test/test_imagestreams_quickstart.py
+    dest: test/test_imagestreams_quickstart.py
+
+  - src: ../../test/test_python_ex_standalone.py
+    dest: test/test_python_ex_standalone.py
+
+  - src: ../../test/test_python_ex_template.py
+    dest: test/test_python_ex_template.py
+
+  - src: ../../test/test_helm_python_django_app.py
+    dest: test/test_helm_python_django_app.py
+
+  - src: ../../test/test_helm_python_django_psql_persistent.py
+    dest: test/test_helm_python_django_psql_persistent.py
+
+  - src: ../../test/test_helm_python_imagestreams.py
+    dest: test/test_helm_python_imagestreams.py
+
+  - src: ../../test/constants.py
+    dest: test/constants.py
+
+  - src: ../../test/__init__.py
+    dest: test/__init__.py
+
   - src: ../../common/test-lib.sh
     dest: test/test-lib.sh
 
