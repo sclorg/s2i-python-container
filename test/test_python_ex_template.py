@@ -17,6 +17,8 @@ IMAGE_NAME = os.getenv("IMAGE_NAME")
 OS = os.getenv("TARGET").lower()
 
 BRANCH_TO_TEST = "2.2.x"
+if "minimal" in VERSION:
+    VERSION = VERSION.replace("-minimal", "")
 if Version(VERSION) >= Version("3.11"):
     BRANCH_TO_TEST = "4.2.x"
 SHORT_VERSION = VERSION.replace(".", "")
@@ -31,8 +33,6 @@ class TestPythonExTemplate:
         self.oc_api.delete_project()
 
     def test_python_ex_template_inside_cluster(self):
-        if OS == "rhel10":
-            pytest.skip("Do NOT test on rhel10. It is not released yet.")
         service_name = f"python-{SHORT_VERSION}-test"
         assert self.oc_api.deploy_s2i_app(
             image_name=IMAGE_NAME, app=f"https://github.com/sclorg/django-ex.git#{BRANCH_TO_TEST}",

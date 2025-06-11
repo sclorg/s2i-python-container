@@ -17,7 +17,7 @@ DEPLOYED_PSQL_IMAGE = "quay.io/centos7/postgresql-10-centos7:centos7"
 IMAGE_TAG = "postgresql:10"
 PSQL_VERSION = "10"
 
-if VERSION == "3.11" or VERSION == "3.12":
+if VERSION == "3.11" or VERSION == "3.12" or VERSION == "3.12-minimal":
     DEPLOYED_PSQL_IMAGE = "quay.io/sclorg/postgresql-12-c8s"
     IMAGE_TAG = "postgresql:12"
     PSQL_VERSION = "12"
@@ -38,11 +38,6 @@ class TestHelmPythonDjangoAppTemplate:
         self.hc_api.delete_project()
 
     def test_django_application_helm_test(self):
-        if OS == "rhel10":
-            pytest.skip("Do NOT test on rhel10. It is not released yet.")
-        new_version = VERSION
-        if "minimal" in VERSION:
-            new_version = VERSION.replace("-minimal", "")
         self.hc_api.package_name = "redhat-python-imagestreams"
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation()
@@ -50,7 +45,7 @@ class TestHelmPythonDjangoAppTemplate:
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation(
             values={
-                "python_version": f"{new_version}{TAG}",
+                "python_version": f"{VERSION}{TAG}",
                 "namespace": self.hc_api.namespace,
                 "source_repository_ref": BRANCH_TO_TEST,
             }
