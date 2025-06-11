@@ -13,7 +13,7 @@ IMAGE_NAME = os.getenv("IMAGE_NAME")
 OS = os.getenv("TARGET").lower()
 
 TAG = TAGS.get(OS)
-DEPLOYED_PSQL_IMAGE = "quay.io/centos7/postgresql-10-centos7:centos7"
+DEPLOYED_PSQL_IMAGE = "quay.io/sclorg/postgresql-10-c8s:c8s"
 IMAGE_TAG = "postgresql:10"
 PSQL_VERSION = "10"
 

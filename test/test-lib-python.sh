@@ -12,16 +12,13 @@ source "${THISDIR}/test-lib.sh"
 source "${THISDIR}/test-lib-openshift.sh"
 
 function ct_pull_or_import_postgresql() {
-  if [[ "${VERSION}" == *"minimal"* ]]; then
-    VERSION=$(echo "${VERSION}" | cut -d "-" -f 1)
-  fi
-  if [[ "${VERSION}" == "3.11" ]] || [[ "${VERSION}" == "3.12" ]]; then
+  if [[ "${VERSION}" == "3.11" ]] || [[ "${VERSION}" == "3.12" ]] || [[ "${VERSION}" == "3.12-minimal" ]]; then
     postgresql_image="quay.io/sclorg/postgresql-12-c8s"
     image_short="postgresql:12"
     image_tag="${image_short}"
   else
-    postgresql_image="quay.io/centos7/postgresql-10-centos7:centos7"
-    image_short="postgresql:10-centos7"
+    postgresql_image="quay.io/sclorg/postgresql-10-c8s:c8s"
+    image_short="postgresql:10-c8s"
     image_tag="postgresql:10"
   fi
   # Variable CVP is set by CVP pipeline
@@ -46,14 +43,15 @@ function test_python_imagestream() {
   elif [ "${OS}" == "rhel10" ]; then
     tag="-ubi10"
   fi
+
   # On RHEL10 we have only 3.12-minimal image
-  if [[ "${VERSION}" == "3.11" ]] || [[ "${VERSION}" == "3.12" ]] && [[ "${VERSION}" == "3.12-minimal" ]]; then
+  if [[ "${VERSION}" == "3.11" ]] || [[ "${VERSION}" == "3.12" ]] || [[ "${VERSION}" == "3.12-minimal" ]]; then
     branch="4.2.x"
     postgresql_image="quay.io/sclorg/postgresql-12-c8s|postgresql:12"
     postgresql_version="12"
   else
     branch="master"
-    postgresql_image="quay.io/centos7/postgresql-10-centos7:centos7|postgresql:10"
+    postgresql_image="quay.io/sclorg/postgresql-10-c8s:c8s|postgresql:10"
     postgresql_version="10"
   fi
   TEMPLATES="
@@ -109,7 +107,7 @@ django-postgresql-persistent.json"
     postgresql_version="12"
     branch="4.2.x"
   else
-    postgresql_image="quay.io/centos7/postgresql-10-centos7:centos7|postgresql:10"
+    postgresql_image="quay.io/sclorg/postgresql-10-c8s:c8s|postgresql:10"
     postgresql_version="10"
     branch="2.2.x"
   fi
