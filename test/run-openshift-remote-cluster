@@ -14,9 +14,9 @@ source "${THISDIR}/test-lib-python.sh"
 source "${THISDIR}/test-lib-remote-openshift.sh"
 
 TEST_LIST="\
+test_python_imagestream
 test_python_s2i_app_ex_standalone
 test_python_s2i_app_ex
-test_python_imagestream
 test_python_s2i_templates
 test_latest_imagestreams
 "
