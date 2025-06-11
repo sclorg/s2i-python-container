@@ -40,16 +40,14 @@ function ct_pull_or_import_postgresql() {
 
 # Check the imagestream
 function test_python_imagestream() {
-  local tag="-ubi7"
-  if [ "${OS}" == "rhel8" ]; then
-    tag="-ubi8"
-  elif [ "${OS}" == "rhel9" ]; then
+  local tag="-ubi8"
+  if [ "${OS}" == "rhel9" ]; then
     tag="-ubi9"
+  elif [ "${OS}" == "rhel10" ]; then
+    tag="-ubi10"
   fi
-  if [[ "${VERSION}" == *"minimal"* ]]; then
-    VERSION=$(echo "${VERSION}" | cut -d "-" -f 1)
-  fi
-  if [[ "${VERSION}" == "3.11" ]] || [[ "${VERSION}" == "3.12" ]]; then
+  # On RHEL10 we have only 3.12-minimal image
+  if [[ "${VERSION}" == "3.11" ]] || [[ "${VERSION}" == "3.12" ]] && [[ "${VERSION}" == "3.12-minimal" ]]; then
     branch="4.2.x"
     postgresql_image="quay.io/sclorg/postgresql-12-c8s|postgresql:12"
     postgresql_version="12"
@@ -62,7 +60,7 @@ function test_python_imagestream() {
 django-postgresql.json \
 django-postgresql-persistent.json"
   for template in $TEMPLATES; do
-    ct_os_test_image_stream_quickstart "${THISDIR}/imagestreams/python-${OS%[0-9]*}.json" \
+    ct_os_test_image_stream_quickstart "${THISDIR}/imagestreams/python-${OS//[0-9]/}.json" \
                                      "https://raw.githubusercontent.com/sclorg/django-ex/${branch}/openshift/templates/${template}" \
                                      "${IMAGE_NAME}" \
                                      'python' \
