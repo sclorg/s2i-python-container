@@ -14,7 +14,7 @@ IMAGE_NAME = os.getenv("IMAGE_NAME")
 OS = os.getenv("TARGET").lower()
 
 TAG = TAGS.get(OS)
-if VERSION == "3.11" or VERSION == "3.12":
+if VERSION == "3.11" or VERSION == "3.12" or VERSION == "3.12-minimal":
     BRANCH_TO_TEST = "4.2.x"
 
 
@@ -33,11 +33,6 @@ class TestHelmPythonDjangoPsqlTemplate:
         self.hc_api.delete_project()
 
     def test_django_psql_helm_test(self):
-        if OS == "rhel10":
-            pytest.skip("Do NOT test on rhel10. It is not released yet.")
-        new_version = VERSION
-        if "minimal" in VERSION:
-            new_version = VERSION.replace("-minimal", "")
         self.hc_api.package_name = "redhat-postgresql-imagestreams"
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation()
@@ -48,7 +43,7 @@ class TestHelmPythonDjangoPsqlTemplate:
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation(
             values={
-                "python_version": f"{new_version}{TAG}",
+                "python_version": f"{VERSION}{TAG}",
                 "namespace": self.hc_api.namespace,
                 "source_repository_ref": BRANCH_TO_TEST,
             }

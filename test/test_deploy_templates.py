@@ -22,6 +22,8 @@ DEPLOYED_PSQL_IMAGE = "quay.io/centos7/postgresql-10-centos7:centos7"
 IMAGE_TAG = "postgresql:10"
 PSQL_VERSION = "10"
 
+if "minimal" in VERSION:
+    VERSION = VERSION.replace("-minimal", "")
 if Version(VERSION) >= Version("3.11"):
     BRANCH_TO_TEST = "4.2.x"
     DEPLOYED_PSQL_IMAGE = "quay.io/sclorg/postgresql-12-c8s"
@@ -47,8 +49,6 @@ class TestDeployTemplate:
         ]
     )
     def test_python_template_inside_cluster(self, template):
-        if OS == "rhel10":
-            pytest.skip("Do NOT test on rhel10. It is not released yet.")
         assert self.oc_api.upload_image(DEPLOYED_PSQL_IMAGE, IMAGE_TAG)
         service_name = f"python-{SHORT_VERSION}-test"
         template_url = self.oc_api.get_raw_url_for_json(
