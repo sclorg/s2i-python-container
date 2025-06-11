@@ -10,29 +10,39 @@
     https://github.com/sclorg/s2i-python-container/blob/master/APP_VERSION/README.md.
   imagestream_files:
   - filename: python-centos.json
-    latest: "3.9-ubi9"
+    latest: "3.12-ubi9"
     distros:
       - name: UBI 8
-        app_versions: ["3.6", "3.8", "3.9", "3.12"]
+        app_versions: ["3.6", "3.9",  "3.11", "3.12"]
 
       - name: UBI 9
-        app_versions: ["3.9", "3.12"]
+        app_versions: ["3.9", "3.11",  "3.12", "3.12-minimal"]
+
+      - name: UBI 10
+        app_versions: ["3.12-minimal"]
 
   - filename: python-rhel.json
-    latest: "3.11-ubi8"
+    latest: "3.12-ubi8"
     distros:
       - name: UBI 8
-        app_versions: ["3.6", "3.8", "3.9", "3.11", "3.12"]
+        app_versions: ["3.6", "3.9", "3.11", "3.12"]
 
       - name: UBI 9
-        app_versions: ["3.9", "3.11", "3.12"]
+        app_versions: ["3.9", "3.11", "3.12", "3.12-minimal"]
+
+      - name: UBI 10
+        app_versions: ["3.12-minimal"]
 
   - filename: python-rhel-aarch64.json
-    latest: "3.9-ubi8"
+    latest: "3.12-ubi8"
     distros:
       - name: UBI 8
-        app_versions: ["3.6", "3.8", "3.9", "3.12"]
+        app_versions: ["3.6", "3.9", "3.11", "3.12"]
 
       - name: UBI 9
-        app_versions: ["3.9", "3.12"]
+        app_versions: ["3.9", "3.11", "3.12", "3.12-minimal"]
+
+      - name: UBI 10
+        app_versions: ["3.12-minimal"]
+
 ...
