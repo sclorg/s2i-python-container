@@ -37,6 +37,10 @@ function ct_pull_or_import_postgresql() {
 
 # Check the imagestream
 function test_python_imagestream() {
+  if [[ "${VERSIONS}" == "3.12" ]] && [[ "${OS}" == "rhel8" ]]; then
+    echo "Skipping tests for ${VERSIONS}. It is not supported in Container Catalog. Imagestreams do not exist for them."
+    return 0
+  fi
   if [[ "${VERSIONS}" == "3.9-minimal" ]] || [[ "${VERSIONS}" == "3.11-minimal" ]]; then
     echo "Skipping tests for ${VERSIONS}. It is not supported in Container Catalog. Imagestreams do not exist for them."
     return 0
@@ -83,7 +87,7 @@ function test_python_s2i_app_ex() {
   if [[ "${VERSION}" == *"minimal"* ]]; then
     VERSION=$(echo "${VERSION}" | cut -d "-" -f 1)
   fi
-  if [[ "${VERSION}" == "3.11" ]] || [[ "${VERSION}" == "3.12" ]]; then
+  if [[ "${VERSION}" == "3.11" ]] || [[ "${VERSION}" == "3.12" ]] || [[ "${VERSION}" == "3.12-minimal" ]]; then
     branch="4.2.x"
   else
     branch="2.2.x"
@@ -106,7 +110,7 @@ django-postgresql-persistent.json"
   if [[ "${VERSION}" == *"minimal"* ]]; then
     VERSION=$(echo "${VERSION}" | cut -d "-" -f 1)
   fi
-  if [[ "${VERSION}" == "3.11" ]] || [[ "${VERSION}" == "3.12" ]]; then
+  if [[ "${VERSION}" == "3.11" ]] || [[ "${VERSION}" == "3.12" ]] || [[ "${VERSION}" == "3.12-minimal" ]]; then
     postgresql_image="quay.io/sclorg/postgresql-12-c8s|postgresql:12"
     postgresql_version="12"
     branch="4.2.x"

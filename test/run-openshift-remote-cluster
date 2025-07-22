@@ -41,9 +41,12 @@ export CT_OCP4_TEST=true
 test -n "${IMAGE_NAME-}" || false 'make sure $IMAGE_NAME is defined'
 test -n "${VERSION-}" || false 'make sure $VERSION is defined'
 
-
-TEST_SUMMARY=''
-TEST_SET=${TESTS:-$TEST_LIST} ct_run_tests_from_testset "openshift-remote-cluster"
+if [[ "${VERSION}" == "3.9-minimal" ]] || [[ "${VERSION}" == "3.11-minimal" ]]; then
+  echo "Skipping tests for minimal images. We do not provide them in container catalog registry."
+  exit 0
+else
+  TEST_SUMMARY=''
+  TEST_SET=${TESTS:-$TEST_LIST} ct_run_tests_from_testset "openshift-remote-cluster"
+fi
 
 # vim: set tabstop=2:shiftwidth=2:expandtab:
-
