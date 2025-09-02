@@ -48,13 +48,10 @@ RUN \
     fix-permissions ${APP_ROOT} -P && \
     rpm-file-permissions && \
     # The following echo adds the unset command for the variables set below to the \
-    # venv activation script. This is inspired from scl_enable script and prevents \
-    # the virtual environment to be activated multiple times and also every time \
-    # the prompt is rendered. \
+    # venv activation script. This prevents the virtual environment from being \
+    # activated multiple times and also every time the prompt is rendered. \
     echo "unset BASH_ENV PROMPT_COMMAND ENV" >> ${APP_ROOT}/bin/activate
-
-# For RHEL/Centos 8+ scl_enable isn't sourced automatically in s2i-core
-# so virtualenv needs to be activated this way
+# Ensure the virtualenv is activated in interactive shells
 ENV BASH_ENV="${APP_ROOT}/bin/activate" \
     ENV="${APP_ROOT}/bin/activate" \
     PROMPT_COMMAND=". ${APP_ROOT}/bin/activate"

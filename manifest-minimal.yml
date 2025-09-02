@@ -3,8 +3,6 @@ DISTGEN_RULES:
   - src: src/README-minimal.md
     dest: README.md
 
-  - src: src/root/opt/app-root/etc/scl_enable
-    dest: root/opt/app-root/etc/scl_enable
 
   - src: src/s2i/bin/assemble
     dest: s2i/bin/assemble
