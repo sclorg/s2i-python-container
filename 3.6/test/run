@@ -38,7 +38,6 @@ test_application_enable_init_wrapper
 "
 
 TEST_VAR_DOCKER="\
-test_scl_variables_in_dockerfile
 test_from_dockerfile
 "
 
@@ -48,7 +47,7 @@ if [[ -z $VERSION ]]; then
     exit 1
 fi
 
-IMAGE_NAME=${IMAGE_NAME:-centos/python-${VERSION//./}-centos7}
+IMAGE_NAME=${IMAGE_NAME:-ubi9/python-${VERSION//./}}
 
 . test/test-lib.sh
 
@@ -128,7 +127,7 @@ test_scl_usage() {
   local expected="$2"
   local cid_file="$3"
 
-  info "Testing the image SCL enable"
+  info "Testing command availability in the image"
   out=$(docker run --rm ${IMAGE_NAME} /bin/bash -c "${run_cmd}" 2>&1)
   if ! echo "${out}" | grep -q "${expected}"; then
     echo "ERROR[/bin/bash -c "${run_cmd}"] Expected '${expected}', got '${out}'"
@@ -241,21 +240,6 @@ test_application_with_user() {
 test_application_enable_init_wrapper() {
   # test application with init wrapper
   CONTAINER_ARGS="-e ENABLE_INIT_WRAPPER=true" test_application
-}
-
-test_scl_variables_in_dockerfile() {
-  if [ "$OS" == "rhel7" ] || [ "$OS" == "centos7" ]; then
-     TESTCASE_RESULT=0
-     CID_FILE_DIR=$(mktemp -d)
-
-     info "Testing variable presence during \`docker exec\`"
-     ct_check_exec_env_vars
-     ct_check_testcase_result $?
-
-     info "Checking if all scl variables are defined in Dockerfile"
-     ct_check_scl_enable_vars
-     ct_check_testcase_result $?
-  fi
 }
 
 # Positive test & non-zero exit status = ERROR.

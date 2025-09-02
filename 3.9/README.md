@@ -2,10 +2,10 @@ Python 3.9 container image
 =========================
 
 This container image includes Python 3.9 as a [S2I](https://github.com/openshift/source-to-image) base image for your Python 3.9 applications.
-Users can choose between RHEL and CentOS based builder images.
+Users can choose between RHEL, CentOS Stream, and Fedora based builder images.
 The RHEL images are available in the [Red Hat Container Catalog](https://catalog.redhat.com/software/containers/explore),
-the CentOS images are available on [Quay.io](https://quay.io/organization/centos7),
-and the Fedora images are available in [Quay.io](https://quay.io/organization/fedora).
+CentOS Stream images are available on [Quay.io](https://quay.io/organization/sclorg),
+and the Fedora images are available on [Quay.io](https://quay.io/organization/fedora).
 The resulting image can be run using [podman](https://github.com/containers/libpod) or
 [docker](http://docker.io).
 
@@ -32,12 +32,12 @@ the nodejs itself is included just to make the npm work.
 Usage in Openshift
 ------------------
 
-For this, we will assume that you are using one of the supported images available via imagestream tags in Openshift, eg. `python:3.9-ubi8`
+For this, we will assume that you are using one of the supported images available via imagestream tags in Openshift, eg. `python:3.9-ubi9`
 Building a simple [python-sample-app](https://github.com/sclorg/django-ex.git) application
 in Openshift can be achieved with the following step:
 
     ```
-    oc new-app python:3.9-ubi8~https://github.com/sclorg/django-ex.git
+    oc new-app python:3.9-ubi9~https://github.com/sclorg/django-ex.git
     ```
 
 **Accessing the application:**
