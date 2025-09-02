@@ -21,7 +21,7 @@ Images available on Quay are:
 This repository contains the source for building various versions of
 the Python application as a reproducible container image using
 [source-to-image](https://github.com/openshift/source-to-image).
-Users can choose between RHEL, Fedora and CentOS based builder images.
+Users can choose between RHEL, Fedora and CentOS Stream based builder images.
 The resulting image can be run using [podman](https://github.com/containers/libpod) or
 [docker](http://docker.io).
 
@@ -165,4 +165,3 @@ Repository organization
         * **run**
 
             Script that runs the [S2I](https://github.com/openshift/source-to-image) test framework.
-

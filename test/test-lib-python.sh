@@ -45,9 +45,9 @@ function test_python_imagestream() {
     echo "Skipping tests for ${VERSIONS}. It is not supported in Container Catalog. Imagestreams do not exist for them."
     return 0
   fi
-  local tag="-ubi8"
-  if [ "${OS}" == "rhel9" ]; then
-    tag="-ubi9"
+  local tag="-ubi9"
+  if [ "${OS}" == "rhel8" ]; then
+    tag="-ubi8"
   elif [ "${OS}" == "rhel10" ]; then
     tag="-ubi10"
   fi
@@ -140,4 +140,3 @@ function test_latest_imagestreams() {
 
 
 # vim: set tabstop=2:shiftwidth=2:expandtab:
-
