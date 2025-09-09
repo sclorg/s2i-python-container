@@ -1,0 +1,324 @@
+#!/bin/bash
+#
+# The 'run' performs a simple test that verifies that S2I image.
+# The main focus here is to excersise the S2I scripts.
+#
+# IMAGE_NAME specifies a name of the candidate image used for testing.
+# The image has to be available before this script is executed.
+#
+declare -a COMMON_WEB_APPS=({gunicorn-config-different-port,gunicorn-different-port,django-different-port,standalone,setup,setup-requirements,django,numpy,app-home,locale,pipenv,pipenv-and-micropipenv-should-fail,app-module,pyuwsgi-pipenv,micropipenv,standalone-custom-pypi-index,gunicorn-python-configfile-different-port}-test-app)
+declare -a FULL_WEB_APPS=({setup-cfg,npm-virtualenv-uwsgi,mod-wsgi,pin-pipenv-version,micropipenv-requirements,poetry-src-layout}-test-app)
+declare -a MINIMAL_WEB_APPS=()
+declare -a WEB_APPS=(${COMMON_WEB_APPS[@]} ${MINIMAL_WEB_APPS[@]})
+
+# Some tests, like the one using the latest pipenv, might be unstable
+# because new upstream releases tend to break our tests sometimes.
+# If a test is in UNSTABLE_TESTS and IGNORE_UNSTABLE_TESTS env
+# variable is defined, a result of the test has no impact on
+# the overall result of the test suite.
+#
+# Reasons for specific tests to be marked as unstable:
+#   pipenv-test-app:
+#     - this testcase installs pipenv from the internet.
+#       Problem is that the upstream releases are from time-to-time broken
+#       which breaks this test. We generally want to know about it
+#       in upstream, but ignore this in downstream.
+declare -a UNSTABLE_TESTS=(pipenv-test-app)
+
+# TODO: Make command compatible for Mac users
+test_dir="$(readlink -f $(dirname "${BASH_SOURCE[0]}"))"
+image_dir=$(readlink -f ${test_dir}/..)
+
+TEST_LIST="\
+test_s2i_usage
+test_docker_run_usage
+test_application
+test_application_with_user
+test_application_enable_init_wrapper
+"
+
+TEST_VAR_DOCKER="\
+test_scl_variables_in_dockerfile
+test_from_dockerfile_minimal
+"
+
+if [[ -z $VERSION ]]; then
+    echo "ERROR: The VERSION variable must be set."
+    ct_check_testcase_result 1
+    exit 1
+fi
+
+IMAGE_NAME=${IMAGE_NAME:-centos/python-${VERSION//./}-centos7}
+
+. test/test-lib.sh
+
+info() {
+  echo -e "\n\e[1m[INFO] $@\e[0m\n"
+}
+
+image_exists() {
+  docker inspect $1 &>/dev/null
+}
+
+container_exists() {
+  image_exists $(cat $cid_file)
+}
+
+
+container_ip() {
+  docker inspect --format="{{ .NetworkSettings.IPAddress }}" $(cat $cid_file)
+}
+
+run_s2i_build() {
+  info "Building the ${1} application image ..."
+  ct_s2i_build_as_df file://${test_dir}/${1} ${IMAGE_NAME} ${IMAGE_NAME}-testapp ${s2i_args}
+}
+
+prepare() {
+  if ! image_exists ${IMAGE_NAME}; then
+    echo "ERROR: The image ${IMAGE_NAME} must exist before this script is executed."
+    return 1
+  fi
+  # TODO: S2I build require the application is a valid 'GIT' repository, we
+  # should remove this restriction in the future when a file:// is used.
+  info "Preparing to test ${1} ..."
+  pushd ${test_dir}/${1} >/dev/null
+  git init
+  git config user.email "build@localhost" && git config user.name "builder"
+  git add -A && git commit -m "Sample commit"
+  popd >/dev/null
+}
+
+run_test_application() {
+  docker run --user=100001 ${CONTAINER_ARGS} --rm --cidfile=${cid_file} ${IMAGE_NAME}-testapp
+}
+
+cleanup() {
+  info "Cleaning up the test application image"
+  if image_exists ${IMAGE_NAME}-testapp; then
+    docker rmi -f ${IMAGE_NAME}-testapp
+  fi
+  rm -rf ${test_dir}/${1}/.git
+}
+wait_for_cid() {
+  local max_attempts=10
+  local sleep_time=1
+  local attempt=1
+  info "Waiting for application container to start $CONTAINER_ARGS ..."
+  while [ $attempt -le $max_attempts ]; do
+    [ -f $cid_file ] && [ -s $cid_file ] && return 0
+    attempt=$(( $attempt + 1 ))
+    sleep $sleep_time
+  done
+  return 1
+}
+
+test_s2i_usage() {
+  info "Testing 's2i usage' ..."
+  ct_s2i_usage ${IMAGE_NAME} ${s2i_args} 1>/dev/null
+}
+
+test_docker_run_usage() {
+  info "Testing 'docker run' usage ..."
+  docker run --rm ${IMAGE_NAME} &>/dev/null
+}
+
+test_scl_usage() {
+  local run_cmd="$1"
+  local expected="$2"
+  local cid_file="$3"
+
+  info "Testing the image SCL enable"
+  out=$(docker run --rm ${IMAGE_NAME} /bin/bash -c "${run_cmd}" 2>&1)
+  if ! echo "${out}" | grep -q "${expected}"; then
+    echo "ERROR[/bin/bash -c "${run_cmd}"] Expected '${expected}', got '${out}'"
+    return 1
+  fi
+  out=$(docker exec $(cat ${cid_file}) /bin/bash -c "${run_cmd}" 2>&1)
+  if ! echo "${out}" | grep -q "${expected}"; then
+    echo "ERROR[exec /bin/bash -c "${run_cmd}"] Expected '${expected}', got '${out}'"
+    return 1
+  fi
+  out=$(docker exec $(cat ${cid_file}) /bin/sh -ic "${run_cmd}" 2>&1)
+  if ! echo "${out}" | grep -q "${expected}"; then
+    echo "ERROR[exec /bin/sh -ic "${run_cmd}"] Expected '${expected}', got '${out}'"
+    return 1
+  fi
+}
+
+test_connection() {
+  info "Testing the HTTP connection (http://$(container_ip):${test_port}) ${CONTAINER_ARGS} ..."
+  local max_attempts=30
+  local sleep_time=1
+  local attempt=1
+  local result=1
+  while [ $attempt -le $max_attempts ]; do
+    response_code=$(curl -s -w %{http_code} -o /dev/null http://$(container_ip):${test_port}/)
+    status=$?
+    if [ $status -eq 0 ]; then
+      if [ $response_code -eq 200 ]; then
+        result=0
+      fi
+      break
+    fi
+    attempt=$(( $attempt + 1 ))
+    sleep $sleep_time
+  done
+  return $result
+}
+
+test_application() {
+  local cid_file="$CID_FILE_DIR"/"$(mktemp -u -p . --suffix .cid)"
+  # Verify that the HTTP connection can be established to test application container
+  run_test_application &
+
+  # Wait for the container to write it's CID file
+  wait_for_cid
+  # Some test apps have tests in their startup code so we have to check
+  # that the container starts at all
+  ct_check_testcase_result $?
+
+  # Instead of relying on VERSION variable coming from Makefile
+  # set the expected string based on the PYTHON_VERSION defined
+  # inside the running container.
+  python_version=$(docker run --rm $IMAGE_NAME /bin/bash -c "echo \$PYTHON_VERSION" 2>&1)
+
+  test_scl_usage "python --version" "Python $python_version." "${cid_file}"
+  ct_check_testcase_result $?
+  test_connection
+  ct_check_testcase_result $?
+  container_exists && docker stop $(cat "$cid_file")
+}
+
+test_from_dockerfile(){
+  info "Test from Dockerfile"
+  # Django 4.2 supports Python 3.9+
+  django_example_repo_url="https://github.com/sclorg/django-ex.git@4.2.x"
+
+  ct_test_app_dockerfile $test_dir/from-dockerfile/Dockerfile.tpl $django_example_repo_url 'Welcome to your Django application on OpenShift' app-src
+  ct_check_testcase_result $?
+
+  info "Test from Dockerfile with no s2i scripts used"
+  ct_test_app_dockerfile $test_dir/from-dockerfile/Dockerfile_no_s2i.tpl $django_example_repo_url 'Welcome to your Django application on OpenShift' app-src
+  ct_check_testcase_result $?
+}
+
+test_from_dockerfile_minimal(){
+  info "Test from Dockerfile"
+
+  # The following tests are for multi-stage builds. These technically also work on full images, but there is no reason to do multi-stage builds with full images.
+
+  # uwsgi in uwsgi-test-app
+  ct_test_app_dockerfile $test_dir/from-dockerfile/uwsgi.Dockerfile.tpl $test_dir/uwsgi-test-app 'Hello World from uWSGI hosted WSGI application!' app-src
+  ct_check_testcase_result $?
+
+  # So far, for all the minimal images, the name of the full container image counterpart
+  # is the same just without -minimal infix.
+  # sclorg/python-39-minimal-c9s / sclorg/python-39-c9s
+  # ubi8/python-39-minimal / ubi8/python-39
+  FULL_IMAGE_NAME=${IMAGE_NAME/-minimal/}
+
+  if ct_pull_image "$FULL_IMAGE_NAME"; then
+    # mod_wsgi in micropipenv-requirements-test-app
+    sed "s@#IMAGE_NAME#@${IMAGE_NAME}@;s@#FULL_IMAGE_NAME#@${FULL_IMAGE_NAME}@" $test_dir/from-dockerfile/mod_wsgi.Dockerfile.tpl > $test_dir/from-dockerfile/Dockerfile
+    ct_test_app_dockerfile $test_dir/from-dockerfile/Dockerfile $test_dir/micropipenv-requirements-test-app 'Hello World from mod_wsgi hosted WSGI application!' app-src
+    ct_check_testcase_result $?
+  else
+    echo "[SKIP] Multistage build from Dockerfile - $FULL_IMAGE_NAME does not exists."
+  fi
+
+}
+
+test_application_with_user() {
+  # test application with random user
+  CONTAINER_ARGS="--user 12345" test_application
+
+}
+
+test_application_enable_init_wrapper() {
+  # test application with init wrapper
+  CONTAINER_ARGS="-e ENABLE_INIT_WRAPPER=true" test_application
+}
+
+test_scl_variables_in_dockerfile() {
+  if [ "$OS" == "rhel7" ] || [ "$OS" == "centos7" ]; then
+     TESTCASE_RESULT=0
+     CID_FILE_DIR=$(mktemp -d)
+
+     info "Testing variable presence during \`docker exec\`"
+     ct_check_exec_env_vars
+     ct_check_testcase_result $?
+
+     info "Checking if all scl variables are defined in Dockerfile"
+     ct_check_scl_enable_vars
+     ct_check_testcase_result $?
+  fi
+}
+
+# Positive test & non-zero exit status = ERROR.
+# Negative test & zero exit status = ERROR.
+# Tests with '-should-fail-' in their name should fail during a build,
+# expecting non-zero exit status.
+evaluate_build_result() {
+  local _result="$1"
+  local _app="$2"
+  local _type="positive"
+  local _test_msg="[PASSED]"
+  local _ret_code=0
+
+  if [[ "$_app" == *"-should-fail-"* ]]; then
+    _type="negative"
+  fi
+
+  if [[ "$_type" == "positive" && "$_result" != "0" ]]; then
+    info "TEST FAILED (${_type}), EXPECTED:0 GOT:${_result}"
+    _ret_code=$_result
+  elif [[ "$_type" == "negative" && "$_result" == "0" ]]; then
+    info "TEST FAILED (${_type}), EXPECTED: non-zero GOT:${_result}"
+    _ret_code=1
+  fi
+  if [ $_ret_code != 0 ]; then
+    cleanup
+    TESTSUITE_RESULT=1
+    _test_msg="[FAILED]"
+  fi
+  ct_update_test_result "$_test_msg" "$_app" run_s2i_build
+
+  if [[ "$_type" == "negative" && "$_result" != "0" ]]; then
+    _ret_code=127 # even though this is success, the app is still not built
+  fi
+  return $_ret_code
+}
+
+ct_init
+
+# For debugging purposes, this script can be run with one or more arguments
+# those arguments list is a sub-set of values in the WEB_APPS array defined above
+# Example: ./run app-home-test-app pipenv-test-app
+for app in ${@:-${WEB_APPS[@]}}; do
+  # Since we built the candidate image locally, we don't want S2I attempt to pull
+  # it from Docker hub
+  s2i_args="--pull-policy=never"
+
+  # Example apps with "-different-port-" in their name don't use the default port 8080
+  if [[ "$app" == *"-different-port-"* ]]; then
+    test_port=8085
+  else
+    test_port=8080
+  fi
+
+  prepare ${app}
+  if [ $? -ne 0 ]; then
+    ct_update_test_result "[FAILED]" "${app}" "preparation"
+    TESTSUITE_RESULT=1
+    continue
+  fi
+  run_s2i_build ${app}
+  evaluate_build_result $? "$app" || continue
+
+  TEST_SET=${TESTS:-$TEST_LIST} ct_run_tests_from_testset "${app}"
+
+  cleanup ${app}
+done
+
+TEST_SET=${TESTS:-$TEST_VAR_DOCKER} ct_run_tests_from_testset "var-docker"
