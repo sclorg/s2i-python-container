@@ -133,6 +133,17 @@ specs:
                   'krb5-devel']
 
   version:
+    "3.13-minimal":
+      version: "3.13"
+      short_ver: "313"
+      minimal: true
+      base_img_version: "1"
+      python_img_version: "1"
+      # Python 3.13 doesn't come as a module
+      module_stream: ""
+      pkg_prefix: "python3.13"
+      main_image: "quay.io/fedora/python-313-minimal"
+
     "3.13":
       version: "3.13"
       short_ver: "313"
@@ -258,3 +269,6 @@ matrix:
     - distros:
         - fedora-41-x86_64
       version: "3.13"
+    - distros:
+        - fedora-41-x86_64
+      version: "3.13-minimal"
