@@ -17,6 +17,7 @@ Images available on Quay are:
 * CentOS Stream 10 [python-312-c9s](https://quay.io/repository/sclorg/python-312-c10s)
 * Fedora [python-312](https://quay.io/repository/fedora/python-312)
 * Fedora [python-313](https://quay.io/repository/fedora/python-313)
+* Fedora [python-313-minimal](https://quay.io/repository/fedora/python-313-minimal)
 
 This repository contains the source for building various versions of
 the Python application as a reproducible container image using
@@ -62,6 +63,7 @@ Python versions currently provided are:
 * [python-3.12](3.12)
 * [python-3.12 Minimal (tech-preview)](3.12-minimal)
 * [python-3.13](3.13)
+* [python-3.13 Minimal (tech-preview)](3.13-minimal)
 
 RHEL versions currently supported are:
 * RHEL 8 ([catalog.redhat.com](https://catalog.redhat.com/software/containers/search))
