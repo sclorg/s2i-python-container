@@ -1,6 +1,6 @@
 # This image provides a Python 3.12 environment you can use to run your Python
 # applications.
-FROM quay.io/fedora/s2i-base:40
+FROM quay.io/fedora/s2i-base:42
 
 EXPOSE 8080
 
@@ -37,9 +37,9 @@ LABEL summary="$SUMMARY" \
       usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.12/test/setup-test-app/ quay.io/fedora/$NAME-312 python-sample-app" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
-RUN INSTALL_PKGS="python3 python3-devel python3-setuptools python3-pip nss_wrapper-libs \
-        httpd httpd-devel atlas-devel gcc-gfortran libffi-devel \
-        libtool-ltdl enchant redhat-rpm-config krb5-devel" && \
+RUN INSTALL_PKGS="python3.12 python3.12-devel nss_wrapper-libs httpd httpd-devel \
+        atlas-devel gcc-gfortran libffi-devel libtool-ltdl enchant \
+        redhat-rpm-config krb5-devel" && \
     dnf -y --setopt=tsflags=nodocs install $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     dnf -y clean all --enablerepo='*'
