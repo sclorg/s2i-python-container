@@ -1,9 +1,5 @@
 {% macro env_metadata() %}{% endmacro %}
 
-{% macro _version_selector(spec) %}
-{% if spec.python_img_version %}{{ spec.python_img_version }}{% else %}{{ spec.version }}{% endif %}
-{% endmacro %}
-
 {% macro _component_name(spec) -%}
 python-{{ spec.short_ver }}-container
 {%- endmacro %}
@@ -15,7 +11,6 @@ python-{{ spec.short_ver }}-container
 {% macro labels(spec) %}
       com.redhat.component="{{ _component_name(spec) }}" \
       name="{{ _image_name(spec) }}" \
-      version="{{ _version_selector(spec) }}" \
       usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir={{spec.version }}/test/setup-test-app/ {{ _image_name(spec) }} python-sample-app" \
       {% if spec.version in spec.get("ubi_versions", []) %}
       com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI" \
