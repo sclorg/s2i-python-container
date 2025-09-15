@@ -106,26 +106,13 @@ specs:
       extra_pkgs:
         "3.12": ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip']
 
-    fedora40:
+    fedora42:
       distros:
-        - fedora-40-x86_64
-      fedora_version: "40"
-      minimal_image: "quay.io/fedora/fedora-minimal:40"
+        - fedora-42-x86_64
+      fedora_version: "42"
+      minimal_image: "quay.io/fedora/fedora-minimal:42"
       s2i_base: quay.io/fedora/s2i-base
-      img_tag: "40"
-      org: "fedora"
-      python_pkgs: ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip']
-      base_pkgs: ['nss_wrapper-libs', 'httpd', 'httpd-devel', 'atlas-devel', 'gcc-gfortran',
-                  'libffi-devel', 'libtool-ltdl', 'enchant', 'redhat-rpm-config',
-                  'krb5-devel']
-
-    fedora41:
-      distros:
-        - fedora-41-x86_64
-      fedora_version: "41"
-      minimal_image: "quay.io/fedora/fedora-minimal:41"
-      s2i_base: quay.io/fedora/s2i-base
-      img_tag: "41"
+      img_tag: "42"
       org: "fedora"
       python_pkgs: ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip']
       base_pkgs: ['nss_wrapper-libs', 'httpd', 'httpd-devel', 'atlas-devel', 'gcc-gfortran',
@@ -133,6 +120,17 @@ specs:
                   'krb5-devel']
 
   version:
+    "3.13-minimal":
+      version: "3.13"
+      short_ver: "313"
+      minimal: true
+      base_img_version: "1"
+      python_img_version: "1"
+      # Python 3.13 doesn't come as a module
+      module_stream: ""
+      pkg_prefix: "python3.13"
+      main_image: "quay.io/fedora/python-313-minimal"
+
     "3.13":
       version: "3.13"
       short_ver: "313"
@@ -242,19 +240,20 @@ matrix:
         - rhel-8-x86_64
       version: "3.11-minimal"
     - distros:
-        - fedora-40-x86_64
         - centos-stream-10-x86_64
         - centos-stream-9-x86_64
         - rhel-9-x86_64
         - rhel-8-x86_64
       version: "3.12"
     - distros:
-        - fedora-40-x86_64
         - centos-stream-10-x86_64
         - centos-stream-9-x86_64
         - rhel-9-x86_64
         - rhel-10-x86_64
       version: "3.12-minimal"
     - distros:
-        - fedora-41-x86_64
+        - fedora-42-x86_64
       version: "3.13"
+    - distros:
+        - fedora-42-x86_64
+      version: "3.13-minimal"

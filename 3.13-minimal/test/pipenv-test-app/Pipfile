@@ -1,0 +1,15 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+"e1839a8" = {path = ".", editable = true}
+requests = "==2.28.2"
+setuptools = {version = "==67.7.2", markers="python_version >= '3.12'"}
+
+[dev-packages]
+pytest = ">=2.8.0"
+
+[requires]
+python_version = "3.13"
