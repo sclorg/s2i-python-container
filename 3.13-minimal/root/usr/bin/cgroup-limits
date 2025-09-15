@@ -1,0 +1,192 @@
+#!/usr/libexec/platform-python
+
+"""
+Script for parsing cgroup information
+
+This script will read some limits from the cgroup system and parse
+them, printing out "VARIABLE=VALUE" on each line for every limit that is
+successfully read. Output of this script can be directly fed into
+bash's export command. Recommended usage from a bash script:
+
+    set -o errexit
+    export_vars=$(cgroup-limits) ; export $export_vars
+
+Variables currently supported:
+    MAX_MEMORY_LIMIT_IN_BYTES
+        Maximum possible limit MEMORY_LIMIT_IN_BYTES can have. This is
+        currently constant value of 9223372036854775807.
+    MEMORY_LIMIT_IN_BYTES
+        Maximum amount of user memory in bytes. If this value is set
+        to the same value as MAX_MEMORY_LIMIT_IN_BYTES, it means that
+        there is no limit set. The value is taken from
+        /sys/fs/cgroup/memory/memory.limit_in_bytes for cgroups v1
+        and from /sys/fs/cgroup/memory.max for cgroups v2
+    NUMBER_OF_CORES
+        Number of CPU cores that can be used. If both the cpu and cpuset
+        controllers specify a limit, the controller with the lowest CPU
+        limit takes precedence. For the cpu controller, the value is
+        calculated from /sys/fs/cgroup/cpu/cpu.cfs_{quota,period}_us for
+        cgroups v1 and from /sys/fs/cgroup/cpuset.cpus.effective for cgroups v2.
+        For the cpuset controller, the value is taken from
+        /sys/fs/cgroup/cpuset/cpuset.cpus for cgroups v1 and from
+        /sys/fs/cgroup/cpuset.cpus.effective for cgroups v2
+    NO_MEMORY_LIMIT
+        Set to "true" if MEMORY_LIMIT_IN_BYTES is so high that the caller
+        can act as if no memory limit was set. Undefined otherwise.
+
+Note about non-root containers:
+
+    Per podman-run(1) man page, on some systems, changing the resource limits
+    may not be allowed for non-root users. For more details, see
+    https://github.com/containers/podman/blob/main/troubleshooting.md#26-running-containers-with-resource-limits-fails-with-a-permissions-error.
+
+How to test this script:
+
+    Run a container as root and see whether the output of available memory
+    and CPUs match what is either available on the host or specified via
+    cgroups limits by the container runtime (podman).
+
+    For example:
+
+    # This should return NO_MEMORY_LIMIT=true, NUMBER_OF_CORES=<what host has>
+    sudo podman run -ti --rm quay.io/fedora/s2i-core /usr/bin/cgroup-limits
+
+    # This should return MEMORY_LIMIT_IN_BYTES=2147483648, NUMBER_OF_CORES=3
+    # 3 CPUs despite --cpus 4 was given is correct, because the cpuset 2-4 means
+    # running on 3 concrete processors only, which is lower limit than --cpus
+    # and thus is preferred
+    sudo podman run -ti --rm --cpus 4 --cpuset-cpus=2-4 --memory 2G quay.io/fedora/s2i-core /usr/bin/cgroup-limits
+"""
+
+from __future__ import division
+from __future__ import print_function
+import sys
+import subprocess
+
+
+def _read_file(path):
+    try:
+        with open(path, 'r') as f:
+            return f.read().strip()
+    except IOError:
+        return None
+
+
+def get_memory_limit():
+    """
+    Read memory limit, in bytes.
+    """
+
+    limit = _read_file('/sys/fs/cgroup/memory/memory.limit_in_bytes')
+    # If first file does not exist, try cgroups v2 file
+    limit = limit or _read_file('/sys/fs/cgroup/memory.max')
+    if limit is None or not limit.isdigit():
+        if limit == 'max':
+            return 9223372036854775807
+        print("Warning: Can't detect memory limit from cgroups",
+              file=sys.stderr)
+        return None
+    return int(limit)
+
+
+def get_number_of_cores():
+    """
+    Read number of CPU cores.
+    """
+
+    limits = [l for l in [_read_cpu_quota(), _read_cpuset_size(), _read_nproc()] if l]
+    if not limits:
+        return None
+    return min(limits)
+
+
+def _read_cpu_quota():
+
+    quota, period = None, None
+
+    quota = _read_file("/sys/fs/cgroup/cpu/cpu.cfs_quota_us")
+    if quota:
+        # cgroups v1
+        quota = quota.strip()
+        if quota == "-1":
+            return None
+
+        period = _read_file("/sys/fs/cgroup/cpu/cpu.cfs_period_us")
+        if period:
+            period = period.strip()
+
+    else:
+        # cgroups v2
+        line = _read_file("/sys/fs/cgroup/cpu.max")
+        if line:
+            fields = line.split()
+
+            if len(fields) >= 2:
+                quota = fields[0]
+                if quota == "max":
+                    return None
+                period = fields[1]
+
+
+    if quota and quota.isdigit() and period and period.isdigit():
+        return int(quota)//int(period)
+
+    print("Warning: Can't detect cpu quota from cgroups",
+          file=sys.stderr)
+    return None
+
+
+def _read_cpuset_size():
+
+    core_count = 0
+
+    line = _read_file('/sys/fs/cgroup/cpuset/cpuset.cpus')
+    # If first file does not exist, try cgroups v2 file
+    line = line or _read_file('/sys/fs/cgroup/cpuset.cpus.effective')
+    if line is None:
+        # None of the files above exists when running podman as non-root,
+        # so in that case, this warning is printed every-time
+        print("Warning: Can't detect cpuset size from cgroups, will use nproc",
+              file=sys.stderr)
+        return None
+
+    for group in line.split(','):
+        core_ids = list(map(int, group.split('-')))
+        if len(core_ids) == 2:
+            core_count += core_ids[1] - core_ids[0] + 1
+        else:
+            core_count += 1
+
+    return core_count
+
+
+def _read_nproc():
+    """
+    Returns number of cores without looking at cgroup limits.
+    This might work as the last resort when running a container as non-root
+    where cgroups v2 resource limits cannot be set without a specific
+    configuration (per podman-run(1) man page).
+    """
+    try:
+        stdout, stderr = subprocess.Popen('nproc', stdout=subprocess.PIPE).communicate()
+        return int(stdout)
+    except EnvironmentError as e:
+        if e.errno != errno.ENOENT:
+            raise
+        return None
+
+
+if __name__ == "__main__":
+    env_vars = {
+        "MAX_MEMORY_LIMIT_IN_BYTES": 9223372036854775807,
+        "MEMORY_LIMIT_IN_BYTES": get_memory_limit(),
+        "NUMBER_OF_CORES": get_number_of_cores()
+    }
+
+    env_vars = {k: v for k, v in env_vars.items() if v is not None}
+
+    if env_vars.get("MEMORY_LIMIT_IN_BYTES", 0) >= 92233720368547:
+        env_vars["NO_MEMORY_LIMIT"] = "true"
+
+    for key, value in env_vars.items():
+        print("{0}={1}".format(key, value))
