@@ -13,7 +13,6 @@ ENV PYTHON_VERSION=3.11 \
     PIP_NO_CACHE_DIR=off
 
 ENV NAME=python3 \
-    VERSION=0 \
     ARCH=x86_64
 
 ENV SUMMARY="Platform for building and running Python $PYTHON_VERSION applications" \
@@ -33,7 +32,6 @@ LABEL summary="$SUMMARY" \
       io.openshift.tags="builder,python,python311,python-311,rh-python311" \
       com.redhat.component="$NAME" \
       name="sclorg/python-311-c9s" \
-      version="$VERSION" \
       usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.11/test/setup-test-app/ $FGC/$NAME python-sample-app" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
