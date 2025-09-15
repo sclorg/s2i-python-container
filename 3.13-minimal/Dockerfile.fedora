@@ -1,14 +1,14 @@
-FROM quay.io/fedora/fedora-minimal:40
+FROM quay.io/fedora/fedora-minimal:42
 
 
 EXPOSE 8080
 
-ENV PYTHON_VERSION=3.12 \
+ENV PYTHON_VERSION=3.13 \
     PYTHONUNBUFFERED=1 \
     PYTHONIOENCODING=UTF-8 \
     LC_ALL=en_US.UTF-8 \
     LANG=en_US.UTF-8 \
-    CNB_STACK_ID=com.redhat.stacks.ubi-python-312 \
+    CNB_STACK_ID=com.redhat.stacks.ubi-python-313 \
     CNB_USER_ID=1001 \
     CNB_GROUP_ID=0 \
     PIP_NO_CACHE_DIR=off \
@@ -40,15 +40,15 @@ on most platforms."
 LABEL summary="$SUMMARY" \
       description="$DESCRIPTION" \
       io.k8s.description="$DESCRIPTION" \
-      io.k8s.display-name="Python 3.12" \
+      io.k8s.display-name="Python 3.13" \
       io.openshift.expose-services="8080:http" \
-      io.openshift.tags="builder,python,python312,python-312,rh-python312" \
-      com.redhat.component="python-312-container" \
-      name="fedora/python-312-minimal" \
+      io.openshift.tags="builder,python,python313,python-313,rh-python313" \
+      com.redhat.component="python-313-container" \
+      name="fedora/python-313-minimal" \
       version="1" \
-      usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.12-minimal/test/setup-test-app/ ubi/python-312-minimal python-sample-app" \
+      usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.13-minimal/test/setup-test-app/ ubi/python-313-minimal python-sample-app" \
       com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI" \
-      io.buildpacks.stack.id="com.redhat.stacks.ubi-python-312-minimal" \
+      io.buildpacks.stack.id="com.redhat.stacks.ubi-python-313-minimal" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 # Very minimal set of packages
@@ -56,22 +56,22 @@ LABEL summary="$SUMMARY" \
 # glibc-langpack-en is needed to set locale to en_US and disable warning about it
 # findutils - find command is needed for fix-permissions script
 # nss_wrapper - used in generate_container_user script
-RUN INSTALL_PKGS="python3.12 glibc-langpack-en findutils nss_wrapper-libs" && \
+RUN INSTALL_PKGS="python3.13 glibc-langpack-en findutils nss_wrapper-libs" && \
     microdnf -y --setopt=tsflags=nodocs --setopt=install_weak_deps=0 install $INSTALL_PKGS && \
     microdnf -y clean all --enablerepo='*'
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH.
-COPY 3.12-minimal/s2i/bin/ $STI_SCRIPTS_PATH
+COPY 3.13-minimal/s2i/bin/ $STI_SCRIPTS_PATH
 
 # Copy extra files to the image.
-COPY 3.12-minimal/root/ /
+COPY 3.13-minimal/root/ /
 
 # Python 3.7+ only
 # Yes, the directory below is already copied by the previous command.
 # The problem here is that the wheels directory is copied as a symlink.
 # Only if you specify symlink directly as a source, COPY copies all the
 # files from the symlink destination.
-COPY 3.12-minimal/root/opt/wheels /opt/wheels
+COPY 3.13-minimal/root/opt/wheels /opt/wheels
 
 # This command sets (and also creates if necessary)
 # the home directory - it has to be done here so the latter
@@ -85,7 +85,7 @@ WORKDIR ${HOME}
 #   writable as OpenShift default security model is to run the container
 #   under random UID.
 RUN \
-    python3.12 -m venv ${APP_ROOT} && \
+    python3.13 -m venv ${APP_ROOT} && \
     # We have to upgrade pip to a newer version because \
     # pip < 19.3 does not support manylinux2014 wheels. Only manylinux2014 (and later) wheels \
     #   support platforms like ppc64le, aarch64 or armv7 \
