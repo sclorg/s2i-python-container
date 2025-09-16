@@ -138,7 +138,6 @@ specs:
       short_ver: "313"
       minimal: false
       base_img_version: "1"
-      python_img_version: "1"
       # Python 3.13 doesn't come as a module
       module_stream: ""
       pkg_prefix: "python3.13"
@@ -149,7 +148,6 @@ specs:
       short_ver: "312"
       minimal: true
       base_img_version: "1"
-      python_img_version: "1"
       # Python 3.12 doesn't come as a module
       module_stream: ""
       pkg_prefix: "python3.12"
@@ -160,7 +158,6 @@ specs:
       short_ver: "312"
       minimal: false
       base_img_version: "1"
-      python_img_version: "1"
       # Python 3.12 doesn't come as a module
       module_stream: ""
       pkg_prefix: "python3.12"
@@ -171,7 +168,6 @@ specs:
       short_ver: "311"
       minimal: false
       base_img_version: "1"
-      python_img_version: "1"
       # Python 3.11 doesn't come as a module
       module_stream: ""
       pkg_prefix: "python3.11"
@@ -182,7 +178,6 @@ specs:
       short_ver: "311"
       minimal: true
       base_img_version: "1"
-      python_img_version: "1"
       # Python 3.11 doesn't come as a module
       module_stream: ""
       pkg_prefix: "python3.11"
@@ -193,7 +188,6 @@ specs:
       short_ver: "39"
       minimal: false
       base_img_version: "1"
-      python_img_version: "1"
       module_stream: "python39:3.9"
       pkg_prefix: "python39"
       main_image: "registry.access.redhat.com/ubi8/python-39"
@@ -203,7 +197,6 @@ specs:
       short_ver: "39"
       minimal: true
       base_img_version: "1"
-      python_img_version: "1"
       module_stream: "python39:3.9"
       pkg_prefix: "python39"
       main_image: "quay.io/sclorg/python-39-minimal-c9s"
@@ -213,7 +206,6 @@ specs:
       short_ver: "36"
       minimal: false
       base_img_version: "1"
-      python_img_version: "1"
       module_stream: "python36:3.6"
       pkg_prefix: "python3"
       main_image: "registry.access.redhat.com/ubi8/python-36"
