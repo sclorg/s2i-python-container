@@ -248,6 +248,7 @@ matrix:
     - distros:
         - centos-stream-10-x86_64
         - centos-stream-9-x86_64
+        - rhel-8-x86_64
         - rhel-9-x86_64
         - rhel-10-x86_64
       version: "3.12-minimal"
