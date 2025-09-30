@@ -37,7 +37,7 @@ function ct_pull_or_import_postgresql() {
 
 # Check the imagestream
 function test_python_imagestream() {
-  if [[ "${VERSIONS}" == "3.12" ]] && [[ "${OS}" == "rhel8" ]]; then
+  if [[ "${VERSIONS}" == "3.12" ]] || [[ "${VERSIONS}" == "3.12-minimal" ]] && [[ "${OS}" == "rhel8" ]]; then
     echo "Skipping tests for ${VERSIONS}. It is not supported in Container Catalog. Imagestreams do not exist for them."
     return 0
   fi
