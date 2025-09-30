@@ -5,7 +5,7 @@ from pathlib import Path
 
 from container_ci_suite.helm import HelmChartsAPI
 
-from constants import TAGS, BRANCH_TO_TEST
+from constants import TAGS, BRANCH_TO_TEST, is_test_allowed
 
 test_dir = Path(os.path.abspath(os.path.dirname(__file__)))
 
@@ -33,6 +33,8 @@ class TestHelmPythonDjangoPsqlTemplate:
         self.hc_api.delete_project()
 
     def test_django_psql_helm_test(self):
+        if not is_test_allowed(os=OS, version=VERSION):
+            pytest.skip(f"This combination for {OS} and {VERSION} is not supported for Helm Charts.")
         self.hc_api.package_name = "redhat-postgresql-imagestreams"
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation()
