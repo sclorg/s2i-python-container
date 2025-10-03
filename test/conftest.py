@@ -1,5 +1,6 @@
 from collections import namedtuple
 import os
+from pathlib import Path
 import sys
 
 from container_ci_suite.utils import check_variables
@@ -16,7 +17,8 @@ VARS = Vars(
     IMAGE_NAME=os.getenv("IMAGE_NAME"),
     IS_MINIMAL="minimal" in VERSION,
     VERSION_NO_MINIMAL=VERSION.replace("-minimal", ""),
-    SHORT_VERSION=VERSION.replace("-minimal", "").replace(".", "")
+    SHORT_VERSION=VERSION.replace("-minimal", "").replace(".", ""),
+    TEST_DIR=Path(__file__).parent.absolute()
 )
 
 
