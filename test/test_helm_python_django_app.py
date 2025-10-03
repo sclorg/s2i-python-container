@@ -14,7 +14,7 @@ DEPLOYED_PSQL_IMAGE = "quay.io/sclorg/postgresql-10-c8s:c8s"
 IMAGE_TAG = "postgresql:10"
 PSQL_VERSION = "10"
 
-if VARS.VERSION == "3.11" or VARS.VERSION == "3.12" or VARS.VERSION == "3.12-minimal":
+if VARS.VERSION in ("3.11", "3.12", "3.12-minimal"):
     DEPLOYED_PSQL_IMAGE = "quay.io/sclorg/postgresql-12-c8s"
     IMAGE_TAG = "postgresql:12"
     PSQL_VERSION = "12"
