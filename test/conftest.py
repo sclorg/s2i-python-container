@@ -3,6 +3,7 @@ import os
 import sys
 
 from container_ci_suite.utils import check_variables
+from pytest import skip
 
 if not check_variables():
     sys.exit(1)
@@ -17,3 +18,9 @@ VARS = Vars(
     VERSION_NO_MINIMAL=VERSION.replace("-minimal", ""),
     SHORT_VERSION=VERSION.replace("-minimal", "").replace(".", "")
 )
+
+
+def skip_helm_charts_tests():
+    if VARS.VERSION in ("3.9-minimal", "3.11-minimal") or \
+           (VARS.VERSION == "3.12-minimal" and VARS.OS == "rhel8"):
+        skip(f"Skipping Helm Charts tests for {VARS.VERSION} on {VARS.OS}.")
