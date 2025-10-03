@@ -1,20 +1,10 @@
-import os
-
-import pytest
-from pathlib import Path
-
 from container_ci_suite.helm import HelmChartsAPI
 
-from constants import TAGS, BRANCH_TO_TEST, is_test_allowed
+from constants import TAGS, BRANCH_TO_TEST
+from conftest import skip_helm_charts_tests, VARS
 
-test_dir = Path(os.path.abspath(os.path.dirname(__file__)))
-
-VERSION = os.getenv("VERSION")
-IMAGE_NAME = os.getenv("IMAGE_NAME")
-OS = os.getenv("TARGET").lower()
-
-TAG = TAGS.get(OS)
-if VERSION == "3.11" or VERSION == "3.12" or VERSION == "3.12-minimal":
+TAG = TAGS.get(VARS.OS)
+if VARS.VERSION in ("3.11", "3.12", "3.12-minimal"):
     BRANCH_TO_TEST = "4.2.x"
 
 
@@ -22,8 +12,7 @@ class TestHelmPythonDjangoPsqlTemplate:
 
     def setup_method(self):
         package_name = "redhat-django-psql-persistent"
-        path = test_dir
-        self.hc_api = HelmChartsAPI(path=path, package_name=package_name, tarball_dir=test_dir, shared_cluster=True)
+        self.hc_api = HelmChartsAPI(path=VARS.TEST_DIR, package_name=package_name, tarball_dir=VARS.TEST_DIR, shared_cluster=True)
         self.hc_api.clone_helm_chart_repo(
             repo_url="https://github.com/sclorg/helm-charts", repo_name="helm-charts",
             subdir="charts/redhat"
@@ -33,8 +22,7 @@ class TestHelmPythonDjangoPsqlTemplate:
         self.hc_api.delete_project()
 
     def test_django_psql_helm_test(self):
-        if not is_test_allowed(os=OS, version=VERSION):
-            pytest.skip(f"This combination for {OS} and {VERSION} is not supported for Helm Charts.")
+        skip_helm_charts_tests()
         self.hc_api.package_name = "redhat-postgresql-imagestreams"
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation()
@@ -45,7 +33,7 @@ class TestHelmPythonDjangoPsqlTemplate:
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation(
             values={
-                "python_version": f"{VERSION}{TAG}",
+                "python_version": f"{VARS.VERSION}{TAG}",
                 "namespace": self.hc_api.namespace,
                 "source_repository_ref": BRANCH_TO_TEST,
             }
