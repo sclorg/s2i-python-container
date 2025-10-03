@@ -1,13 +1,8 @@
-import os
-
-from pathlib import Path
-
 from container_ci_suite.helm import HelmChartsAPI
 
 from constants import TAGS, BRANCH_TO_TEST
 from conftest import skip_helm_charts_tests, VARS
 
-test_dir = Path(os.path.abspath(os.path.dirname(__file__)))
 
 TAG = TAGS.get(VARS.OS)
 DEPLOYED_PSQL_IMAGE = "quay.io/sclorg/postgresql-10-c8s:c8s"
@@ -24,8 +19,7 @@ class TestHelmPythonDjangoAppTemplate:
 
     def setup_method(self):
         package_name = "redhat-python-django-application"
-        path = test_dir
-        self.hc_api = HelmChartsAPI(path=path, package_name=package_name, tarball_dir=test_dir, shared_cluster=True)
+        self.hc_api = HelmChartsAPI(path=VARS.TEST_DIR, package_name=package_name, tarball_dir=VARS.TEST_DIR, shared_cluster=True)
         self.hc_api.clone_helm_chart_repo(
             repo_url="https://github.com/sclorg/helm-charts", repo_name="helm-charts",
             subdir="charts/redhat"
