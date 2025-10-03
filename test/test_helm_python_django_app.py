@@ -6,18 +6,16 @@ from pathlib import Path
 from container_ci_suite.helm import HelmChartsAPI
 
 from constants import TAGS, BRANCH_TO_TEST, is_test_allowed
+from conftest import VARS
+
 test_dir = Path(os.path.abspath(os.path.dirname(__file__)))
 
-VERSION = os.getenv("VERSION")
-IMAGE_NAME = os.getenv("IMAGE_NAME")
-OS = os.getenv("TARGET").lower()
-
-TAG = TAGS.get(OS)
+TAG = TAGS.get(VARS.OS)
 DEPLOYED_PSQL_IMAGE = "quay.io/sclorg/postgresql-10-c8s:c8s"
 IMAGE_TAG = "postgresql:10"
 PSQL_VERSION = "10"
 
-if VERSION == "3.11" or VERSION == "3.12" or VERSION == "3.12-minimal":
+if VARS.VERSION == "3.11" or VARS.VERSION == "3.12" or VARS.VERSION == "3.12-minimal":
     DEPLOYED_PSQL_IMAGE = "quay.io/sclorg/postgresql-12-c8s"
     IMAGE_TAG = "postgresql:12"
     PSQL_VERSION = "12"
@@ -38,8 +36,8 @@ class TestHelmPythonDjangoAppTemplate:
         self.hc_api.delete_project()
 
     def test_django_application_helm_test(self):
-        if not is_test_allowed(os=OS, version=VERSION):
-            pytest.skip(f"This combination for {OS} and {VERSION} is not supported for Helm Charts.")
+        if not is_test_allowed(os=VARS.OS, version=VARS.VERSION):
+            pytest.skip(f"This combination for {VARS.OS} and {VARS.VERSION} is not supported for Helm Charts.")
         self.hc_api.package_name = "redhat-python-imagestreams"
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation()
@@ -47,7 +45,7 @@ class TestHelmPythonDjangoAppTemplate:
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation(
             values={
-                "python_version": f"{VERSION}{TAG}",
+                "python_version": f"{VARS.VERSION}{TAG}",
                 "namespace": self.hc_api.namespace,
                 "source_repository_ref": BRANCH_TO_TEST,
             }
