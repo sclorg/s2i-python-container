@@ -10,7 +10,7 @@ from conftest import skip_helm_charts_tests, VARS
 test_dir = Path(os.path.abspath(os.path.dirname(__file__)))
 
 TAG = TAGS.get(VARS.OS)
-if VARS.VERSION == "3.11" or VARS.VERSION == "3.12" or VARS.VERSION == "3.12-minimal":
+if VARS.VERSION in ("3.11", "3.12", "3.12-minimal"):
     BRANCH_TO_TEST = "4.2.x"
 
 
