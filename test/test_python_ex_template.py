@@ -1,7 +1,3 @@
-import os
-import sys
-
-import pytest
 from packaging.version import Version
 
 from container_ci_suite.openshift import OpenShiftAPI
