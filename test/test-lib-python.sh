@@ -58,7 +58,7 @@ function test_python_imagestream() {
     postgresql_image="quay.io/sclorg/postgresql-12-c8s|postgresql:12"
     postgresql_version="12"
   else
-    branch="master"
+    branch="2.2.x"
     postgresql_image="quay.io/sclorg/postgresql-10-c8s:c8s|postgresql:10"
     postgresql_version="10"
   fi
