@@ -208,9 +208,6 @@ SYMLINK_RULES:
   - src: ../../test/conftest.py
     dest: test/conftest.py
 
-  - src: ../../test/constants.py
-    dest: test/constants.py
-
   - src: ../../test/__init__.py
     dest: test/__init__.py
 

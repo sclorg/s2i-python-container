@@ -1,9 +1,7 @@
 from container_ci_suite.helm import HelmChartsAPI
 
-from constants import TAGS, BRANCH_TO_TEST
-from conftest import skip_helm_charts_tests, VARS
+from conftest import BRANCH_TO_TEST, skip_helm_charts_tests,VARS
 
-TAG = TAGS.get(VARS.OS)
 if VARS.VERSION in ("3.11", "3.12", "3.12-minimal"):
     BRANCH_TO_TEST = "4.2.x"
 
@@ -33,7 +31,7 @@ class TestHelmPythonDjangoPsqlTemplate:
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation(
             values={
-                "python_version": f"{VARS.VERSION}{TAG}",
+                "python_version": f"{VARS.VERSION}{VARS.TAG}",
                 "namespace": self.hc_api.namespace,
                 "source_repository_ref": BRANCH_TO_TEST,
             }

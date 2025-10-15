@@ -3,8 +3,7 @@ from packaging.version import Version
 
 from container_ci_suite.openshift import OpenShiftAPI
 
-from constants import TAGS, BRANCH_TO_TEST
-from conftest import VARS
+from conftest import BRANCH_TO_TEST,VARS
 
 DEPLOYED_PSQL_IMAGE = "quay.io/sclorg/postgresql-10-c8s:c8s"
 IMAGE_TAG = "postgresql:10"
@@ -15,8 +14,6 @@ if Version(VARS.VERSION_NO_MINIMAL) >= Version("3.11"):
     DEPLOYED_PSQL_IMAGE = "quay.io/sclorg/postgresql-12-c8s"
     IMAGE_TAG = "postgresql:12"
     PSQL_VERSION = "12"
-
-TAG = TAGS.get(VARS.OS, None)
 
 
 # Replacement with 'test_python_s2i_templates'
