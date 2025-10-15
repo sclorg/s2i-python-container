@@ -3,8 +3,9 @@ from packaging.version import Version
 
 from container_ci_suite.openshift import OpenShiftAPI
 
-from conftest import BRANCH_TO_TEST,VARS
+from conftest import VARS
 
+BRANCH_TO_TEST = "2.2.x"
 DEPLOYED_PSQL_IMAGE = "quay.io/sclorg/postgresql-10-c8s:c8s"
 IMAGE_TAG = "postgresql:10"
 PSQL_VERSION = "10"

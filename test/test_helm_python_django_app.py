@@ -1,10 +1,11 @@
 from container_ci_suite.helm import HelmChartsAPI
 
-from conftest import BRANCH_TO_TEST, skip_helm_charts_tests, VARS
+from conftest import skip_helm_charts_tests, VARS
 
 DEPLOYED_PSQL_IMAGE = "quay.io/sclorg/postgresql-10-c8s:c8s"
 IMAGE_TAG = "postgresql:10"
 PSQL_VERSION = "10"
+BRANCH_TO_TEST = "2.2.x"
 
 if VARS.VERSION in ("3.11", "3.12", "3.12-minimal"):
     DEPLOYED_PSQL_IMAGE = "quay.io/sclorg/postgresql-12-c8s"

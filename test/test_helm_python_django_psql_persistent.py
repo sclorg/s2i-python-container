@@ -1,6 +1,8 @@
 from container_ci_suite.helm import HelmChartsAPI
 
-from conftest import BRANCH_TO_TEST, skip_helm_charts_tests,VARS
+from conftest import skip_helm_charts_tests, VARS
+
+BRANCH_TO_TEST = "2.2.x"
 
 if VARS.VERSION in ("3.11", "3.12", "3.12-minimal"):
     BRANCH_TO_TEST = "4.2.x"
