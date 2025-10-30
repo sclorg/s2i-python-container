@@ -15,7 +15,10 @@ TAGS = {
     "rhel10": "-ubi10",
 }
 
-Vars = namedtuple("Vars", ["OS", "VERSION", "IMAGE_NAME", "IS_MINIMAL", "VERSION_NO_MINIMAL", "SHORT_VERSION", "TEST_DIR"])
+Vars = namedtuple("Vars", [
+    "OS", "VERSION", "IMAGE_NAME", "IS_MINIMAL", "VERSION_NO_MINIMAL",
+    "SHORT_VERSION", "TAG", "TEST_DIR"
+    ])
 VERSION = os.getenv("VERSION")
 OS = os.getenv("TARGET").lower()
 VARS = Vars(
