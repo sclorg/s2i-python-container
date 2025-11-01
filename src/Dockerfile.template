@@ -54,6 +54,9 @@ RUN INSTALL_PKGS="{{ common.list_pkgs(extra_pkgs + spec.python_pkgs + spec.base_
     {% if spec.preinstall_cmd %}
 {{ common.preinstall_cmd(spec) -}}
     {% endif %}
+    {% if spec.enable_epel_for and spec.version in spec.enable_epel_for %}
+    yum -y install --setopt=install_weak_deps=0 epel-release && \
+    {% endif %}
     {{ commands.pkginstaller.install([], {'docs': False}) }}{{ common.enablerepo(spec) }} $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     {% if spec.logos %}
