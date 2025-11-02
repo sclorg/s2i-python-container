@@ -60,7 +60,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: [ "3.9", "3.9-minimal", "3.11", "3.11-minimal", "3.12", "3.12-minimal", "3.13" ]
+        version: [ "3.9", "3.9-minimal", "3.11", "3.11-minimal", "3.12", "3.12-minimal", "3.13", "3.13-minimal" ]
         os_test: [ "fedora", "rhel8", "rhel9", "rhel10", "c9s", "c10s" ]
         test_case: [ "container" ]
     if: |
