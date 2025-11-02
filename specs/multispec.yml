@@ -93,7 +93,7 @@ specs:
       distros:
         - centos-stream-10-x86_64
       el_version: "10"
-      minimal_image: "quay.io/centos/centos:stream10-development-minimal"
+      minimal_image: "quay.io/centos/centos:stream10-minimal"
       s2i_base: quay.io/sclorg/s2i-base-c10s
       img_tag: "c10s"
       org: "sclorg"
