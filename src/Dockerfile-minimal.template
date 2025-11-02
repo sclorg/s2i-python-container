@@ -59,7 +59,7 @@ LABEL summary="$SUMMARY" \
 # nss_wrapper - used in generate_container_user script
 RUN INSTALL_PKGS="{{ spec.pkg_prefix }} glibc-langpack-en findutils nss_wrapper-libs" && \
     {% if spec.enable_epel_for and spec.version in spec.enable_epel_for %}
-    microdnf -y install epel-release && \
+    microdnf -y install --setopt=install_weak_deps=0 epel-release && \
     {% endif %}
     microdnf -y --setopt=tsflags=nodocs --setopt=install_weak_deps=0 install $INSTALL_PKGS && \
     microdnf -y clean all --enablerepo='*'
