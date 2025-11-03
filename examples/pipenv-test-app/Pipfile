@@ -12,4 +12,4 @@ setuptools = {version = "==67.7.2", markers="python_version >= '3.12'"}
 pytest = ">=2.8.0"
 
 [requires]
-python_version = "3.13"
+python_version = "3.14"
