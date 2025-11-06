@@ -12,8 +12,8 @@ Images available on Quay are:
 * CentOS Stream 9 [python-311-c9s](https://quay.io/repository/sclorg/python-311-c9s)
 * CentOS Stream 9 [python-312-minimal-c9s](https://quay.io/repository/sclorg/python-312-minimal-c9s)
 * CentOS Stream 9 [python-312-c9s](https://quay.io/repository/sclorg/python-312-c9s)
-* CentOS Stream 10 [python-312-minimal-c9s](https://quay.io/repository/sclorg/python-312-minimal-c10s)
-* CentOS Stream 10 [python-312-c9s](https://quay.io/repository/sclorg/python-312-c10s)
+* CentOS Stream 10 [python-312-minimal-c10s](https://quay.io/repository/sclorg/python-312-minimal-c10s)
+* CentOS Stream 10 [python-312-c10s](https://quay.io/repository/sclorg/python-312-c10s)
 * Fedora [python-313](https://quay.io/repository/fedora/python-313)
 * Fedora [python-313-minimal](https://quay.io/repository/fedora/python-313-minimal)
 
