@@ -75,8 +75,7 @@ CentOS Stream versions currently supported are:
 * CentOS Stream 10 ([quay.io/sclorg](https://quay.io/organization/sclorg))
 
 Fedora versions currently supported are:
-* Fedora 40 ([quay.io/fedora](https://quay.io/organization/fedora))
-* Fedora 41 ([quay.io/fedora](https://quay.io/organization/fedora))
+* Fedora 42 ([quay.io/fedora](https://quay.io/organization/fedora))
 
 Download
 --------
