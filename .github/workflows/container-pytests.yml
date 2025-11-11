@@ -1,0 +1,77 @@
+---
+
+on:
+  issue_comment:
+    types:
+      - created
+jobs:
+  distgen-check:
+    name: "Check distgen generated files"
+    runs-on: ubuntu-latest
+    if: |
+      github.event.issue.pull_request
+      && (contains(github.event.comment.body, '[test-pytest]') || contains(github.event.comment.body, '[test-all]'))
+      && contains(fromJson('["OWNER", "MEMBER"]'), github.event.comment.author_association)
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5
+        with:
+          ref: "refs/pull/${{ github.event.issue.number }}/head"
+          submodules: true
+
+      - name: Check distgen generated files
+        id: check
+        shell: bash
+        run: |
+          sha=$(git rev-parse HEAD)
+          sudo apt update && sudo apt -y install python3-pip
+          pip3 install pyyaml distgen Jinja2
+          result="success"
+          ./common/tests/check_distgen_generated_files.sh || result="failure"
+          echo "result=$result" >> "$GITHUB_OUTPUT"
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+
+      - name: Set final commit status
+        uses: myrotvorets/set-commit-status-action@v2.0.0
+        with:
+          status: ${{ steps.check.outputs.result }}
+          context: "Distgen check"
+          sha: ${{ steps.check.outputs.sha }}
+
+      - name: Exit on ERR
+        shell: bash
+        run: |
+          _result=${{ steps.check.outputs.result }}
+          if [ "$_result" == failure ]; then
+            echo "Distgen-generated files are not regenerated properly."
+            echo "Please regenerate them with:"
+            echo "'make clean-versions'"
+            echo "'make generate-all'"
+            exit 1
+          fi
+
+  container-tests:
+    needs: distgen-check
+    name: "Container PyTest: ${{ matrix.version }} - ${{ matrix.os_test }}"
+    runs-on: ubuntu-latest
+    concurrency:
+      group: container-pytest-${{ github.event.issue.number }}-${{ matrix.version }}-${{ matrix.os_test }}
+      cancel-in-progress: true
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [ "3.9", "3.9-minimal", "3.11", "3.11-minimal", "3.12", "3.12-minimal", "3.13" ]
+        os_test: [ "fedora", "rhel8", "rhel9", "rhel10", "c9s", "c10s" ]
+        test_case: [ "container-pytest" ]
+    if: |
+      github.event.issue.pull_request
+      && (contains(github.event.comment.body, '[test-pytest]') || contains(github.event.comment.body, '[test-all]'))
+      && contains(fromJson('["OWNER", "MEMBER"]'), github.event.comment.author_association)
+    steps:
+      - uses: sclorg/tfaga-wrapper@main
+        with:
+          os_test: ${{ matrix.os_test }}
+          version: ${{ matrix.version }}
+          test_case: ${{ matrix.test_case }}
+          public_api_key: ${{ secrets.TF_PUBLIC_API_KEY }}
+          private_api_key: ${{ secrets.TF_INTERNAL_API_KEY }}
