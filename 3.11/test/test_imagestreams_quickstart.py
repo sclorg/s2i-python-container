@@ -1,1 +1,0 @@
-../../test/test_imagestreams_quickstart.py
