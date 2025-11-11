@@ -20,6 +20,10 @@ DISTGEN_RULES:
     dest: test/run
     mode: "0755"
 
+  - src: test/run-pytest
+    dest: test/run-pytest
+    mode: "0755"
+
   - src: src/test/pipenv-test-app/Pipfile
     dest: test/pipenv-test-app/Pipfile
 
@@ -184,26 +188,32 @@ SYMLINK_RULES:
   - src: ../../test/run-openshift-pytest
     dest: test/run-openshift-pytest
 
-  - src: ../../test/test_deploy_templates.py
-    dest: test/test_deploy_templates.py
+  - src: ../../test/test_container_application.py
+    dest: test/test_container_application.py
 
-  - src: ../../test/test_imagestreams_quickstart.py
-    dest: test/test_imagestreams_quickstart.py
+  - src: ../../test/test_container_basics.py
+    dest: test/test_container_basics.py
 
-  - src: ../../test/test_python_ex_standalone.py
-    dest: test/test_python_ex_standalone.py
+  - src: ../../test/test_ocp_deploy_templates.py
+    dest: test/test_ocp_deploy_templates.py
 
-  - src: ../../test/test_python_ex_template.py
-    dest: test/test_python_ex_template.py
+  - src: ../../test/test_ocp_imagestreams_quickstart.py
+    dest: test/test_ocp_imagestreams_quickstart.py
 
-  - src: ../../test/test_helm_python_django_app.py
-    dest: test/test_helm_python_django_app.py
+  - src: ../../test/test_ocp_python_ex_standalone.py
+    dest: test/test_ocp_python_ex_standalone.py
 
-  - src: ../../test/test_helm_python_django_psql_persistent.py
-    dest: test/test_helm_python_django_psql_persistent.py
+  - src: ../../test/test_ocp_python_ex_template.py
+    dest: test/test_ocp_python_ex_template.py
 
-  - src: ../../test/test_helm_python_imagestreams.py
-    dest: test/test_helm_python_imagestreams.py
+  - src: ../../test/test_ocp_helm_python_django_app.py
+    dest: test/test_ocp_helm_python_django_app.py
+
+  - src: ../../test/test_ocp_helm_python_django_psql_persistent.py
+    dest: test/test_ocp_helm_python_django_psql_persistent.py
+
+  - src: ../../test/test_ocp_helm_python_imagestreams.py
+    dest: test/test_ocp_helm_python_imagestreams.py
 
   - src: ../../test/conftest.py
     dest: test/conftest.py
