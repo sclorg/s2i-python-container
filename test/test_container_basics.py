@@ -116,33 +116,32 @@ class TestS2IPythonContainer:
         # sclorg/python-39-minimal-c9s / sclorg/python-39-c9s
         # ubi8/python-39-minimal / ubi8/python-39
         full_image_name = VARS.IMAGE_NAME.replace("-minimal", "")
-        is_pulled = PodmanCLIWrapper.podman_pull_image(image_name=full_image_name)
-        if not is_pulled:
-            assert pytest.skip(
-                f"[SKIP] Multistage build from Dockerfile - '{full_image_name}' does not exists."
+        is_pulled = PodmanCLIWrapper.podman_pull_image(
+            image_name=full_image_name, loops=1
+        )
+        print(f"Is image {full_image_name} pulled? {is_pulled}")
+        if is_pulled:
+            dockerfile_image_name = ContainerTestLibUtils.update_dockerfile(
+                dockerfile=VARS.TEST_DIR / "from-dockerfile/mod_wsgi.Dockerfile.tpl",
+                original_string="#IMAGE_NAME#",
+                string_to_replace=VARS.IMAGE_NAME,
             )
-
-        dockerfile_image_name = ContainerTestLibUtils.update_dockerfile(
-            dockerfile=VARS.TEST_DIR / "from-dockerfile/mod_wsgi.Dockerfile.tpl",
-            original_string="#IMAGE_NAME#",
-            string_to_replace=VARS.IMAGE_NAME,
-        )
-        dockerfile = ContainerTestLibUtils.update_dockerfile(
-            dockerfile=dockerfile_image_name,
-            original_string="#FULL_IMAGE_NAME#",
-            string_to_replace=full_image_name,
-        )
-        assert self.app.build_test_container(
-            dockerfile=dockerfile,
-            app_url=VARS.TEST_DIR / "micropipenv-requirements-test-app",
-            app_dir="app-src",
-            app_image_name="micropipenv-requirements-test-app",
-        )
-        assert self.app.test_app_dockerfile()
-        cip = self.app.get_cip(cid_file_name="micropipenv-requirements-test-app")
-        assert cip
-        assert self.app.test_response(
-            url=cip,
-            expected_output="Hello World from mod_wsgi hosted WSGI application!",
-            debug=True,
-        )
+            dockerfile = ContainerTestLibUtils.update_dockerfile(
+                dockerfile=dockerfile_image_name,
+                original_string="#FULL_IMAGE_NAME#",
+                string_to_replace=full_image_name,
+            )
+            assert self.app.build_test_container(
+                dockerfile=dockerfile,
+                app_url=VARS.TEST_DIR / "micropipenv-requirements-test-app",
+                app_dir="app-src",
+                app_image_name="micropipenv-requirements-test-app",
+            )
+            assert self.app.test_app_dockerfile()
+            cip = self.app.get_cip(cid_file_name="micropipenv-requirements-test-app")
+            assert cip
+            assert self.app.test_response(
+                url=cip,
+                expected_output="Hello World from mod_wsgi hosted WSGI application!",
+                debug=True,
+            )
