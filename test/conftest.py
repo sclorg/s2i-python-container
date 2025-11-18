@@ -29,6 +29,7 @@ Vars = namedtuple(
         "TEST_DIR",
         "WEB_APPS",
         "SHOULD_FAIL_WEB_APPS",
+        "UNSTABLE_WEB_APP",
         "BRANCH_TO_TEST",
         "DEPLOYED_PSQL_IMAGE",
         "IMAGE_TAG",
@@ -61,7 +62,6 @@ COMMON_WEB_APPS = [
         "numpy",
         "app-home",
         "locale",
-        "pipenv",
         "app-module",
         "pyuwsgi-pipenv",
         "micropipenv",
@@ -83,7 +83,9 @@ FULL_WEB_APPS = [
 SHOULD_FAIL_WEB_APPS = [
     TEST_DIR / "pipenv-and-micropipenv-should-fail-test-app",
 ]
-
+UNSTABLE_WEB_APP = [
+    "pipenv-test-app",
+]
 MINIMAL_WEB_APPS: list[Path] = []
 if "minimal" in VERSION:
     WEB_APPS = COMMON_WEB_APPS
@@ -101,6 +103,7 @@ VARS = Vars(
     TEST_DIR=TEST_DIR,
     WEB_APPS=WEB_APPS,
     SHOULD_FAIL_WEB_APPS=SHOULD_FAIL_WEB_APPS,
+    UNSTABLE_WEB_APP=UNSTABLE_WEB_APP,
     BRANCH_TO_TEST=BRANCH_TO_TEST,
     DEPLOYED_PSQL_IMAGE=DEPLOYED_PSQL_IMAGE,
     IMAGE_TAG=IMAGE_TAG,
