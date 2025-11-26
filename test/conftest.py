@@ -39,15 +39,16 @@ Vars = namedtuple(
 VERSION = os.getenv("VERSION")
 OS = os.getenv("TARGET").lower()
 TEST_DIR = Path(__file__).parent.absolute()
-BRANCH_TO_TEST = "2.2.x"
-DEPLOYED_PSQL_IMAGE = "quay.io/sclorg/postgresql-10-c8s:c8s"
-IMAGE_TAG = "postgresql:10"
-PSQL_VERSION = "10"
-if VERSION in ("3.11", "3.12", "3.12-minimal"):
-    BRANCH_TO_TEST = "4.2.x"
-    DEPLOYED_PSQL_IMAGE = "quay.io/sclorg/postgresql-12-c8s"
-    IMAGE_TAG = "postgresql:12"
-    PSQL_VERSION = "12"
+BRANCH_TO_TEST = "4.2.x"
+DEPLOYED_PSQL_IMAGE = "quay.io/sclorg/postgresql-12-c8s"
+IMAGE_TAG = "postgresql:12"
+PSQL_VERSION = "12"
+
+if VERSION in ("3.6"):
+    DEPLOYED_PSQL_IMAGE = "quay.io/sclorg/postgresql-10-c8s:c8s"
+    IMAGE_TAG = "postgresql:10"
+    PSQL_VERSION = "10"
+    BRANCH_TO_TEST = "2.2.x"
 
 COMMON_WEB_APPS = [
     TEST_DIR / f"{x}-test-app"
@@ -86,7 +87,6 @@ SHOULD_FAIL_WEB_APPS = [
 UNSTABLE_WEB_APP = [
     "pipenv-test-app",
 ]
-MINIMAL_WEB_APPS: list[Path] = []
 if "minimal" in VERSION:
     WEB_APPS = COMMON_WEB_APPS
 else:

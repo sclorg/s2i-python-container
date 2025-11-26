@@ -80,7 +80,7 @@ class TestS2IPythonContainer:
             pytest.skip("Skipping tests 'test_dockerfiles' for minimal versions.")
         assert self.app.build_test_container(
             dockerfile=VARS.TEST_DIR / "from-dockerfile" / dockerfile,
-            app_url="https://github.com/sclorg/django-ex.git@4.2.x",
+            app_url=f"https://github.com/sclorg/django-ex.git@{VARS.BRANCH_TO_TEST}",
             app_dir="app-src",
         )
         assert self.app.test_app_dockerfile()
