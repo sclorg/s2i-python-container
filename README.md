@@ -2,23 +2,6 @@ Python container images
 =======================
 [![Build and push container images to Quay.io registry](https://github.com/sclorg/s2i-python-container/actions/workflows/build-and-push.yml/badge.svg)](https://github.com/sclorg/s2i-python-container/actions/workflows/build-and-push.yml)
 
-Images available on Quay are:
-* RHEL 8 [python-39-minimal-el8](https://quay.io/repository/sclorg/python-39-minimal-el8)
-* RHEL 8 [python-311-minimal-el8](https://quay.io/repository/sclorg/python-311-minimal-el8)
-* RHEL 8 [python-312-minimal-el8](https://quay.io/repository/sclorg/python-312-minimal-el8)
-* CentOS Stream 9 minimal [python-39-minimal-c9s](https://quay.io/repository/sclorg/python-39-minimal-c9s)
-* CentOS Stream 9 [python-39-c9s](https://quay.io/repository/sclorg/python-39-c9s)
-* CentOS Stream 9 minimal [python-311-minimal-c9s](https://quay.io/repository/sclorg/python-311-minimal-c9s)
-* CentOS Stream 9 [python-311-c9s](https://quay.io/repository/sclorg/python-311-c9s)
-* CentOS Stream 9 [python-312-minimal-c9s](https://quay.io/repository/sclorg/python-312-minimal-c9s)
-* CentOS Stream 9 [python-312-c9s](https://quay.io/repository/sclorg/python-312-c9s)
-* CentOS Stream 10 [python-312-minimal-c10s](https://quay.io/repository/sclorg/python-312-minimal-c10s)
-* CentOS Stream 10 [python-312-c10s](https://quay.io/repository/sclorg/python-312-c10s)
-* CentOS Stream 10 [python-313-minimal-c10s](https://quay.io/repository/sclorg/python-313-minimal-c10s)
-* CentOS Stream 10 [python-313-c10s](https://quay.io/repository/sclorg/python-313-c10s)
-* Fedora [python-313](https://quay.io/repository/fedora/python-313)
-* Fedora [python-313-minimal](https://quay.io/repository/fedora/python-313-minimal)
-
 This repository contains the source for building various versions of
 the Python application as a reproducible container image using
 [source-to-image](https://github.com/openshift/source-to-image).
@@ -54,28 +37,24 @@ For more information about contributing, see
 
 Versions
 ---------------
-Python versions currently provided are:
-* [python-3.6](3.6)
-* [python-3.9](3.9)
-* [python-3.9 Minimal (tech-preview)](3.9-minimal)
-* [python-3.11](3.11)
-* [python-3.11 Minimal (tech-preview)](3.11-minimal)
-* [python-3.12](3.12)
-* [python-3.12 Minimal (tech-preview)](3.12-minimal)
-* [python-3.13](3.13)
-* [python-3.13 Minimal (tech-preview)](3.13-minimal)
-
-RHEL versions currently supported are:
-* RHEL 8 ([catalog.redhat.com](https://catalog.redhat.com/software/containers/search))
-* RHEL 9 ([catalog.redhat.com](https://catalog.redhat.com/software/containers/search))
-* RHEL 10 ([catalog.redhat.com](https://catalog.redhat.com/software/containers/search))
-
-CentOS Stream versions currently supported are:
-* CentOS Stream 9 ([quay.io/sclorg](https://quay.io/organization/sclorg))
-* CentOS Stream 10 ([quay.io/sclorg](https://quay.io/organization/sclorg))
-
-Fedora versions currently supported are:
-* Fedora 42 ([quay.io/fedora](https://quay.io/organization/fedora))
+Currently supported versions are visible in the following table, expand an entry to see its container registry address.
+<!--
+Table start
+-->
+||CentOS Stream 9|CentOS Stream 10|Fedora|RHEL 8|RHEL 9|RHEL 10|
+|:--|:--:|:--:|:--:|:--:|:--:|:--:|
+|3.6||||<details><summary>✓</summary>`registry.redhat.io/rhel8/python-36`</details>|||
+|3.9|<details><summary>✓</summary>`quay.io/sclorg/python-39-c9s`</details>|||<details><summary>✓</summary>`registry.redhat.io/rhel8/python-39`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel9/python-39`</details>||
+|3.9-minimal|<details><summary>✓</summary>`quay.io/sclorg/python-39-minimal-c9s`</details>|||<details><summary>✓</summary>`registry.redhat.io/rhel8/python-39-minimal`</details>|||
+|3.11|<details><summary>✓</summary>`quay.io/sclorg/python-311-c9s`</details>|||<details><summary>✓</summary>`registry.redhat.io/rhel8/python-311`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel9/python-311`</details>||
+|3.11-minimal|<details><summary>✓</summary>`quay.io/sclorg/python-311-minimal-c9s`</details>|||<details><summary>✓</summary>`registry.redhat.io/rhel8/python-311-minimal`</details>|||
+|3.12|<details><summary>✓</summary>`quay.io/sclorg/python-312-c9s`</details>|<details><summary>✓</summary>`quay.io/sclorg/python-312-c10s`</details>||<details><summary>✓</summary>`registry.redhat.io/rhel8/python-312`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel9/python-312`</details>||
+|3.12-minimal|<details><summary>✓</summary>`quay.io/sclorg/python-312-minimal-c9s`</details>|<details><summary>✓</summary>`quay.io/sclorg/python-312-minimal-c10s`</details>||<details><summary>✓</summary>`registry.redhat.io/rhel8/python-312-minimal`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel9/python-312-minimal`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel10/python-312-minimal`</details>|
+|3.13||<details><summary>✓</summary>`quay.io/sclorg/python-313-c10s`</details>|<details><summary>✓</summary>`quay.io/fedora/python-313`</details>||||
+|3.13-minimal||<details><summary>✓</summary>`quay.io/sclorg/python-313-minimal-c10s`</details>|<details><summary>✓</summary>`quay.io/fedora/python-313-minimal`</details>||||
+<!--
+Table end
+-->
 
 Download
 --------
