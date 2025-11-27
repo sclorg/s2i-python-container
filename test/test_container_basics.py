@@ -144,3 +144,7 @@ class TestS2IPythonContainer:
                 expected_output="Hello World from mod_wsgi hosted WSGI application!",
                 debug=True,
             )
+        else:
+            pytest.skip(
+                f"The full container image for the minimal one {full_image_name} does not exist, skipping the rest of the tests."
+            )
