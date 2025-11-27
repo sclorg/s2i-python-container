@@ -8,4 +8,4 @@
 
 THISDIR=$(dirname ${BASH_SOURCE[0]})
 
-cd "${THISDIR}" && python3.12 -m pytest -s -rA --showlocals -vv test_*.py
+cd "${THISDIR}" && python3.12 -m pytest -s -rA --showlocals -vv test_ocp_*.py
