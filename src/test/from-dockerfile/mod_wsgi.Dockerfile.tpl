@@ -21,7 +21,7 @@ COPY --from=builder $APP_ROOT $APP_ROOT
 
 # Install httpd and echant packages - runtime dependencies of our application
 USER 0
-RUN microdnf install -y httpd enchant
+RUN microdnf install -y httpd
 USER 1001
 
 # Set the default command for the resulting image
