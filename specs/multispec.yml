@@ -190,7 +190,7 @@ specs:
       base_img_version: "1"
       module_stream: "python39:3.9"
       pkg_prefix: "python39"
-      main_image: "registry.access.redhat.com/ubi8/python-39"
+      main_image: "registry.access.redhat.com/ubi9/python-39"
 
     "3.9-minimal":
       version: "3.9"
@@ -217,11 +217,9 @@ matrix:
       version: "3.6"
     - distros:
         - centos-stream-9-x86_64
-        - rhel-8-x86_64
         - rhel-9-x86_64
       version: "3.9"
     - distros:
-        - rhel-8-x86_64
         - centos-stream-9-x86_64
       version: "3.9-minimal"
     - distros:
