@@ -74,7 +74,7 @@ To use the Python image in a Dockerfile, follow these steps:
 #### 1. Pull a base builder image to build on
 
 ```
-podman pull registry.access.redhat.com/ubi8/python-39
+podman pull registry.access.redhat.com/ubi9/python-39
 ```
 
 #### 2. Pull and application code
@@ -105,7 +105,7 @@ prepared for a future flawless switch to a newer or different platform.
 To use the Source-to-Image scripts and build an image using a Dockerfile, create a Dockerfile with this content:
 
 ```
-FROM registry.access.redhat.com/ubi8/python-39
+FROM registry.access.redhat.com/ubi9/python-39
 
 # Add application sources to a directory that the assemble script expects them
 # and set permissions so that the container runs without root access
@@ -125,7 +125,7 @@ If you decide not to use the Source-to-Image scripts, you will need to manually 
 Example Dockerfile for a simple Django application:
 
 ```
-FROM registry.access.redhat.com/ubi8/python-39
+FROM registry.access.redhat.com/ubi9/python-39
 
 # Add application sources with correct permissions for OpenShift
 USER 0

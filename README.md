@@ -44,8 +44,8 @@ Table start
 ||CentOS Stream 9|CentOS Stream 10|Fedora|RHEL 8|RHEL 9|RHEL 10|
 |:--|:--:|:--:|:--:|:--:|:--:|:--:|
 |3.6||||<details><summary>✓</summary>`registry.redhat.io/rhel8/python-36`</details>|||
-|3.9|<details><summary>✓</summary>`quay.io/sclorg/python-39-c9s`</details>|||<details><summary>✓</summary>`registry.redhat.io/rhel8/python-39`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel9/python-39`</details>||
-|3.9-minimal|<details><summary>✓</summary>`quay.io/sclorg/python-39-minimal-c9s`</details>|||<details><summary>✓</summary>`registry.redhat.io/rhel8/python-39-minimal`</details>|||
+|3.9|<details><summary>✓</summary>`quay.io/sclorg/python-39-c9s`</details>||||<details><summary>✓</summary>`registry.redhat.io/rhel9/python-39`</details>||
+|3.9-minimal|<details><summary>✓</summary>`quay.io/sclorg/python-39-minimal-c9s`</details>||||||
 |3.11|<details><summary>✓</summary>`quay.io/sclorg/python-311-c9s`</details>|||<details><summary>✓</summary>`registry.redhat.io/rhel8/python-311`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel9/python-311`</details>||
 |3.11-minimal|<details><summary>✓</summary>`quay.io/sclorg/python-311-minimal-c9s`</details>|||<details><summary>✓</summary>`registry.redhat.io/rhel8/python-311-minimal`</details>|||
 |3.12|<details><summary>✓</summary>`quay.io/sclorg/python-312-c9s`</details>|<details><summary>✓</summary>`quay.io/sclorg/python-312-c10s`</details>||<details><summary>✓</summary>`registry.redhat.io/rhel8/python-312`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel9/python-312`</details>||
