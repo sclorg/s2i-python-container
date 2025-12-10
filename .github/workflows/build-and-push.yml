@@ -22,14 +22,6 @@ jobs:
             tag: "c9s"
             image_name: "python-39-c9s"
 
-          - dockerfile: "3.9-minimal/Dockerfile.rhel8"
-            docker_context: "3.9-minimal"
-            registry_namespace: "sclorg"
-            quayio_username: "QUAY_IMAGE_SCLORG_BUILDER_USERNAME"
-            quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
-            tag: "el8"
-            image_name: "python-39-minimal-el8"
-
           - dockerfile: "3.9-minimal/Dockerfile.c9s"
             docker_context: "3.9-minimal"
             registry_namespace: "sclorg"
