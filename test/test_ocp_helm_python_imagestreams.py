@@ -24,22 +24,26 @@ class TestHelmRHELPythonImageStreams:
         self.hc_api.delete_project()
 
     @pytest.mark.parametrize(
-        "version,registry",
+        "version,registry,expected",
         [
             (
                 "3.12-minimal-ubi10",
                 "registry.redhat.io/ubi10/python-312-minimal:latest",
+                True,
             ),
-            ("3.12-ubi9", "registry.redhat.io/ubi9/python-312:latest"),
-            ("3.12-ubi8", "registry.redhat.io/ubi8/python-312:latest"),
-            ("3.11-ubi9", "registry.redhat.io/ubi9/python-311:latest"),
-            ("3.11-ubi8", "registry.redhat.io/ubi8/python-311:latest"),
-            ("3.9-ubi9", "registry.redhat.io/ubi9/python-39:latest"),
-            ("3.9-ubi8", "registry.redhat.io/ubi8/python-39:latest"),
-            ("3.6-ubi8", "registry.redhat.io/ubi8/python-36:latest"),
+            ("3.12-ubi9", "registry.redhat.io/ubi9/python-312:latest", True),
+            ("3.12-ubi8", "registry.redhat.io/ubi8/python-312:latest", True),
+            ("3.11-ubi9", "registry.redhat.io/ubi9/python-311:latest", True),
+            ("3.11-ubi8", "registry.redhat.io/ubi8/python-311:latest", True),
+            ("3.9-ubi9", "registry.redhat.io/ubi9/python-39:latest", True),
+            ("3.9-ubi8", "registry.redhat.io/ubi8/python-39:latest", False),
+            ("3.6-ubi8", "registry.redhat.io/ubi8/python-36:latest", True),
         ],
     )
-    def test_package_imagestream(self, version, registry):
+    def test_package_imagestream(self, version, registry, expected):
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation()
-        assert self.hc_api.check_imagestreams(version=version, registry=registry)
+        assert (
+            self.hc_api.check_imagestreams(version=version, registry=registry)
+            == expected
+        )
