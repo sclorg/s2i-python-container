@@ -14,6 +14,6 @@ jobs:
     uses: "sclorg/ci-actions/.github/workflows/container-tests.yml@main"
     with:
       enabled-tests: '["container","container-pytest","openshift-4","openshift-pytest"]'
-      versions: '[ "3.9", "3.9-minimal", "3.11", "3.11-minimal", "3.12", "3.12-minimal", "3.13", "3.13-minimal" ]'
+      versions: '[ "3.9", "3.9-minimal", "3.11", "3.11-minimal", "3.12", "3.12-minimal", "3.13", "3.13-minimal", "3.14", "3.14-minimal" ]'
       openshift-versions: '[ "3.8", "3.9", "3.11", "3.12", "3.12-minimal" ]'
     secrets: inherit
