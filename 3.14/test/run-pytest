@@ -1,0 +1,16 @@
+#!/bin/bash
+#
+# IMAGE_NAME specifies a name of the candidate image used for testing.
+# The image has to be available before this script is executed.
+# SINGLE_VERSION specifies the major version of the MariaDB in format of X.Y
+# OS specifies RHEL version (e.g. OS=rhel8)
+#
+
+THISDIR=$(dirname ${BASH_SOURCE[0]})
+
+if python3 -c 'import sys; sys.exit(0 if sys.version_info < (3,13) else 1)'; then
+  PYTHON_VERSION="3.12"
+else
+  PYTHON_VERSION="3"
+fi
+cd "${THISDIR}" && "python${PYTHON_VERSION}" -m pytest -s -rA --showlocals -vv test_container_*.py

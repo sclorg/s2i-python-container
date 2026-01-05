@@ -1,0 +1,1 @@
+../../common/check_imagestreams.py

@@ -1,0 +1,21 @@
+#!/bin/sh
+
+CHECK_DIRS="/ /opt /etc /usr /usr/bin /usr/lib /usr/lib64 /usr/share /usr/libexec"
+
+rpm_format="[%{FILESTATES:fstate}  %7{FILEMODES:octal} %{FILENAMES:shescape}\n]"
+
+rpm -q --qf "$rpm_format" filesystem | while read line
+do
+    eval "set -- $line"
+
+    case $1 in
+        normal) ;;
+        *) continue ;;
+    esac
+
+    case " $CHECK_DIRS " in
+        *" $3 "*)
+            chmod "${2: -4}" "$3"
+            ;;
+    esac
+done
