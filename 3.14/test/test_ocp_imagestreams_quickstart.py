@@ -1,0 +1,1 @@
+../../test/test_ocp_imagestreams_quickstart.py
