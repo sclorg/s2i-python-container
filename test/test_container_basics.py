@@ -48,7 +48,7 @@ class TestS2IPythonContainer:
         Test if python --version returns proper output
         """
         python_version = PodmanCLIWrapper.podman_run_command_and_remove(
-            cid_file_name=VARS.IMAGE_NAME, cmd="echo \\$PYTHON_VERSION"
+            cid_file_name=VARS.IMAGE_NAME, cmd="echo $PYTHON_VERSION"
         ).strip()
         python_version_output = PodmanCLIWrapper.podman_run_command_and_remove(
             cid_file_name=VARS.IMAGE_NAME, cmd="python --version"
