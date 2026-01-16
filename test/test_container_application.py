@@ -44,7 +44,7 @@ class TestPythonApplication:
         )
         assert ContainerImage.wait_for_cid(cid_file_name=cid_file_name)
         python_version = PodmanCLIWrapper.podman_run_command_and_remove(
-            cid_file_name=VARS.IMAGE_NAME, cmd="echo \\$PYTHON_VERSION"
+            cid_file_name=VARS.IMAGE_NAME, cmd="echo $PYTHON_VERSION"
         ).strip()
         python_version_output = PodmanCLIWrapper.podman_run_command_and_remove(
             cid_file_name=VARS.IMAGE_NAME, cmd="python --version"
@@ -102,10 +102,10 @@ class TestPythonUnstableApplication:
             cid_file_name=cid_file_name,
             container_args=s2i_app_unstable,
         )
-        assert ContainerImage.wait_for_cid(cid_file_name=cid_file_name)
         python_version = PodmanCLIWrapper.podman_run_command_and_remove(
-            cid_file_name=VARS.IMAGE_NAME, cmd="echo \\$PYTHON_VERSION"
+            cid_file_name=VARS.IMAGE_NAME, cmd="echo $PYTHON_VERSION"
         ).strip()
+        assert ContainerImage.wait_for_cid(cid_file_name=cid_file_name)
         python_version_output = PodmanCLIWrapper.podman_run_command_and_remove(
             cid_file_name=VARS.IMAGE_NAME, cmd="python --version"
         )
