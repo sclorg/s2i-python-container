@@ -1,0 +1,2 @@
+pyuwsgi  # this is just a copy of uwsgi project but it has wheels on PyPI
+Flask
