@@ -178,12 +178,6 @@ SYMLINK_RULES:
   - src: ../../../src/test/from-dockerfile/Dockerfile.tpl
     dest: test/from-dockerfile/Dockerfile.tpl
 
-  - src: ../../test/run-openshift
-    dest: test/run-openshift
-
-  - src: ../../test/run-openshift-remote-cluster
-    dest: test/run-openshift-remote-cluster
-
   - src: ../../test/run-openshift-pytest
     dest: test/run-openshift-pytest
 
@@ -222,18 +216,6 @@ SYMLINK_RULES:
 
   - src: ../../common/test-lib.sh
     dest: test/test-lib.sh
-
-  - src: ../../common/test-lib-openshift.sh
-    dest: test/test-lib-openshift.sh
-
-  - src: ../../common/test-lib-remote-openshift.sh
-    dest: test/test-lib-remote-openshift.sh
-
-  - src: ../../common/test-openshift.yaml
-    dest: test/test-openshift.yaml
-
-  - src: ../../test/test-lib-python.sh
-    dest: test/test-lib-python.sh
 
   - src: ../../imagestreams
     dest: test/imagestreams
