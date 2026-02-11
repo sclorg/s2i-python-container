@@ -1,1 +1,0 @@
-../common/test-lib-openshift.sh
