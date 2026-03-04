@@ -1,4 +1,5 @@
 from container_ci_suite.helm import HelmChartsAPI
+import pytest
 
 from conftest import skip_helm_charts_tests, VARS
 
@@ -22,6 +23,8 @@ class TestHelmPythonDjangoPsqlTemplate:
         self.hc_api.delete_project()
 
     def test_django_psql_helm_test(self):
+        if VARS.VERSION in ["3.14", "3.14-minimal"]:
+            pytest.skip("Helm charts for Python 3.14 are not yet available.")
         skip_helm_charts_tests()
         self.hc_api.package_name = "redhat-postgresql-imagestreams"
         assert self.hc_api.helm_package()

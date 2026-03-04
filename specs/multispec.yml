@@ -44,11 +44,12 @@ specs:
                   'mod_auth_gssapi', 'mod_ldap', 'mod_session',
                   'atlas-devel', 'gcc-gfortran', 'libffi-devel', 'libtool-ltdl', 'enchant',
                   'krb5-devel']
-      ubi_versions: ['3.9', '3.11', '3.12']
+      ubi_versions: ['3.9', '3.11', '3.12', '3.14']
       extra_pkgs:
         "3.9": ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip']
         "3.11": ['python3.11', 'python3.11-devel', 'python3.11-pip']
         "3.12": ['python3.12', 'python3.12-devel', 'python3.12-pip']
+        "3.14": ['python3.14', 'python3.14-devel', 'python3.14-pip']
 
     rhel10:
       distros:
@@ -65,9 +66,10 @@ specs:
                   'mod_auth_gssapi', 'mod_ldap', 'mod_session',
                   'atlas-devel', 'gcc-gfortran', 'libffi-devel', 'libtool-ltdl', 'enchant',
                   'krb5-devel']
-      ubi_versions: ['3.12']
+      ubi_versions: ['3.12', '3.14']
       extra_pkgs:
         "3.12": ['python3.12', 'python3.12-devel', 'python3.12-pip']
+        "3.14": ['python3.14', 'python3.14-devel', 'python3.14-pip']
 
 
     c9s:
@@ -88,6 +90,7 @@ specs:
         "3.9": ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip']
         "3.11": ['python3.11', 'python3.11-devel', 'python3.11-pip']
         "3.12": ['python3.12', 'python3.12-devel', 'python3.12-pip']
+        "3.14": ['python3.14', 'python3.14-devel', 'python3.14-pip']
 
     c10s:
       distros:
@@ -103,10 +106,11 @@ specs:
                   'mod_auth_gssapi', 'mod_ldap', 'mod_session',
                   'gcc-gfortran', 'libffi-devel', 'libtool-ltdl',
                   'krb5-devel']
-      enable_epel_for: ["3.13", "3.13-minimal"]
+      enable_epel_for: ["3.13", "3.13-minimal", "3.14", "3.14-minimal"]
       extra_pkgs:
         "3.12": ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip']
         "3.13": ['python3.13', 'python3.13-devel', 'python3.13-pip']
+        "3.14": ['python3.14', 'python3.14-devel', 'python3.14-pip']
 
     fedora42:
       distros:
@@ -288,7 +292,13 @@ matrix:
       version: "3.13-minimal"
     - distros:
         - fedora-43-x86_64
+        - centos-stream-9-x86_64
+        - centos-stream-10-x86_64
+        - rhel-9-x86_64
       version: "3.14"
     - distros:
         - fedora-43-x86_64
+        - centos-stream-10-x86_64
+        - rhel-9-x86_64
+        - rhel-10-x86_64
       version: "3.14-minimal"

@@ -20,6 +20,8 @@ class TestImagestreamsQuickstart:
         "template", ["django.json", "django-postgresql-persistent.json"]
     )
     def test_python_template_inside_cluster(self, template):
+        if VARS.VERSION in ["3.14", "3.14-minimal"]:
+            pytest.skip("Testing templates for Python 3.14 are not yet available.")
         if self.oc_api.shared_cluster:
             assert self.oc_api.upload_image_to_external_registry(
                 VARS.DEPLOYED_PSQL_IMAGE, VARS.IMAGE_TAG
