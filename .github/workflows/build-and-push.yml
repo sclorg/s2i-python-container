@@ -142,6 +142,30 @@ jobs:
             tag: "314"
             image_name: "python-314-minimal"
 
+          - dockerfile: "3.14/Dockerfile.c9s"
+            docker_context: "3.14"
+            registry_namespace: "sclorg"
+            quayio_username: "QUAY_IMAGE_SCLORG_BUILDER_USERNAME"
+            quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
+            tag: "c9s"
+            image_name: "python-314-c9s"
+
+          - dockerfile: "3.14-minimal/Dockerfile.c9s"
+            docker_context: "3.14-minimal"
+            registry_namespace: "sclorg"
+            quayio_username: "QUAY_IMAGE_SCLORG_BUILDER_USERNAME"
+            quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
+            tag: "c9s"
+            image_name: "python-314-minimal-c9s"
+
+          - dockerfile: "3.14-minimal/Dockerfile.c10s"
+            docker_context: "3.14-minimal"
+            registry_namespace: "sclorg"
+            quayio_username: "QUAY_IMAGE_SCLORG_BUILDER_USERNAME"
+            quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
+            tag: "c10s"
+            image_name: "python-314-minimal-c10s"
+
     steps:
       - name: Build and push to quay.io registry
         uses: sclorg/build-and-push-action@v4
