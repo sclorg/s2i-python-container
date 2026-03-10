@@ -116,5 +116,5 @@ def skip_helm_charts_tests():
         VARS.VERSION == "3.12-minimal" and VARS.OS == "rhel8"
     ):
         skip(f"Skipping Helm Charts tests for {VARS.VERSION} on {VARS.OS}.")
-    if VARS.VERSION in ("3.14", "3.14-minimal") and VARS.OS in ("rhel9", "rhel10"):
+    if VARS.VERSION in ("3.14", "3.14-minimal"):
         skip(f"Skipping Helm Charts tests for {VARS.VERSION} on {VARS.OS}. The image is not GA available yet.")
