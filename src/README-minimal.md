@@ -29,6 +29,8 @@ of installed packages. There are no compilers, no header files, no npm etc and t
 reimplementation called microdnf, making the resulting container images much smaller. This creates some limitations
 but we provide ways to workaround them.
 
+See [the Red Hat Enterprise Linux Application Streams Life Cycle page](https://access.redhat.com/support/policy/updates/rhel-app-streams-life-cycle) for information about support for a particular stream.
+
 Limitations
 -----------
 
