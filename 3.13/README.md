@@ -29,6 +29,8 @@ modules for their web applications. There is no guarantee for any specific npm o
 version, that is included in the image; those versions can be changed anytime and
 the nodejs itself is included just to make the npm work.
 
+See [the Red Hat Enterprise Linux Application Streams Life Cycle page](https://access.redhat.com/support/policy/updates/rhel-app-streams-life-cycle) for information about support for a particular stream.
+
 Usage in Openshift
 ------------------
 
