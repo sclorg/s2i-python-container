@@ -1,1 +1,0 @@
-../../test/test_ocp_helm_python_django_app.py

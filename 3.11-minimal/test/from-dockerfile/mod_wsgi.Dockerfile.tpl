@@ -1,1 +1,0 @@
-../../../src/test/from-dockerfile/mod_wsgi.Dockerfile.tpl
