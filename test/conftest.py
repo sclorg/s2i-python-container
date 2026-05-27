@@ -112,7 +112,7 @@ VARS = Vars(
 
 
 def skip_helm_charts_tests():
-    if VARS.VERSION in ("3.9-minimal", "3.11-minimal") or (
+    if VARS.VERSION in ("3.9-minimal") or (
         VARS.VERSION == "3.12-minimal" and VARS.OS == "rhel8"
     ):
         skip(f"Skipping Helm Charts tests for {VARS.VERSION} on {VARS.OS}.")
