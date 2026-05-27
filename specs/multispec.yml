@@ -23,11 +23,9 @@ specs:
                 '{{ spec.pkg_prefix }}-setuptools', '{{ spec.pkg_prefix }}-pip']
         "default": ['{{ spec.pkg_prefix }}', '{{ spec.pkg_prefix }}-devel',
                     '{{ spec.pkg_prefix }}-setuptools', '{{ spec.pkg_prefix }}-pip']
-        "3.11": ['{{ spec.pkg_prefix }}', '{{ spec.pkg_prefix }}-devel',
-                 '{{ spec.pkg_prefix }}-setuptools', '{{ spec.pkg_prefix }}-pip']
         "3.12": ['{{ spec.pkg_prefix }}', '{{ spec.pkg_prefix }}-devel',
                  '{{ spec.pkg_prefix }}-setuptools', '{{ spec.pkg_prefix }}-pip']
-      ubi_versions: ['3.6', '3.9', '3.11', '3.12']
+      ubi_versions: ['3.6', '3.9', '3.12']
 
     rhel9:
       distros:
@@ -44,10 +42,9 @@ specs:
                   'mod_auth_gssapi', 'mod_ldap', 'mod_session',
                   'atlas-devel', 'gcc-gfortran', 'libffi-devel', 'libtool-ltdl', 'enchant',
                   'krb5-devel']
-      ubi_versions: ['3.9', '3.11', '3.12', '3.14']
+      ubi_versions: ['3.9', '3.12', '3.14']
       extra_pkgs:
         "3.9": ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip']
-        "3.11": ['python3.11', 'python3.11-devel', 'python3.11-pip']
         "3.12": ['python3.12', 'python3.12-devel', 'python3.12-pip']
         "3.14": ['python3.14', 'python3.14-devel', 'python3.14-pip']
 
@@ -88,7 +85,6 @@ specs:
                   'krb5-devel']
       extra_pkgs:
         "3.9": ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip']
-        "3.11": ['python3.11', 'python3.11-devel', 'python3.11-pip']
         "3.12": ['python3.12', 'python3.12-devel', 'python3.12-pip']
         "3.14": ['python3.14', 'python3.14-devel', 'python3.14-pip']
 
@@ -201,26 +197,6 @@ specs:
       pkg_prefix: "python3.12"
       main_image: "registry.access.redhat.com/ubi9/python-312"
 
-    "3.11":
-      version: "3.11"
-      short_ver: "311"
-      minimal: false
-      base_img_version: "1"
-      # Python 3.11 doesn't come as a module
-      module_stream: ""
-      pkg_prefix: "python3.11"
-      main_image: "registry.access.redhat.com/ubi9/python-311"
-
-    "3.11-minimal":
-      version: "3.11"
-      short_ver: "311"
-      minimal: true
-      base_img_version: "1"
-      # Python 3.11 doesn't come as a module
-      module_stream: ""
-      pkg_prefix: "python3.11"
-      main_image: "quay.io/sclorg/python-311-minimal-c9s"
-
     "3.9":
       version: "3.9"
       short_ver: "39"
@@ -260,15 +236,6 @@ matrix:
     - distros:
         - centos-stream-9-x86_64
       version: "3.9-minimal"
-    - distros:
-        - centos-stream-9-x86_64
-        - rhel-9-x86_64
-        - rhel-8-x86_64
-      version: "3.11"
-    - distros:
-        - centos-stream-9-x86_64
-        - rhel-8-x86_64
-      version: "3.11-minimal"
     - distros:
         - centos-stream-10-x86_64
         - centos-stream-9-x86_64
