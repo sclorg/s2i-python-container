@@ -1,7 +1,10 @@
 import os
-import mod_wsgi.server
+try:
+    import mod_wsgi.express.cli as server_wrapper
+except ImportError:
+  import mod_wsgi.server as server_wrapper
 
-mod_wsgi.server.start(
+server_wrapper.start(
   '--log-to-terminal',
   '--port', '8080',
   '--trust-proxy-header', 'X-Forwarded-For',
