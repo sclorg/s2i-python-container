@@ -22,7 +22,7 @@
         app_versions: ["3.12-minimal"]
 
   - filename: python-rhel.json
-    latest: "3.12-ubi8"
+    latest: "3.12-ubi9"
     distros:
       - name: UBI 8
         app_versions: ["3.6", "3.9"]
@@ -34,7 +34,7 @@
         app_versions: ["3.12-minimal"]
 
   - filename: python-rhel-aarch64.json
-    latest: "3.12-ubi8"
+    latest: "3.12-ubi9"
     distros:
       - name: UBI 8
         app_versions: ["3.6", "3.9"]
