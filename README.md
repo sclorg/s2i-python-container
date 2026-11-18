@@ -48,8 +48,8 @@ Table start
 |3.9-minimal|<details><summary>✓</summary>`quay.io/sclorg/python-39-minimal-c9s`</details>||||||
 |3.12|<details><summary>✓</summary>`quay.io/sclorg/python-312-c9s`</details>|<details><summary>✓</summary>`quay.io/sclorg/python-312-c10s`</details>||<details><summary>✓</summary>`registry.redhat.io/rhel8/python-312`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel9/python-312`</details>||
 |3.12-minimal|<details><summary>✓</summary>`quay.io/sclorg/python-312-minimal-c9s`</details>|<details><summary>✓</summary>`quay.io/sclorg/python-312-minimal-c10s`</details>||<details><summary>✓</summary>`registry.redhat.io/rhel8/python-312-minimal`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel9/python-312-minimal`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel10/python-312-minimal`</details>|
-|3.13||<details><summary>✓</summary>`quay.io/sclorg/python-313-c10s`</details>|<details><summary>✓</summary>`quay.io/fedora/python-313`</details>||||
-|3.13-minimal||<details><summary>✓</summary>`quay.io/sclorg/python-313-minimal-c10s`</details>|<details><summary>✓</summary>`quay.io/fedora/python-313-minimal`</details>||||
+|3.13||<details><summary>✓</summary>`quay.io/sclorg/python-313-c10s`</details>|||||
+|3.13-minimal||<details><summary>✓</summary>`quay.io/sclorg/python-313-minimal-c10s`</details>|||||
 |3.14|<details><summary>✓</summary>`quay.io/sclorg/python-314-c9s`</details>||<details><summary>✓</summary>`quay.io/fedora/python-314`</details>||<details><summary>✓</summary>`registry.redhat.io/rhel9/python-314`</details>||
 |3.14-minimal|<details><summary>✓</summary>`quay.io/sclorg/python-314-minimal-c9s`</details>|<details><summary>✓</summary>`quay.io/sclorg/python-314-minimal-c10s`</details>|<details><summary>✓</summary>`quay.io/fedora/python-314-minimal`</details>||<details><summary>✓</summary>`registry.redhat.io/rhel9/python-314-minimal`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel10/python-314-minimal`</details>|
 <!--

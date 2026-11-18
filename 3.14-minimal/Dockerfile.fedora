@@ -1,4 +1,4 @@
-FROM quay.io/fedora/fedora-minimal:43
+FROM quay.io/fedora/fedora-minimal:44
 
 
 EXPOSE 8080

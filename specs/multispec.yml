@@ -108,26 +108,13 @@ specs:
         "3.13": ['python3.13', 'python3.13-devel', 'python3.13-pip']
         "3.14": ['python3.14', 'python3.14-devel', 'python3.14-pip']
 
-    fedora42:
+    fedora44:
       distros:
-        - fedora-42-x86_64
-      fedora_version: "42"
-      minimal_image: "quay.io/fedora/fedora-minimal:42"
+        - fedora-44-x86_64
+      fedora_version: "44"
+      minimal_image: "quay.io/fedora/fedora-minimal:44"
       s2i_base: quay.io/fedora/s2i-base
-      img_tag: "42"
-      org: "fedora"
-      python_pkgs: ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip']
-      base_pkgs: ['nss_wrapper-libs', 'httpd', 'httpd-devel', 'atlas-devel', 'gcc-gfortran',
-                  'libffi-devel', 'libtool-ltdl', 'enchant', 'redhat-rpm-config',
-                  'krb5-devel']
-
-    fedora43:
-      distros:
-        - fedora-43-x86_64
-      fedora_version: "43"
-      minimal_image: "quay.io/fedora/fedora-minimal:43"
-      s2i_base: quay.io/fedora/s2i-base
-      img_tag: "43"
+      img_tag: "44"
       org: "fedora"
       python_pkgs: ['python3', 'python3-devel', 'python3-setuptools', 'python3-pip']
       base_pkgs: ['nss_wrapper-libs', 'httpd', 'httpd-devel', 'atlas-devel', 'gcc-gfortran',
@@ -165,7 +152,7 @@ specs:
       # Python 3.13 doesn't come as a module
       module_stream: ""
       pkg_prefix: "python3.13"
-      main_image: "quay.io/fedora/python-313-minimal"
+      main_image: "quay.io/sclorg/python-313-minimal-c10s"
 
     "3.13":
       version: "3.13"
@@ -175,7 +162,7 @@ specs:
       # Python 3.13 doesn't come as a module
       module_stream: ""
       pkg_prefix: "python3.13"
-      main_image: "quay.io/fedora/python-313"
+      main_image: "quay.io/sclorg/python-313-c10s"
 
     "3.12-minimal":
       version: "3.12"
@@ -250,20 +237,18 @@ matrix:
         - rhel-10-x86_64
       version: "3.12-minimal"
     - distros:
-        - fedora-42-x86_64
         - centos-stream-10-x86_64
       version: "3.13"
     - distros:
-        - fedora-42-x86_64
         - centos-stream-10-x86_64
       version: "3.13-minimal"
     - distros:
-        - fedora-43-x86_64
+        - fedora-44-x86_64
         - centos-stream-9-x86_64
         - rhel-9-x86_64
       version: "3.14"
     - distros:
-        - fedora-43-x86_64
+        - fedora-44-x86_64
         - centos-stream-10-x86_64
         - centos-stream-9-x86_64
         - rhel-9-x86_64
