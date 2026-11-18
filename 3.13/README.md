@@ -76,7 +76,7 @@ To use the Python image in a Dockerfile, follow these steps:
 #### 1. Pull a base builder image to build on
 
 ```
-podman pull quay.io/fedora/python-313
+podman pull quay.io/sclorg/python-313-c10s
 ```
 
 #### 2. Pull and application code
@@ -107,7 +107,7 @@ prepared for a future flawless switch to a newer or different platform.
 To use the Source-to-Image scripts and build an image using a Dockerfile, create a Dockerfile with this content:
 
 ```
-FROM quay.io/fedora/python-313
+FROM quay.io/sclorg/python-313-c10s
 
 # Add application sources to a directory that the assemble script expects them
 # and set permissions so that the container runs without root access
@@ -127,7 +127,7 @@ If you decide not to use the Source-to-Image scripts, you will need to manually 
 Example Dockerfile for a simple Django application:
 
 ```
-FROM quay.io/fedora/python-313
+FROM quay.io/sclorg/python-313-c10s
 
 # Add application sources with correct permissions for OpenShift
 USER 0

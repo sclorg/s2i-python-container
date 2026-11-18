@@ -13,7 +13,7 @@ The image is built on top of the [official CentOS Stream base containers](quay.i
 To pull the Python 3.13 minimal container image to build on, run
 
 ```
-podman pull quay.io/fedora/python-313-minimal
+podman pull quay.io/sclorg/python-313-minimal-c10s
 ```
 
 Description
