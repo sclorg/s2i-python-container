@@ -147,7 +147,7 @@
         "annotations": {
           "openshift.io/display-name": "Python 3.12 (Latest)",
           "openshift.io/provider-display-name": "Red Hat, Inc.",
-          "description": "Build and run Python 3.12 applications on UBI 8. For more information about using this builder image, including OpenShift considerations, see https://github.com/sclorg/s2i-python-container/blob/master/3.12/README.md.\n\nWARNING: By selecting this tag, your application will automatically update to use the latest version available on OpenShift, including major version updates.\n",
+          "description": "Build and run Python 3.12 applications on UBI 9. For more information about using this builder image, including OpenShift considerations, see https://github.com/sclorg/s2i-python-container/blob/master/3.12/README.md.\n\nWARNING: By selecting this tag, your application will automatically update to use the latest version available on OpenShift, including major version updates.\n",
           "iconClass": "icon-python",
           "tags": "builder,python",
           "version": "3.12",
@@ -155,7 +155,7 @@
         },
         "from": {
           "kind": "ImageStreamTag",
-          "name": "3.12-ubi8"
+          "name": "3.12-ubi9"
         },
         "referencePolicy": {
           "type": "Local"
