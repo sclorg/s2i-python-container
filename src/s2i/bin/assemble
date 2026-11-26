@@ -14,13 +14,8 @@ function virtualenv_bin() {
     # from stdlib instead of virtualenv package
     python{{ spec.version }} -m venv $1
   {% else %}
-  if head "/etc/redhat-release" | grep -q "^CentOS Linux release 7" || \
-     head "/etc/redhat-release" | grep -q "^Red Hat Enterprise Linux\( Server\)\? release 7" || \
-     head "/etc/redhat-release" | grep -q "^Fedora release"; then
-    virtualenv $1
-  else
+    # Python 3.6 (only on UBI 8) uses the virtualenv package
     virtualenv-${PYTHON_VERSION} $1
-  fi
   {% endif %}
 }
 
@@ -62,18 +57,6 @@ mv /tmp/src/* "$HOME"
 
 # set permissions for any installed artifacts
 fix-permissions /opt/app-root -P
-
-{% if spec.version == "3.6" %}
-# Python <3.7 only code, Python 3.7+ uses bundled wheel from Fedora
-# We have to first upgrade pip to at least 19.3 because
-# pip < 19.3 does not support manylinux2014 wheels. Only manylinux2014 (and later) wheels
-#   support platforms like ppc64le, aarch64 or armv7
-echo "---> Upgrading pip to latest version supported for Python $PYTHON_VERSION ..."
-if ! pip install -U "pip"; then
-  echo "WARNING: Installation of 'pip' failed, trying again from official PyPI with pip --isolated install"
-  pip install --isolated -U "pip"
-fi
-{% endif %}
 
 if [[ ! -z "$PIP_INDEX_URL" ]]; then
   echo "---> Creating pip.ini config file"
