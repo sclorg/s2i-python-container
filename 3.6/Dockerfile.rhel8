@@ -62,7 +62,6 @@ COPY 3.6/root/ /
 #   under random UID.
 RUN \
     virtualenv-$PYTHON_VERSION ${APP_ROOT} && \
-    rm -r /opt/wheels && \
     chown -R 1001:0 ${APP_ROOT} && \
     fix-permissions ${APP_ROOT} -P && \
     rpm-file-permissions && \

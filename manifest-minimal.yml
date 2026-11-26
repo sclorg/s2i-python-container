@@ -223,6 +223,3 @@ SYMLINK_RULES:
 
   - src: ../../common/check_imagestreams.py
     dest: test/check_imagestreams.py
-
-  - src: ../../../src/root/opt/wheels/
-    dest: root/opt/wheels

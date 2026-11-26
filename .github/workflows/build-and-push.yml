@@ -70,22 +70,6 @@ jobs:
             tag: "c10s"
             image_name: "python-312-c10s"
 
-          - dockerfile: "3.13/Dockerfile.fedora"
-            docker_context: "3.13"
-            registry_namespace: "fedora"
-            quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_USERNAME"
-            quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
-            tag: "313"
-            image_name: "python-313"
-
-          - dockerfile: "3.13-minimal/Dockerfile.fedora"
-            docker_context: "3.13-minimal"
-            registry_namespace: "fedora"
-            quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_USERNAME"
-            quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
-            tag: "313"
-            image_name: "python-313-minimal"
-
           - dockerfile: "3.13/Dockerfile.c10s"
             docker_context: "3.13"
             registry_namespace: "sclorg"

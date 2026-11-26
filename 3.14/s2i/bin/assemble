@@ -53,7 +53,6 @@ mv /tmp/src/* "$HOME"
 # set permissions for any installed artifacts
 fix-permissions /opt/app-root -P
 
-
 if [[ ! -z "$PIP_INDEX_URL" ]]; then
   echo "---> Creating pip.ini config file"
   echo "[global]
