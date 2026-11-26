@@ -66,13 +66,6 @@ COPY 3.13-minimal/s2i/bin/ $STI_SCRIPTS_PATH
 # Copy extra files to the image.
 COPY 3.13-minimal/root/ /
 
-# Python 3.7+ only
-# Yes, the directory below is already copied by the previous command.
-# The problem here is that the wheels directory is copied as a symlink.
-# Only if you specify symlink directly as a source, COPY copies all the
-# files from the symlink destination.
-COPY 3.13-minimal/root/opt/wheels /opt/wheels
-
 # This command sets (and also creates if necessary)
 # the home directory - it has to be done here so the latter
 # fix-permissions fixes this directory as well.
@@ -86,15 +79,6 @@ WORKDIR ${HOME}
 #   under random UID.
 RUN \
     python3.13 -m venv ${APP_ROOT} && \
-    # We have to upgrade pip to a newer version because \
-    # pip < 19.3 does not support manylinux2014 wheels. Only manylinux2014 (and later) wheels \
-    #   support platforms like ppc64le, aarch64 or armv7 \
-    # We are newly using wheel from one of the latest stable Fedora releases (from RPM python-pip-wheel) \
-    # because it's tested better then whatever version from PyPI and contains useful patches. \
-    # We have to do it here so the permissions are correctly fixed and pip is able \
-    # to reinstall itself in the next build phases in the assemble script if user wants the latest version \
-    ${APP_ROOT}/bin/pip install /opt/wheels/pip-* && \
-    rm -r /opt/wheels && \
     chown -R 1001:0 ${APP_ROOT} && \
     fix-permissions ${APP_ROOT} -P && \
     rpm-file-permissions
